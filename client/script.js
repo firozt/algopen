@@ -169,42 +169,61 @@ class GraphNode {
 
 function createDraggableNode(x,y,val){
     const node = createNode(x, y, val, true);
-    const pos = node.getPosition()
-    node.on('dragmove', () => {
-        const pos = node.getPosition()
-        const pos2 = node2.getPosition()
-        line.points([pos.x, pos.y, pos2.x, pos2.y])
-        layer.batchDraw();
-    });
+    // const pos = node.getPosition()
+    // node.on('dragmove', () => {
+    //     const pos = node.getPosition()
+    //     const pos2 = node2.getPosition()
+    //     line.points([pos.x, pos.y, pos2.x, pos2.y])
+    //     layer.batchDraw();
+    // });
+    return node
 }
 
 
 
-function graphVisualiser(input) {
-    const node = createNode(200, 200, '1', true);
-    const node2 = createNode(400, 200, '2', true);
+// function graphVisualiser(input) {
+    // const node = createNode(200, 200, '1', true);
+    // const node2 = createNode(400, 200, '2', true);
 
-    function updateLine() {
-        const pos1 = node.getPosition();
-        const pos2 = node2.getPosition();
+    // function updateLine() {
+    //     const pos1 = node.getPosition();
+    //     const pos2 = node2.getPosition();
 
-        const dx = pos2.x - pos1.x;
-        const dy = pos2.y - pos1.y;
-        const length = Math.sqrt(dx * dx + dy * dy);
+    //     const dx = pos2.x - pos1.x;
+    //     const dy = pos2.y - pos1.y;
+    //     const length = Math.sqrt(dx * dx + dy * dy);
 
-        // Calculate shortened start and end points
-        const offsetX = (dx / length) * 30;
-        const offsetY = (dy / length) * 30;
+    //     // Calculate shortened start and end points
+    //     const offsetX = (dx / length) * 30;
+    //     const offsetY = (dy / length) * 30;
 
-        const newStartX = pos1.x + offsetX;
-        const newStartY = pos1.y + offsetY;
-        const newEndX = pos2.x - offsetX;
-        const newEndY = pos2.y - offsetY;
+    //     const newStartX = pos1.x + offsetX;
+    //     const newStartY = pos1.y + offsetY;
+    //     const newEndX = pos2.x - offsetX;
+    //     const newEndY = pos2.y - offsetY;
 
-        line.points([newStartX, newStartY, newEndX, newEndY]);
-        layer.batchDraw();
-    }
+    //     line.points([newStartX, newStartY, newEndX, newEndY]);
+    //     layer.batchDraw();
+    // }
 
+    // const line = new Konva.Arrow({
+    //     points: [], // will be set below
+    //     stroke: 'black',
+    //     strokeWidth: 2,
+    //     pointerLength: 10,
+    //     pointerWidth: 10,
+    //     fill: 'black',
+    // });
+    // layer.add(line);
+
+    // node.on('dragmove', updateLine);
+    // node2.on('dragmove', updateLine);
+
+    // updateLine(); // Initial draw
+    // layer.draw();
+// }
+
+function createNodeConnection(node1, node2){
     const line = new Konva.Arrow({
         points: [], // will be set below
         stroke: 'black',
@@ -213,16 +232,69 @@ function graphVisualiser(input) {
         pointerWidth: 10,
         fill: 'black',
     });
-    layer.add(line);
+    layer.add(line)
 
-    node.on('dragmove', updateLine);
+    const updateLine = () => {
+            const pos1 = node1.getPosition()
+            const pos2 = node2.getPosition()
+        
+            const dx = pos2.x - pos1.x;
+            const dy = pos2.y - pos1.y;
+            const length = Math.sqrt(dx * dx + dy * dy);
+        
+            // Calculate shortened start and end points
+            const offsetX = (dx / length) * 30;
+            const offsetY = (dy / length) * 30;
+        
+            const newStartX = pos1.x + offsetX;
+            const newStartY = pos1.y + offsetY;
+            const newEndX = pos2.x - offsetX;
+            const newEndY = pos2.y - offsetY;
+        
+            line.points([newStartX, newStartY, newEndX, newEndY]);
+            layer.batchDraw();
+    }
+
+    node1.on('dragmove', updateLine);
     node2.on('dragmove', updateLine);
-
-    updateLine(); // Initial draw
-    layer.draw();
 }
 
 
+function graphVisualiser(input) {
+
+    const parseInput = (input) => {
+        // get all unique nodes
+        const unique_nodes = new Set(input.replaceAll(' ','').split(/[,\n:]+/)) // contains set of all unique nodes
+        const parsedInput = input.replaceAll(' ','').split('\n') // contains user input, each index is new line
+
+        const nodeMapping = {}
+
+        let start_distance = 100
+        console.log(unique_nodes)
+        unique_nodes.forEach(node => {
+            nodeMapping[node] = createDraggableNode(start_distance,50,node)
+            start_distance += 100
+        })
+
+
+        return [nodeMapping,parsedInput]
+    }
+
+    const [nodeMapping, parsedInput] = parseInput(input)
+
+    parsedInput.forEach((line, index) => {
+        const [node, neighbours] = line.split(':') // first index goes to node, rest are neighbours
+        neighbours.split(',').forEach(neighbour => {
+            const nodeFromObj = nodeMapping[node]
+            const nodeToObj = nodeMapping[neighbour]
+            createNodeConnection(nodeFromObj,nodeToObj)
+        }) 
+    })
+
+}
+
+
+// Main
 function visualise() {
     resetStage()
     const input = document.getElementById('text-input').value
@@ -243,6 +315,7 @@ function visualise() {
 
 
 
+// misc functions
 
 function saveToLocalStorage(){
     const textarea = document.getElementById('text-input');
