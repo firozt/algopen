@@ -238,6 +238,21 @@ function createNodeConnection(node1, node2){
     updateLine() // initial draw of lines
 }
 
+function randomInt(lower,upper){
+	return Math.floor(Math.random()*(upper-lower))+lower
+}
+
+function closeToAnotherNode(x,y,previousPositions){
+	for(let i = 0; i < previousPositions.length; i++){
+		const x2 = previousPositions[i].x
+		const y2 = previousPositions[i].y
+		const dist = Math.floor(Math.sqrt((x-x2)**2 + (y-y2)**2))
+		if (dist < 100){
+			return true
+		}
+	}
+	return false
+}
 
 function graphVisualiser(input) {
 
@@ -247,12 +262,20 @@ function graphVisualiser(input) {
         const parsedInput = input.replaceAll(' ','').split('\n') // contains user input, each index is new line
 
         const nodeMapping = {}
+		const previousPositions = [] // holds previous x,y values
 
-        let start_distance = 100
-        console.log(unique_nodes)
+		// safe zone is x between 50,700 | y between 50, 500
         unique_nodes.forEach(node => {
-            nodeMapping[node] = createDraggableNode(start_distance,50,node)
-            start_distance += 100
+			let random_x
+			let random_y
+			do {
+				random_x = randomInt(50,700)
+				random_y = randomInt(50,550)
+			} while (closeToAnotherNode(random_x,random_y,previousPositions))
+
+			previousPositions.push({x:random_x,y:random_y})
+            nodeMapping[node] = createDraggableNode(random_x,random_y,node)
+
         })
 
 
