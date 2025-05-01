@@ -106,7 +106,7 @@ function handleSelection(index){
     ]
 
     const infoText = [
-        'Enter in array format, each node label seperated by a comma ( , )',
+        'Enter in array format, each node label seperated by a comma ( , ) below',
         'tree traversal - TODO',
         'graph visualiser - TODO',
     ]
@@ -125,10 +125,9 @@ function handleSelection(index){
         }
     })
 
-    const infoTextVal = document.getElementById('info')
-    infoTextVal.textContent = infoText[index]
+    const infoTextVal = document.getElementById('info-text')
+    infoTextVal.innerHTML = infoText[index]
 }
-
 
 class GraphNode {
     constructor(x,y,neighbours = []) {
@@ -216,3 +215,25 @@ function visualise() {
 
 generateTree([1,'null',2,'null','null',2,3]);
 
+
+
+function saveToLocalStorage(){
+    const textarea = document.getElementById('text-input');
+    
+    textarea.addEventListener('input', function() {
+        const textareaValue = textarea.value;
+        localStorage.setItem('textareaContent', textareaValue);
+        console.log('Saved to localStorage:', textareaValue);
+    });
+}
+
+function checkLocalStorageStartup() {
+    let textarea = localStorage.getItem('textareaContent')
+    if (!textarea) {
+        textarea = '1,null,2,null,null,2,3'
+    }
+    document.getElementById('text-input').value = textarea
+}
+
+checkLocalStorageStartup()
+saveToLocalStorage()

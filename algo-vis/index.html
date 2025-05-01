@@ -7,7 +7,7 @@
     <script src="https://unpkg.com/konva@9.2.0/konva.min.js"></script>
     <script src="script.js" defer></script>
     <meta name="theme-color" content="#1C1E1F">
-    <title>Algo visualizer</title>
+    <title>Algorithim visualizer</title>
 </head>
 <body>
     <header>
@@ -42,9 +42,10 @@
                 </ul>
             </div>
             <div id="info">
-                <p>Enter in array format, each node label seperated by a comma ( , )</p>
+                <p id="info-text">Enter in array format, each node label seperated by a comma ( , ) below</p>
+                <hr style="margin-top: 10px; color: rgba(128, 128, 128, 0.427);"/>
             </div>
-            <textarea id="text-input" rows="25" cols="45"></textarea>
+            <textarea onchange="saveToLocalStorage()" id="text-input" rows="25" cols="45"></textarea>
             <button onclick="visualise()">Visualise</button>
         </div>
         <div class="display" >

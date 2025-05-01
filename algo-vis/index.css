@@ -118,6 +118,7 @@ textarea {
     border: 2px solid black;
     border-top: none;
     padding: 10px;
+    font-size: 16px;
     background-color:  var(--bg-dim);
     caret-color: white;
     color: #E1E2E3;
