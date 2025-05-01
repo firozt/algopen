@@ -213,7 +213,6 @@ function visualise() {
     }
 }
 
-generateTree([1,'null',2,'null','null',2,3]);
 
 
 
@@ -233,7 +232,8 @@ function checkLocalStorageStartup() {
         textarea = '1,null,2,null,null,2,3'
     }
     document.getElementById('text-input').value = textarea
+    visualise()
 }
 
-checkLocalStorageStartup()
-saveToLocalStorage()
+checkLocalStorageStartup() // checks local storage for previous sessions
+saveToLocalStorage() // creates listener for saving to local storage
