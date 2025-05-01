@@ -136,7 +136,7 @@ function handleSelection(index){
     const infoText = [
         'Enter in array format, each node label seperated by a comma ( , ) below',
         'tree traversal - TODO',
-        'graph visualiser - TODO',
+        'Enter the graph in adjancency list format, i.e:\nnodeX : neighbourA,neighbourB\nnodeY...',
     ]
 
 
@@ -169,59 +169,8 @@ class GraphNode {
 
 function createDraggableNode(x,y,val){
     const node = createNode(x, y, val, true);
-    // const pos = node.getPosition()
-    // node.on('dragmove', () => {
-    //     const pos = node.getPosition()
-    //     const pos2 = node2.getPosition()
-    //     line.points([pos.x, pos.y, pos2.x, pos2.y])
-    //     layer.batchDraw();
-    // });
     return node
 }
-
-
-
-// function graphVisualiser(input) {
-    // const node = createNode(200, 200, '1', true);
-    // const node2 = createNode(400, 200, '2', true);
-
-    // function updateLine() {
-    //     const pos1 = node.getPosition();
-    //     const pos2 = node2.getPosition();
-
-    //     const dx = pos2.x - pos1.x;
-    //     const dy = pos2.y - pos1.y;
-    //     const length = Math.sqrt(dx * dx + dy * dy);
-
-    //     // Calculate shortened start and end points
-    //     const offsetX = (dx / length) * 30;
-    //     const offsetY = (dy / length) * 30;
-
-    //     const newStartX = pos1.x + offsetX;
-    //     const newStartY = pos1.y + offsetY;
-    //     const newEndX = pos2.x - offsetX;
-    //     const newEndY = pos2.y - offsetY;
-
-    //     line.points([newStartX, newStartY, newEndX, newEndY]);
-    //     layer.batchDraw();
-    // }
-
-    // const line = new Konva.Arrow({
-    //     points: [], // will be set below
-    //     stroke: 'black',
-    //     strokeWidth: 2,
-    //     pointerLength: 10,
-    //     pointerWidth: 10,
-    //     fill: 'black',
-    // });
-    // layer.add(line);
-
-    // node.on('dragmove', updateLine);
-    // node2.on('dragmove', updateLine);
-
-    // updateLine(); // Initial draw
-    // layer.draw();
-// }
 
 function createNodeConnection(node1, node2){
     const line = new Konva.Arrow({
@@ -257,6 +206,7 @@ function createNodeConnection(node1, node2){
 
     node1.on('dragmove', updateLine);
     node2.on('dragmove', updateLine);
+    updateLine() // initial draw of lines
 }
 
 
@@ -282,8 +232,8 @@ function graphVisualiser(input) {
 
     const [nodeMapping, parsedInput] = parseInput(input)
 
-    parsedInput.forEach((line, index) => {
-        const [node, neighbours] = line.split(':') // first index goes to node, rest are neighbours
+    parsedInput.forEach((line) => {
+        const [node, neighbours] = line.split(':') // first index goes to parent node, rest are neighbours
         neighbours.split(',').forEach(neighbour => {
             const nodeFromObj = nodeMapping[node]
             const nodeToObj = nodeMapping[neighbour]
