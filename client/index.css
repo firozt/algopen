@@ -254,3 +254,32 @@ button:hover {
     display: block;
     width: fit-content;
 }
+
+.display-controls {
+    opacity: .2;
+    z-index: 999;
+    width: fit-content;
+    background-color: black;
+    position: absolute;
+
+}
+
+
+.display-controls button {
+    margin: 0;
+    width: 30px;
+    height: 30px;
+    border-top: none;
+    border-left: 2px solid black;
+}
+
+.display-controls>button {
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+    border-left: none !important;
+}
+
+footer {
+    height: 2rem;
+    display: block;
+}

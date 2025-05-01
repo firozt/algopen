@@ -9,10 +9,10 @@ const stage = new Konva.Stage({
     draggable: true
 });
 
-const scaleBy = 1.05;
 
 stage.on('wheel', (e) => {
     e.evt.preventDefault();
+    const scaleBy = 1.05;
 
     const oldScale = stage.scaleX();
 
@@ -36,6 +36,35 @@ stage.on('wheel', (e) => {
     stage.batchDraw();
 });
 
+function zoomStage(scaleBy=1.5) {
+    const oldScale = stage.scaleX();
+    const newScale = oldScale * scaleBy;
+
+	const center = getVisibleCenter()
+    stage.scale({ x: newScale, y: newScale });
+
+    const newPos = {
+      x: stage.width() / 2 - center.x * newScale,
+      y: stage.height() / 2 - center.y * newScale,
+    };
+
+    stage.position(newPos);
+    stage.batchDraw();
+}
+
+function getVisibleCenter() {
+	const scale = stage.scaleX(); // assuming uniform scale for x and y
+	const position = stage.position();
+	const width = stage.width();
+	const height = stage.height();
+	// Convert center screen point to stage coordinates
+	const center = {
+		x: (width / 2 - position.x) / scale,
+		y: (height / 2 - position.y) / scale,
+	};
+
+	return center;
+}
 
 const layer = new Konva.Layer();
 stage.add(layer);
