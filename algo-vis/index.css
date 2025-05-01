@@ -1,0 +1,213 @@
+/* Resetting default styles */
+* {
+    padding: 0;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 300;
+    resize: none;
+}
+
+body {
+    background-image: url('./background2.svg');
+    background-position: center;
+    background-size: contain;
+}
+
+button {
+    all: unset;
+}
+
+/* variables */
+
+:root {
+    /* Background and Dim Colors */
+    --black:      #1C1E1F;
+    --bg-dim:     #21282C;
+    --bg0:        #273136;
+    --bg1:        #313B42;
+    --bg2:        #353F46;
+    --bg3:        #3A444B;
+    --bg4:        #414B53;
+    --gray-dim:   #55626D;
+  
+    /* Accent Colors */
+    --red:        #F76C7C;
+    --orange:     #F3A96A;
+    --yellow:     #E3D367;
+    --green:      #9CD57B;
+    --blue:       #78CEE9;
+    --purple:     #BAA0F8;
+  
+    /* Foreground & Neutral */
+    --fg:         #E1E2E3;
+    --gray:       #82878B;
+  }
+  
+
+/* css file starts  */
+
+
+body {
+    background-color: var(--gray-dim);
+}
+
+header {
+    background-color: var(--black);
+    color: white;
+    width: 100vw;
+
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    margin-bottom: 3rem;
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+}
+
+
+header > div {
+    margin-left: 2rem;
+    margin-right: 2rem;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+header h1 {
+    font-weight: 600;
+}
+
+#linebreak {
+    width: 90%;
+    margin: auto;
+}
+
+.content {
+    margin: auto;
+    gap: 5px;
+    width: fit-content;;
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    max-width: 450px;
+}
+
+.selections {
+    background-color: black;
+}
+
+.inputs button {
+    border-radius: 0;
+
+}
+
+button {
+    background-color: black;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    padding: 5px;
+    border: 1px solid black;
+    user-select: none;
+}
+
+textarea {
+    border: 2px solid black;
+    border-top: none;
+    padding: 10px;
+    background-color:  var(--bg-dim);
+    caret-color: white;
+    color: #E1E2E3;
+    font-family: 'Courier New', monospace;
+}
+
+
+textarea:focus {
+    outline: none;
+}
+
+button:hover {
+    background-color: #eee;
+    color: black;
+    border: 1px solid black;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+}
+
+
+.selected {
+    background-color: var(--bg-dim);
+
+    color: rgba(255, 255, 255, 0.538);
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+    border-top: 2px solid black;
+    border-bottom: none;
+    z-index: 999;
+    position: relative;
+    top: 1px;
+}
+
+.selected:hover {
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+    border-top: 2px solid black;
+    border-bottom: none;
+}
+
+#screen {
+    margin: auto;
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+    width: 600px;
+    height: 600px;
+    background-color: black;
+    display: block;
+}
+
+.display {
+    background-color: #eee;
+    border: 2px solid black;
+    overflow: hidden;
+    position: relative;
+    max-width: 745px;
+    height: 600px;
+
+}
+
+.display:hover {
+    cursor: grab;
+}
+
+#info {
+    background-color: var(--bg-dim);
+    color: rgba(255, 255, 255, 0.526);
+    padding: 10px;
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+}
+
+@media (max-width: 1255px) {
+    .content {
+        flex-direction: column;
+        align-items: center;
+    }
+    #container {
+        width: 100vw;
+    }
+}
+
+#portfolio:hover {
+    cursor: pointer;
+}
+
+#portfolio {
+    display: block;
+    width: fit-content;
+}
