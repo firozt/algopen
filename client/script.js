@@ -283,8 +283,8 @@ function checkLocalStorageStartup() {
         textarea = '1,null,2,null,null,2,3'
     }
     document.getElementById('text-input').value = textarea
-    visualise()
 }
 
 checkLocalStorageStartup() // checks local storage for previous sessions
 saveToLocalStorage() // creates listener for saving to local storage
+visualise('1,2,3,null,4,5,6')
