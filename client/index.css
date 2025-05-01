@@ -11,8 +11,7 @@ body {
     background-image: url('./public/background2.svg');
     background-position: center;
     background-size: contain;
-    width: 100vw;
-    overflow-x: hidden;
+
 
 }
 
@@ -228,6 +227,11 @@ button:hover {
         border: none;
         margin: auto;
         width: 100vw;
+    }
+
+    .html {
+        width: 100vw;
+        overflow-x: hidden;
     }
 }
 
