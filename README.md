@@ -1,7 +1,7 @@
 
-# Project Name
+# Algorithm Visualizer
 
-Brief description of what the project does and its purpose.
+This web application gives users ways of visualising complex algorithms, allowing users to more easily understand their code and datastructures it interacts with
 
 ## Table of Contents
 
