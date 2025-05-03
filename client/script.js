@@ -242,16 +242,24 @@ function randomInt(lower,upper){
 	return Math.floor(Math.random()*(upper-lower))+lower
 }
 
-function closeToAnotherNode(x,y,previousPositions){
+function closeToAnotherNode(x,y,previousPositions,nodePadding=100){
 	for(let i = 0; i < previousPositions.length; i++){
 		const x2 = previousPositions[i].x
 		const y2 = previousPositions[i].y
 		const dist = Math.floor(Math.sqrt((x-x2)**2 + (y-y2)**2))
-		if (dist < 100){
+		if (dist < nodePadding){
 			return true
 		}
 	}
 	return false
+}
+
+function intersectsEdge(x,y,previousPositions) {
+	for(let i = 0; i < previousPositions.length; i++){
+		const x2 = previousPositions[i].x
+		const y2 = previousPositions[i].y
+
+	}
 }
 
 function graphVisualiser(input) {
@@ -271,7 +279,7 @@ function graphVisualiser(input) {
 			do {
 				random_x = randomInt(50,700)
 				random_y = randomInt(50,550)
-			} while (closeToAnotherNode(random_x,random_y,previousPositions))
+			} while (closeToAnotherNode(random_x,random_y,previousPositions,150))
 
 			previousPositions.push({x:random_x,y:random_y})
             nodeMapping[node] = createDraggableNode(random_x,random_y,node)
