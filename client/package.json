@@ -1,9 +1,21 @@
 {
-  "devDependencies": {
-    "typescript": "^5.8.3",
-    "vite": "^6.3.5"
+  "name": "your-project-name",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .ts,.tsx",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "konva": "^9.3.20"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3", 
+    "vite": "^6.3.5",
+    "@types/konva": "^9.2.6",
+    "@types/node": "^20.11.19",
+    "vite-plugin-gh-pages": "^1.0.0"
   }
 }
