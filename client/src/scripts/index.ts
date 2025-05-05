@@ -1,7 +1,7 @@
 import Konva from 'konva';
 import { LINE_WIDTH, NODE_COLOR, NODE_RADIUS, TEXT_COLOR } from "./constants";
 import { getVisibleCenter } from "./libs/SceneController";
-import { Vector2d } from '../../node_modules/konva/lib/types';
+import { Vector2d } from './types';
 import { Group } from 'konva/lib/Group';
 
 console.log('js running')

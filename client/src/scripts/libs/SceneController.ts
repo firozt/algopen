@@ -1,4 +1,4 @@
-import Konva from "../../../node_modules/konva/lib/index-types";
+import Konva from 'konva'
 
 export function getVisibleCenter(stage: Konva.Stage) {
     const scale = stage.scaleX(); // assuming uniform scale for x and y

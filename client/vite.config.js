@@ -1,12 +1,17 @@
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vite'
+import path from 'path'
 
 export default defineConfig({
-  root: 'src',
-  base: '/algovis/',
+  root: __dirname,
   build: {
-    outDir: '../dist',
+    outDir: 'dist',
     rollupOptions: {
-      input: '/src/index.ts'
+      input: path.resolve(__dirname, 'index.html')
+    }
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './')
     }
   }
-});
+})

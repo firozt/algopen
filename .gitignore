@@ -2,4 +2,8 @@
 todo.txt
 /dist
 /node_modules
+/.pnpm-store
+/.yarn/cache
 *.local
+/.vite
+.vscode/
