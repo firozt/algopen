@@ -30,16 +30,24 @@ jobs:
           node-version: 20
           
       - name: Install dependencies
-        run: npm install
-        
+        working-directory: ./client
+        run: |
+          npm install
+          
       - name: Build project
-        run: npm run build
-        
+        working-directory: ./client
+        run: |
+          npm run build
+          
+      - name: Verify built files
+        working-directory: ./client
+        run: |
+          ls -la dist/
+          
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload only the built dist folder
-          path: 'dist'
+          path: 'client/dist'
           
       - name: Deploy to GitHub Pages
         id: deployment
