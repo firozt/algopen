@@ -2,6 +2,7 @@ import Konva from 'konva';
 import { LINE_WIDTH, NODE_COLOR, NODE_RADIUS, TEXT_COLOR } from "./constants";
 import { getVisibleCenter } from "./libs/SceneController";
 import { Vector2d } from '../../node_modules/konva/lib/types';
+import { Group } from 'konva/lib/Group';
 
 console.log('js running')
 
@@ -180,7 +181,6 @@ function resetStage() {
 let selected = 0
 
 function handleSelection(index: number){
-    console.log('asdlkja')
     selected = index
     const buttons = [
         document.getElementById('treebuilder'),
@@ -201,34 +201,25 @@ function handleSelection(index: number){
     }
 
     buttons.forEach((val,idx) => {
+
         if (idx == index) {
-            val.classList = ['selected']
+            (val as HTMLElement).className = 'selected'
         }
         else {
-            val.classList = []
+            (val as HTMLElement).className = ''
         }
     })
 
-    const infoTextVal = document.getElementById('info-text')
+    const infoTextVal = document.getElementById('info-text') as HTMLElement
     infoTextVal.innerHTML = infoText[index]
 }
 
-class GraphNode {
-    constructor(x,y,neighbours = []) {
-        this.x = x
-        this.y = y
-        this.neighbours = neighbours
-    }
-}
-
-
-
-function createDraggableNode(pos: Vector2d, val: string){
+function createDraggableNode(pos: Vector2d, val: string): Group{
     const node = createNode(pos, val, true);
     return node
 }
 
-function createNodeConnection(node1, node2){
+function createNodeConnection(node1: Group, node2: Group){
     const line = new Konva.Arrow({
         points: [], // will be set below
         stroke: 'black',
@@ -265,15 +256,15 @@ function createNodeConnection(node1, node2){
     updateLine() // initial draw of lines
 }
 
-function randomInt(lower,upper){
+function randomInt(lower: number,upper: number){
 	return Math.floor(Math.random()*(upper-lower))+lower
 }
 
-function closeToAnotherNode(x,y,previousPositions,nodePadding=100){
+function closeToAnotherNode(pos: Vector2d,previousPositions: Vector2d[],nodePadding=100){
 	for(let i = 0; i < previousPositions.length; i++){
 		const x2 = previousPositions[i].x
 		const y2 = previousPositions[i].y
-		const dist = Math.floor(Math.sqrt((x-x2)**2 + (y-y2)**2))
+		const dist = Math.floor(Math.sqrt((pos.x-x2)**2 + (pos.y-y2)**2))
 		if (dist < nodePadding){
 			return true
 		}
@@ -283,13 +274,13 @@ function closeToAnotherNode(x,y,previousPositions,nodePadding=100){
 
 function graphVisualiser(input: string) {
 
-    const parseInput = (input: string) => {
+    const parseInput = (input: string): [{ [key: string]: Konva.Group }, string[]]  => {
         input.replace
         // get all unique nodes
         const unique_nodes = new Set(input.replaceAll(' ','').split(/[,\n:]+/)) // contains set of all unique nodes
         const parsedInput = input.replaceAll(' ','').split('\n') // contains user input, each index is new line
 
-        const nodeMapping: any = {} // str -> node obj
+        const nodeMapping: { [key: string]: Konva.Group } = {} // str -> node obj
 		const previousPositions: Vector2d[] = [] // holds previous x,y values
 
 		// safe zone is x between 50,700 | y between 50, 500
@@ -299,7 +290,14 @@ function graphVisualiser(input: string) {
 			do {
 				random_x = randomInt(50,700)
 				random_y = randomInt(50,550)
-			} while (closeToAnotherNode(random_x,random_y,previousPositions,150))
+			} while (closeToAnotherNode(
+                {
+                    x: random_x,
+                    y: random_y,
+                },
+                previousPositions,
+                150)
+            )
 
 			previousPositions.push({x:random_x,y:random_y})
             nodeMapping[node] = createDraggableNode(
@@ -375,10 +373,10 @@ function checkLocalStorageStartup() {
 
 }
 
-checkLocalStorageStartup() // checks local storage for previous sessions
-saveToLocalStorage() // creates listener for saving to local storage
+checkLocalStorageStartup(); // checks local storage for previous sessions
+saveToLocalStorage(); // creates listener for saving to local storage
 
 
-window.visualise = visualise;
-window.handleSelection = handleSelection
-window.zoomStage = zoomStage
+(window as any).visualise = visualise;
+(window as any).handleSelection = handleSelection;
+(window as any).zoomStage = zoomStage;
