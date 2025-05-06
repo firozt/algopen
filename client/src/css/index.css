@@ -125,6 +125,8 @@ textarea {
     border-top: none;
     border-radius: 0;
     padding: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
     font-size: 16px;
     background-color:  var(--bg-dim);
     caret-color: white;
@@ -132,10 +134,6 @@ textarea {
     font-family: 'Courier New', monospace;
     height: 380px;
 }
-
-/* textarea + button { */
-    /* height: 4rem; */
-/* } */
 
 .v-wrapper{
     width: 100%;

@@ -1,52 +1,18 @@
 import Konva from 'konva';
 import { LINE_WIDTH, MAX_PLACEMENT_ATTEMPTS, NODE_COLOR, NODE_RADIUS, TEXT_COLOR } from "./constants";
-import { getVisibleCenter } from "./libs/SceneController";
+import { connectCircles, createDraggableNode, createNode, getVisibleCenter, initialiseStage, resetStage } from "./libs/SceneController";
 import { Vector2d } from './types';
 import { Group } from 'konva/lib/Group';
+import { checkLocalStorageStartup, closeToAnotherNode, getBoundingRectPoints, intersectsAllLines, loadLastSelectedTab, randomInt, saveToLocalStorage } from './libs/Misc';
 
 console.log('js running')
 
-const width = window.innerWidth;
-const height = window.innerHeight;
 
 // initialise stage for the website
-const stage = new Konva.Stage({
-    container: 'container',
-    width: width,
-    height: height,
-    draggable: true
-});
+const stage = initialiseStage()
+const layer = new Konva.Layer();
+stage.add(layer);
 
-// Adding mousehweel event listener for the stage
-stage.on('wheel', (e) => {
-    e.evt.preventDefault();
-    const scaleBy = 1.05;
-    const oldScale = stage.scaleX();
-    const pointer = stage.getPointerPosition();
-
-    if (!pointer) {
-        console.warn('Developer Error: Pointer is null on zoom out')
-        return
-    }
-
-    const mousePointTo = {
-        x: (pointer.x - stage.x()) / oldScale,
-        y: (pointer.y - stage.y()) / oldScale,
-    };
-
-    const direction = e.evt.deltaY > 0 ? 1 : -1;
-    const newScale = direction > 0 ? oldScale / scaleBy : oldScale * scaleBy;
-
-    stage.scale({ x: newScale, y: newScale });
-
-    const newPos = {
-        x: pointer.x - mousePointTo.x * newScale,
-        y: pointer.y - mousePointTo.y * newScale,
-    };
-
-    stage.position(newPos);
-    stage.batchDraw();
-});
 
 // Zoom
 function zoomStage(scaleBy=1.5) {
@@ -63,55 +29,6 @@ function zoomStage(scaleBy=1.5) {
 
     stage.position(newPos);
     stage.batchDraw();
-}
-
-
-const layer = new Konva.Layer();
-stage.add(layer);
-
-function createNode(pos: Vector2d, val: string, draggable = false): Group {
-    // group will contain circle node and text on the circle node
-    const group = new Konva.Group({ 
-        x: pos.x, 
-        y: pos.y, 
-        draggable 
-    }); 
-
-    const circle = new Konva.Circle({
-        radius: NODE_RADIUS,
-        fill: NODE_COLOR,
-        stroke: NODE_COLOR, // same color as node
-        strokeWidth: LINE_WIDTH,
-    });
-
-    const text = new Konva.Text({
-        text: val.toString(),
-        fontSize: 20,
-        fill: TEXT_COLOR,
-        align: 'center',
-        verticalAlign: 'middle',
-        width: 60,
-        height: 60,
-        offsetX: 30,
-        offsetY: 30
-    });
-
-    group.add(circle);
-    group.add(text);
-    layer.add(group);
-
-    return group;
-}
-
-function connectCircles(pos1: Vector2d, pos2: Vector2d) {
-    const line = new Konva.Line({
-        points: [pos1.x, pos1.y, pos2.x, pos2.y],
-        stroke: 'black',
-        strokeWidth: 3,
-        lineCap: 'round',
-        lineJoin: 'round'
-    });
-    layer.add(line);
 }
 
 function getLevel(index: number): number {
@@ -137,7 +54,8 @@ function generateTree(tree_array: string[]) {
                 {
                     x: pos.x - new_x,
                     y:  new_y
-                }
+                },
+                layer
             );
             dfs(left, 
                 {
@@ -151,7 +69,8 @@ function generateTree(tree_array: string[]) {
                 {
                     x: pos.x + new_x,
                     y:  new_y
-                }
+                },
+                layer
             );
             dfs(
                 right,
@@ -161,22 +80,13 @@ function generateTree(tree_array: string[]) {
                 }
             );
         }
-        createNode(pos, tree_array[index]);
+        createNode(pos, tree_array[index],false,layer);
     };
 
     dfs(0, {x:375, y: 75});
     layer.draw()
 }
 
-function resetStage() {
-    stage.getChildren().forEach(layer => {
-        if (layer instanceof Konva.Layer) {
-          layer.destroyChildren(); // remove all shapes in this layer
-          layer.draw();            // redraw to apply the changes
-        }
-    });
-    
-}
 
 function handleSelection(index: number){
     // save new selected to local storage
@@ -214,10 +124,7 @@ function handleSelection(index: number){
     infoTextVal.innerHTML = infoText[index]
 }
 
-function createDraggableNode(pos: Vector2d, val: string): Group{
-    const node = createNode(pos, val, true);
-    return node
-}
+
 
 function createNodeConnection(node1: Group, node2: Group){
     const line = new Konva.Arrow({
@@ -256,70 +163,6 @@ function createNodeConnection(node1: Group, node2: Group){
     updateLine() // initial draw of lines
 }
 
-function randomInt(lower: number,upper: number){
-	return Math.floor(Math.random()*(upper-lower))+lower
-}
-
-function closeToAnotherNode(pos: Vector2d,previousPositions: Vector2d[],nodePadding=100): boolean{
-	for(let i = 0; i < previousPositions.length; i++){
-		const x2 = previousPositions[i].x
-		const y2 = previousPositions[i].y
-		const dist = Math.floor(Math.sqrt((pos.x-x2)**2 + (pos.y-y2)**2))
-		if (dist < nodePadding){
-			return true
-		}
-	}
-	return false
-}
-
-function intersectsLine(p1: Vector2d,p2: Vector2d,nodeCenter: Vector2d): boolean {
-    // we define the line in y=mx+c format
-    const grad = (p2.y-p1.y)/(p2.x-p1.x) // grad
-    
-    // sub in p1 to find c
-    const constant = p1.y - (grad*p1.x)
-    const boundingRectPoint = getBoundingRectPoints(nodeCenter,50)
-    let previousRes
-
-    // check each point is above/below line
-    // for an intersection atleast one point will differ to others (max 3),
-    // returns true if rect intersects line else false
-    for(let i = 0; i < boundingRectPoint.length; i++) {
-        const pos = boundingRectPoint[i]
-        const res = pos.y > (grad * pos.x) + constant
-        if (res == previousRes || previousRes == undefined ){
-            previousRes = res
-        } else {
-            return true
-        }
-    }
-    return false
-}
-
-// TODO make this better complexity (currently O(N^2))
-function intersectsAllLines(nodeCenter: Vector2d,previousPositions: Vector2d[]): boolean {
-    for (let i = 0; i < previousPositions.length; i++) {
-        for (let j = 1; j < previousPositions.length; j++) {
-            if (j==i) continue
-            const res = intersectsLine(previousPositions[i],previousPositions[j],nodeCenter)
-            if (res)
-                return true
-        }
-    }
-    return false
-}
-function getBoundingRectPoints(nodeCenter: Vector2d, padding=0): Vector2d[] {
-    const node = createNode(nodeCenter, 'test', true);
-    const boundingRect = node.getClientRect();
-    node.destroy();
-
-    return [
-        { x: boundingRect.x-padding, y: boundingRect.y-padding }, // top-left
-        { x: boundingRect.x+boundingRect.width+padding, y: boundingRect.y-padding}, // top-right
-        { x: boundingRect.x-padding, y: boundingRect.y + boundingRect.height+padding }, // bottom-left
-        { x: boundingRect.x+ boundingRect.width+padding, y: boundingRect.y + boundingRect.height+padding } // bottom-right
-    ];
-}
 
 
 // Places node on scene, tries to place at a random position. 
@@ -336,7 +179,7 @@ function graphVisualiser(input: string) {
         const nodeMapping: { [key: string]: Konva.Group } = {} // str -> node obj
 		const previousPositions: Vector2d[] = [] // holds previous x,y values
         
-		// safe zone is x between 50,700 | y between 50, 500
+		// safe zone is x between 50,700 | y between 50, 500 on startup
         unique_nodes.forEach(node => {
 			let random_x
 			let random_y
@@ -360,7 +203,8 @@ function graphVisualiser(input: string) {
                     x:random_x,
                     y:random_y
                 },
-                node
+                node,
+                layer
             )
         })
         return [nodeMapping,parsedInput]
@@ -382,7 +226,7 @@ function graphVisualiser(input: string) {
 
 // Main
 function visualise() {
-    resetStage()
+    resetStage(stage)
     const textarea = document.getElementById('text-input') as HTMLTextAreaElement
     const input = textarea.value
     const selected: number = JSON.parse(localStorage.getItem('selected') ?? '-1')
@@ -405,34 +249,12 @@ function visualise() {
 
 
 
-// misc functions
+// misc functions and listeners
 
-function saveToLocalStorage(){
-    const textarea = document.getElementById('text-input') as HTMLTextAreaElement;
-    
-    textarea.addEventListener('input', function() {
-        const textareaValue = textarea.value;
-        localStorage.setItem('textareaContent', textareaValue);
-    });
-}
-
-function checkLocalStorageStartup() {
-    let textarea = localStorage.getItem('textareaContent')
-    if (!textarea) {
-        textarea = '1,null,2,null,null,2,3'
-    }
-    const textareaElement = document.getElementById('text-input') as HTMLTextAreaElement;
-    textareaElement.value = textarea
-}
-
-function loadLastSelectedTab() {
-    const selected: string = localStorage.getItem('selected') ?? '0'
-    handleSelection(JSON.parse(selected))
-}
 
 checkLocalStorageStartup(); // checks local storage for previous sessions
 saveToLocalStorage(); // creates listener for saving to local storage
-loadLastSelectedTab();
+loadLastSelectedTab(handleSelection);
 
 
 // stops scrolling when user is trying to pan around the canvas
@@ -440,6 +262,20 @@ document.getElementById('screen')?.addEventListener('touchmove',  (e) => {
     e.preventDefault();
 }, { passive: false });
 
+
+// changes text of button on hover
+const button = document.getElementById('visualise-test') as HTMLSpanElement
+button.addEventListener('mouseover',  (e) => {
+    const span = button.childNodes[0] as HTMLSpanElement
+    span.innerText = 'Go'
+}, { passive: false });
+
+button.addEventListener('mouseout', (e) => {
+    const span = button.childNodes[0] as HTMLSpanElement
+    span.innerText = 'Visualise'
+}, {passive: false });
+
+// brings these function to global scope
 (window as any).visualise = visualise;
 (window as any).handleSelection = handleSelection;
 (window as any).zoomStage = zoomStage;
