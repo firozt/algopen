@@ -11,8 +11,11 @@ body {
     background-image: url('/public/background2.svgd');
     background-position: center;
     background-size: contain;
+    
+}
 
-
+html, body {
+        overflow-x: hidden;
 }
 
 button {
@@ -283,6 +286,7 @@ button:hover {
         border: none;
         margin: auto;
         width: 100vw;
+        gap: 25px;
     }
 
     .html {

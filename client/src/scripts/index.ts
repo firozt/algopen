@@ -333,21 +333,21 @@ function visualise() {
     resetStage()
     const textarea = document.getElementById('text-input') as HTMLTextAreaElement
     const input = textarea.value
-    const selected = JSON.parse(localStorage.getItem('selected') ?? '-1')
+    const selected: number = JSON.parse(localStorage.getItem('selected') ?? '-1')
 
     if (selected == 0) {
         const parsed_input = input.replaceAll('[','').replaceAll(']','').replaceAll(' ','').split(',')
         console.log('tree visualising')
         generateTree(parsed_input)
     }
-    if (selected == 1) {
+    else if (selected == 1) {
         console.log('tree traversal')
     }
-    if (selected == 2) {
+    else if (selected == 2) {
         console.log('graph visualiser')
         graphVisualiser(input)
     } else {
-        console.warn('Selected could not be parsed')
+        console.warn('Selected could not be parsed : ' + selected)
     }
 }
 
@@ -382,6 +382,12 @@ function loadLastSelectedTab() {
 checkLocalStorageStartup(); // checks local storage for previous sessions
 saveToLocalStorage(); // creates listener for saving to local storage
 loadLastSelectedTab();
+
+
+// stops scrolling when user is trying to pan around the canvas
+document.getElementById('screen')?.addEventListener('touchmove',  (e) => {
+    e.preventDefault();
+}, { passive: false });
 
 (window as any).visualise = visualise;
 (window as any).handleSelection = handleSelection;
