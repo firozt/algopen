@@ -178,10 +178,10 @@ function resetStage() {
     
 }
 
-let selected = 0
-
 function handleSelection(index: number){
-    selected = index
+    // save new selected to local storage
+    localStorage.setItem('selected',JSON.stringify(index))
+
     const buttons = [
         document.getElementById('treebuilder'),
         document.getElementById('treetraversal'),
@@ -333,7 +333,7 @@ function visualise() {
     resetStage()
     const textarea = document.getElementById('text-input') as HTMLTextAreaElement
     const input = textarea.value
-
+    const selected = JSON.parse(localStorage.getItem('selected') ?? '-1')
 
     if (selected == 0) {
         const parsed_input = input.replaceAll('[','').replaceAll(']','').replaceAll(' ','').split(',')
@@ -346,6 +346,8 @@ function visualise() {
     if (selected == 2) {
         console.log('graph visualiser')
         graphVisualiser(input)
+    } else {
+        console.warn('Selected could not be parsed')
     }
 }
 
@@ -370,13 +372,18 @@ function checkLocalStorageStartup() {
     }
     const textareaElement = document.getElementById('text-input') as HTMLTextAreaElement;
     textareaElement.value = textarea
+}
 
+function loadLastSelectedTab() {
+    const selected: string = localStorage.getItem('selected') ?? '0'
+    handleSelection(JSON.parse(selected))
 }
 
 checkLocalStorageStartup(); // checks local storage for previous sessions
 saveToLocalStorage(); // creates listener for saving to local storage
-
+loadLastSelectedTab();
 
 (window as any).visualise = visualise;
 (window as any).handleSelection = handleSelection;
 (window as any).zoomStage = zoomStage;
+(window as any).saveToLocalStorage = saveToLocalStorage
