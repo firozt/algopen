@@ -1,5 +1,5 @@
 import Konva from 'konva';
-import { LINE_WIDTH, NODE_COLOR, NODE_RADIUS, TEXT_COLOR } from "./constants";
+import { LINE_WIDTH, MAX_PLACEMENT_ATTEMPTS, NODE_COLOR, NODE_RADIUS, TEXT_COLOR } from "./constants";
 import { getVisibleCenter } from "./libs/SceneController";
 import { Vector2d } from './types';
 import { Group } from 'konva/lib/Group';
@@ -69,7 +69,7 @@ function zoomStage(scaleBy=1.5) {
 const layer = new Konva.Layer();
 stage.add(layer);
 
-function createNode(pos: Vector2d, val: string, draggable = false) {
+function createNode(pos: Vector2d, val: string, draggable = false): Group {
     // group will contain circle node and text on the circle node
     const group = new Konva.Group({ 
         x: pos.x, 
@@ -260,7 +260,7 @@ function randomInt(lower: number,upper: number){
 	return Math.floor(Math.random()*(upper-lower))+lower
 }
 
-function closeToAnotherNode(pos: Vector2d,previousPositions: Vector2d[],nodePadding=100){
+function closeToAnotherNode(pos: Vector2d,previousPositions: Vector2d[],nodePadding=100): boolean{
 	for(let i = 0; i < previousPositions.length; i++){
 		const x2 = previousPositions[i].x
 		const y2 = previousPositions[i].y
@@ -272,8 +272,61 @@ function closeToAnotherNode(pos: Vector2d,previousPositions: Vector2d[],nodePadd
 	return false
 }
 
-function graphVisualiser(input: string) {
+function intersectsLine(p1: Vector2d,p2: Vector2d,nodeCenter: Vector2d): boolean {
+    // we define the line in y=mx+c format
+    const grad = (p2.y-p1.y)/(p2.x-p1.x) // grad
+    
+    // sub in p1 to find c
+    const constant = p1.y - (grad*p1.x)
+    const boundingRectPoint = getBoundingRectPoints(nodeCenter,50)
+    let previousRes
 
+    // check each point is above/below line
+    // for an intersection atleast one point will differ to others (max 3),
+    // returns true if rect intersects line else false
+    for(let i = 0; i < boundingRectPoint.length; i++) {
+        const pos = boundingRectPoint[i]
+        const res = pos.y > (grad * pos.x) + constant
+        if (res == previousRes || previousRes == undefined ){
+            previousRes = res
+        } else {
+            return true
+        }
+    }
+    return false
+}
+
+// TODO make this better complexity (currently O(N^2))
+function intersectsAllLines(nodeCenter: Vector2d,previousPositions: Vector2d[]): boolean {
+    for (let i = 0; i < previousPositions.length; i++) {
+        for (let j = 1; j < previousPositions.length; j++) {
+            if (j==i) continue
+            const res = intersectsLine(previousPositions[i],previousPositions[j],nodeCenter)
+            if (res)
+                return true
+        }
+    }
+    return false
+}
+function getBoundingRectPoints(nodeCenter: Vector2d, padding=0): Vector2d[] {
+    const node = createNode(nodeCenter, 'test', true);
+    const boundingRect = node.getClientRect();
+    node.destroy();
+
+    return [
+        { x: boundingRect.x-padding, y: boundingRect.y-padding }, // top-left
+        { x: boundingRect.x+boundingRect.width+padding, y: boundingRect.y-padding}, // top-right
+        { x: boundingRect.x-padding, y: boundingRect.y + boundingRect.height+padding }, // bottom-left
+        { x: boundingRect.x+ boundingRect.width+padding, y: boundingRect.y + boundingRect.height+padding } // bottom-right
+    ];
+}
+
+
+// Places node on scene, tries to place at a random position. 
+// On the random position does checks to see if its a valid position i.e not too close
+// to another node or intersects a node/edge.
+// If valid places and goes next
+function graphVisualiser(input: string) {
     const parseInput = (input: string): [{ [key: string]: Konva.Group }, string[]]  => {
         input.replace
         // get all unique nodes
@@ -282,22 +335,24 @@ function graphVisualiser(input: string) {
 
         const nodeMapping: { [key: string]: Konva.Group } = {} // str -> node obj
 		const previousPositions: Vector2d[] = [] // holds previous x,y values
-
+        
 		// safe zone is x between 50,700 | y between 50, 500
         unique_nodes.forEach(node => {
 			let random_x
 			let random_y
-			do {
-				random_x = randomInt(50,700)
-				random_y = randomInt(50,550)
-			} while (closeToAnotherNode(
-                {
-                    x: random_x,
-                    y: random_y,
-                },
-                previousPositions,
-                150)
+            let attempts = 0
+            do {
+                random_x = randomInt(50,700)
+                random_y = randomInt(50,550)
+                attempts += 1
+            } while (
+                attempts <= MAX_PLACEMENT_ATTEMPTS &&
+                (
+                    closeToAnotherNode({x: random_x, y: random_y}, previousPositions, 150) || 
+                    intersectsAllLines({x: random_x, y: random_y}, previousPositions)
+                )
             )
+            
 
 			previousPositions.push({x:random_x,y:random_y})
             nodeMapping[node] = createDraggableNode(
@@ -307,10 +362,7 @@ function graphVisualiser(input: string) {
                 },
                 node
             )
-
         })
-
-
         return [nodeMapping,parsedInput]
     }
 
@@ -361,7 +413,6 @@ function saveToLocalStorage(){
     textarea.addEventListener('input', function() {
         const textareaValue = textarea.value;
         localStorage.setItem('textareaContent', textareaValue);
-        console.log('Saved to localStorage:', textareaValue);
     });
 }
 
