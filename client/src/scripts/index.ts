@@ -144,7 +144,7 @@ function graphWeightedVisualiser(input: string) {
         neighbours.split(',').forEach(neighbour => {
             const nodeFromObj = nodeMapping[node]
             const nodeToObj = nodeMapping[neighbour.replace(/\(\d+\)/g, '')] // remove weighting
-            const weightval = neighbour.match(/\((\d+)\)/)?.[1].toString() ?? 'error'
+            const weightval = neighbour.match(/\((\d+)\)/)?.[1].toString() ?? '1'
             createWeightedNodeConnection(nodeFromObj,nodeToObj,weightval,layer)
         })
     });
