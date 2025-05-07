@@ -24,19 +24,22 @@ Below depicts the binary tree visualiser, by entering the array notation of a bi
 ## Features
 
 - ✅ Visualising binary tree data structures
-- ☑️ Visualising directional graphs
+- ✅ Visualising directional graphs
+- ✅ Visualising weighted graphs
+- ☑️ Visualising sorting algorithms
+- ☑️ Visualising path finding algorithms
 - ☑️ Visualising tree traversal algorithms
 
 ## Tech Stack
 
-**Frontend:** Plain Javascript / Konva.js / Tailwind
-**Backend:** Python / Django 
+**Frontend:** Vite / Typescript / Konva.js 
+**Backend:** None (as of now)
 
 ## Getting Started
 
 ### Prerequisites
-- Python version 3.12+
-- Django
+- Konva
+- Typescript Interpeter
 
 ### Setup
 
