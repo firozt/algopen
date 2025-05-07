@@ -225,10 +225,11 @@ function graphVisualiser(input: string, directional: boolean) {
 
 
 function isDirectional(input: string): [string, boolean] {
+    console.log( input.split('\n')[0].toLowerCase())
     const res = input.length > 0 && input.split('\n')[0].toLowerCase() == 'directed'
 
     if (res) {
-        input = input.replace('directed\n','')
+        input = input.replace(/directed\n/i,'')
     }
 
     return [input,res]
