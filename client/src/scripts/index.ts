@@ -1,9 +1,8 @@
 import Konva from 'konva';
-import { LINE_WIDTH, MAX_PLACEMENT_ATTEMPTS, NODE_COLOR, NODE_RADIUS, TEXT_COLOR } from "./constants";
+import { MAX_PLACEMENT_ATTEMPTS } from "./constants";
 import { connectCircles, createDraggableNode, createNode, createNodeConnection, createWeightedNodeConnection, getVisibleCenter, initialiseStage, resetStage } from "./libs/SceneController";
 import { Vector2d } from './types';
-import { Group } from 'konva/lib/Group';
-import { checkLocalStorageStartup, closeToAnotherNode, getBoundingRectPoints, intersectsAllLines, loadLastSelectedTab, randomInt, saveToLocalStorage } from './libs/Misc';
+import { checkLocalStorageStartup, closeToAnotherNode, intersectsAllLines, loadLastSelectedTab, randomInt, saveToLocalStorage } from './libs/Misc';
 
 console.log('js running')
 
@@ -96,8 +95,8 @@ function handleSelection(index: number){
 
     const infoText = [
         'Enter in array format, each node label seperated by a comma ( , ) below',
-        'Enter the graph in adjancency list format with the weighting in brackets, i.e:\nnodeX : neighbourA(2),neighbourB(3)\nnodeY...',
-        'Enter the graph in adjancency list format, i.e:\nnodeX : neighbourA,neighbourB\nnodeY...',
+        'Enter the graph in adjancency list format with the weighting in brackets, i.e:\nnodeX : neighbourA(2),neighbourB(3)\nnodeY...\nFor a directed graph, begin line 1 with \'directed\'',
+        'Enter the graph in adjancency list format, i.e:\nnodeX : neighbourA,neighbourB\nnodeY...\nFor a directed graph, begin line 1 with \'directed\'',
     ]
 
 
@@ -125,14 +124,14 @@ function handleSelection(index: number){
 
 
 
-function graphWeightedVisualiser(input: string) {
+function graphWeightedVisualiser(input: string, directional: boolean) {
     const parseInput = (input: string) : [{ [key: string]: Konva.Group }, string[]]  => {
         // first takes out the weights in the form '(number)' then removes whitespace, now in the same form as pre weighted
         const unique_nodes = new Set(
             input
               .replaceAll(/\(.*?\)/g, '')   // Remove anything inside ( )
-              .replaceAll(' ', '')            // Remove spaces
-              .split(/[,\n:]+/)               // Split by comma, newline, or colon
+              .replaceAll(' ', '')          // Remove spaces
+              .split(/[,\n:]+/)             // Split by comma, newline, or colon
         );
 
         const parsedInput = input.replaceAll(' ','').split('\n')  // contains user input, each index is new line
@@ -151,7 +150,7 @@ function graphWeightedVisualiser(input: string) {
             const nodeFromObj = nodeMapping[node]
             const nodeToObj = nodeMapping[neighbour.replace(/\(.*?\)/g, '')] // remove weighting
             const weightval = neighbour.match(/\(.*?\)/g)?.toString().replaceAll('(','').replaceAll(')','') ?? '1';
-            createWeightedNodeConnection(nodeFromObj,nodeToObj,weightval,layer)
+            createWeightedNodeConnection(nodeFromObj,nodeToObj,weightval,directional,layer)
         })
     });
     
@@ -169,8 +168,8 @@ function placeAllNodes(unique_nodes: Set<string>): { [key: string]: Konva.Group 
         let random_x
         let random_y
         let attempts = 0
-        let buffer = unique_nodes.size > 7 ? (unique_nodes.size-5) * 30 : 0
-        let nodeMinDistance = unique_nodes.size < 9 ? 1500 / unique_nodes.size  : 150
+        const buffer = unique_nodes.size > 7 ? (unique_nodes.size-5) * 30 : 0
+        const nodeMinDistance = unique_nodes.size < 9 ? 1500 / unique_nodes.size  : 150
         do {
             random_x = randomInt(50,1000+buffer)
             random_y = randomInt(50,800+buffer)
@@ -201,12 +200,12 @@ function placeAllNodes(unique_nodes: Set<string>): { [key: string]: Konva.Group 
 }
 
 
-function graphVisualiser(input: string) {
+function graphVisualiser(input: string, directional: boolean) {
     const parseInput = (input: string): [{ [key: string]: Konva.Group }, string[]]  => {
         // get all unique nodes
 
-        let unique_nodes = new Set(input.replaceAll(' ','').split(/[,\n:]+/))  // regex splits on comma, newline and colon // contains set of all unique nodes
-        let parsedInput = input.replaceAll(' ','').split('\n')  // contains user input, each index is new line
+        const unique_nodes = new Set(input.replaceAll(' ','').split(/[,\n:]+/))  // regex splits on comma, newline and colon // contains set of all unique nodes
+        const parsedInput = input.replaceAll(' ','').split('\n')  // contains user input, each index is new line
 
         return [placeAllNodes(unique_nodes),parsedInput]
     }
@@ -218,10 +217,21 @@ function graphVisualiser(input: string) {
         neighbours.split(',').forEach(neighbour => {
             const nodeFromObj = nodeMapping[node]
             const nodeToObj = nodeMapping[neighbour]
-            createNodeConnection(nodeFromObj,nodeToObj, layer)
+            createNodeConnection(nodeFromObj,nodeToObj,directional,layer)
         }) 
     })
 
+}
+
+
+function isDirectional(input: string): [string, boolean] {
+    const res = input.length > 0 && input.split('\n')[0].toLowerCase() == 'directed'
+
+    if (res) {
+        input = input.replace('directed\n','')
+    }
+
+    return [input,res]
 }
 
 
@@ -239,11 +249,14 @@ function visualise() {
     }
     else if (selected == 1) {
         console.log('tree traversal')
-        graphWeightedVisualiser(input)
+        const [parsed, directional] = isDirectional(input)
+        graphWeightedVisualiser(parsed,directional)
     }
     else if (selected == 2) {
         console.log('graph visualiser')
-        graphVisualiser(input)
+        const [parsed, directional] = isDirectional(input)
+
+        graphVisualiser(parsed,directional)
     } else {
         console.warn('Selected could not be parsed : ' + selected)
     }
@@ -267,18 +280,28 @@ document.getElementById('screen')?.addEventListener('touchmove',  (e) => {
 
 // changes text of button on hover
 const button = document.getElementById('visualise-test') as HTMLSpanElement
-button.addEventListener('mouseover',  (e) => {
+button.addEventListener('mouseover',  () => {
     const span = button.childNodes[0] as HTMLSpanElement
     span.innerText = 'Go'
 }, { passive: false });
 
-button.addEventListener('mouseout', (e) => {
+button.addEventListener('mouseout', () => {
     const span = button.childNodes[0] as HTMLSpanElement
     span.innerText = 'Visualise'
 }, {passive: false });
 
 // brings these function to global scope
-(window as any).visualise = visualise;
-(window as any).handleSelection = handleSelection;
-(window as any).zoomStage = zoomStage;
-(window as any).saveToLocalStorage = saveToLocalStorage
+
+
+
+interface GlobalType {
+    visualise : () => void
+    saveToLocalStorage : () => void
+    zoomStage : (scaleBy: number) => void
+    handleSelection : (index: number) => void 
+}
+
+(window as unknown as GlobalType).visualise = visualise;
+(window as unknown as GlobalType).handleSelection = handleSelection;
+(window as unknown as GlobalType).zoomStage = zoomStage;
+(window as unknown as GlobalType).saveToLocalStorage = saveToLocalStorage
