@@ -1,6 +1,6 @@
 import Konva from 'konva';
 import { LINE_WIDTH, MAX_PLACEMENT_ATTEMPTS, NODE_COLOR, NODE_RADIUS, TEXT_COLOR } from "./constants";
-import { connectCircles, createDraggableNode, createNode, getVisibleCenter, initialiseStage, resetStage } from "./libs/SceneController";
+import { connectCircles, createDraggableNode, createNode, createNodeConnection, createWeightedNodeConnection, getVisibleCenter, initialiseStage, resetStage } from "./libs/SceneController";
 import { Vector2d } from './types';
 import { Group } from 'konva/lib/Group';
 import { checkLocalStorageStartup, closeToAnotherNode, getBoundingRectPoints, intersectsAllLines, loadLastSelectedTab, randomInt, saveToLocalStorage } from './libs/Misc';
@@ -92,15 +92,11 @@ function handleSelection(index: number){
     // save new selected to local storage
     localStorage.setItem('selected',JSON.stringify(index))
 
-    const buttons = [
-        document.getElementById('treebuilder'),
-        document.getElementById('treetraversal'),
-        document.getElementById('graphvisualiser'),
-    ]
+    const buttons = [...(document.getElementById('tab-container')?.children ?? [])];
 
     const infoText = [
         'Enter in array format, each node label seperated by a comma ( , ) below',
-        'tree traversal - TODO',
+        'Enter the graph in adjancency list format with the weighting in brackets, i.e:\nnodeX : neighbourA(2),neighbourB(3)\nnodeY...',
         'Enter the graph in adjancency list format, i.e:\nnodeX : neighbourA,neighbourB\nnodeY...',
     ]
 
@@ -110,7 +106,7 @@ function handleSelection(index: number){
         return
     }
 
-    buttons.forEach((val,idx) => {
+    buttons?.forEach((val,idx) => {
 
         if (idx == index) {
             (val as HTMLElement).className = 'selected'
@@ -126,44 +122,71 @@ function handleSelection(index: number){
 
 
 
-function createNodeConnection(node1: Group, node2: Group){
-    const line = new Konva.Arrow({
-        points: [], // will be set below
-        stroke: 'black',
-        strokeWidth: 2,
-        pointerLength: 10,
-        pointerWidth: 10,
-        fill: 'black',
-    });
-    layer.add(line)
 
-    const updateLine = () => {
-            const pos1 = node1.getPosition()
-            const pos2 = node2.getPosition()
+
+
+function graphWeightedVisualiser(input: string) {
+    const parseInput = (input: string) : [{ [key: string]: Konva.Group }, string[]]  => {
+        // first takes out the weights in the form '(number)' then removes whitespace, now in the same form as pre weighted
+        const unique_nodes = new Set(input.replaceAll(/\(\d+\)/g, '').replaceAll(' ','').split(/[,\n:]+/)) 
+        const parsedInput = input.replaceAll(' ','').split('\n')  // contains user input, each index is new line
+
         
-            const dx = pos2.x - pos1.x;
-            const dy = pos2.y - pos1.y;
-            const length = Math.sqrt(dx * dx + dy * dy);
-        
-            // Calculate shortened start and end points
-            const offsetX = (dx / length) * 30;
-            const offsetY = (dy / length) * 30;
-        
-            const newStartX = pos1.x + offsetX;
-            const newStartY = pos1.y + offsetY;
-            const newEndX = pos2.x - offsetX;
-            const newEndY = pos2.y - offsetY;
-        
-            line.points([newStartX, newStartY, newEndX, newEndY]);
-            layer.batchDraw();
+        // first create, place and store the unique nodes
+
+        return [placeAllNodes(unique_nodes),parsedInput]
     }
 
-    node1.on('dragmove', updateLine);
-    node2.on('dragmove', updateLine);
-    updateLine() // initial draw of lines
+    const [nodeMapping, parsedInput] = parseInput(input)
+
+    parsedInput.forEach((line) => {
+        const [node, neighbours] = line.split(':'); // first index is parent, rest are neighbours
+        neighbours.split(',').forEach(neighbour => {
+            const nodeFromObj = nodeMapping[node]
+            const nodeToObj = nodeMapping[neighbour.replace(/\(\d+\)/g, '')] // remove weighting
+            const weightval = neighbour.match(/\((\d+)\)/)?.[1].toString() ?? 'error'
+            createWeightedNodeConnection(nodeFromObj,nodeToObj,weightval,layer)
+        })
+    });
+    
+
 }
 
 
+function placeAllNodes(unique_nodes: Set<string>): { [key: string]: Konva.Group } {
+    const nodeMapping: { [key: string]: Konva.Group } = {} // str -> node obj
+    const previousPositions: Vector2d[] = [] // holds previous x,y values
+    unique_nodes.forEach(node => {
+        let random_x
+        let random_y
+        let attempts = 0
+        do {
+            random_x = randomInt(50,700)
+            random_y = randomInt(50,550)
+            attempts += 1
+        } while (
+            attempts <= MAX_PLACEMENT_ATTEMPTS &&
+            (
+                closeToAnotherNode({x: random_x, y: random_y}, previousPositions, 150) || 
+                intersectsAllLines({x: random_x, y: random_y}, previousPositions)
+            )
+        )
+        
+
+        previousPositions.push({x:random_x,y:random_y})
+        nodeMapping[node] = createDraggableNode(
+            {
+                x:random_x,
+                y:random_y
+            },
+            node,
+            layer
+        )
+    })
+
+    return nodeMapping
+
+}
 
 // Places node on scene, tries to place at a random position. 
 // On the random position does checks to see if its a valid position i.e not too close
@@ -171,43 +194,12 @@ function createNodeConnection(node1: Group, node2: Group){
 // If valid places and goes next
 function graphVisualiser(input: string) {
     const parseInput = (input: string): [{ [key: string]: Konva.Group }, string[]]  => {
-        input.replace
         // get all unique nodes
-        const unique_nodes = new Set(input.replaceAll(' ','').split(/[,\n:]+/)) // contains set of all unique nodes
-        const parsedInput = input.replaceAll(' ','').split('\n') // contains user input, each index is new line
 
-        const nodeMapping: { [key: string]: Konva.Group } = {} // str -> node obj
-		const previousPositions: Vector2d[] = [] // holds previous x,y values
-        
-		// safe zone is x between 50,700 | y between 50, 500 on startup
-        unique_nodes.forEach(node => {
-			let random_x
-			let random_y
-            let attempts = 0
-            do {
-                random_x = randomInt(50,700)
-                random_y = randomInt(50,550)
-                attempts += 1
-            } while (
-                attempts <= MAX_PLACEMENT_ATTEMPTS &&
-                (
-                    closeToAnotherNode({x: random_x, y: random_y}, previousPositions, 150) || 
-                    intersectsAllLines({x: random_x, y: random_y}, previousPositions)
-                )
-            )
-            
+        let unique_nodes = new Set(input.replaceAll(' ','').split(/[,\n:]+/))  // regex splits on comma, newline and colon // contains set of all unique nodes
+        let parsedInput = input.replaceAll(' ','').split('\n')  // contains user input, each index is new line
 
-			previousPositions.push({x:random_x,y:random_y})
-            nodeMapping[node] = createDraggableNode(
-                {
-                    x:random_x,
-                    y:random_y
-                },
-                node,
-                layer
-            )
-        })
-        return [nodeMapping,parsedInput]
+        return [placeAllNodes(unique_nodes),parsedInput]
     }
 
     const [nodeMapping, parsedInput] = parseInput(input)
@@ -217,7 +209,7 @@ function graphVisualiser(input: string) {
         neighbours.split(',').forEach(neighbour => {
             const nodeFromObj = nodeMapping[node]
             const nodeToObj = nodeMapping[neighbour]
-            createNodeConnection(nodeFromObj,nodeToObj)
+            createNodeConnection(nodeFromObj,nodeToObj, layer)
         }) 
     })
 
@@ -238,6 +230,7 @@ function visualise() {
     }
     else if (selected == 1) {
         console.log('tree traversal')
+        graphWeightedVisualiser(input)
     }
     else if (selected == 2) {
         console.log('graph visualiser')

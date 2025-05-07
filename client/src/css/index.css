@@ -8,7 +8,7 @@
 }
 
 body {
-    background-image: url('/public/background2.svgd');
+    background-image: url('/public/background2.svg');
     background-position: center;
     background-size: contain;
     
@@ -132,7 +132,8 @@ textarea {
     caret-color: white;
     color: #E1E2E3;
     font-family: 'Courier New', monospace;
-    height: 380px;
+    /* height: 380px; */
+    height: 100%;
 }
 
 .v-wrapper{
@@ -260,6 +261,10 @@ button:hover {
     }
     #container {
         width: 100vw;
+    }
+
+    .inputs {
+        width: 100%;
     }
 }
 

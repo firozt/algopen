@@ -2,6 +2,8 @@ import Konva from 'konva'
 import { Vector2d } from '../types';
 import { Group } from 'konva/lib/Group';
 import { NODE_RADIUS, NODE_COLOR, LINE_WIDTH, TEXT_COLOR } from '../constants';
+import { Layer } from 'konva/lib/Layer';
+import { Arrow } from 'konva/lib/shapes/Arrow';
 
 export function getVisibleCenter(stage: Konva.Stage) {
     const scale = stage.scaleX(); // assuming uniform scale for x and y
@@ -111,8 +113,8 @@ export function createNode(pos: Vector2d, val: string, draggable = false, layer:
         verticalAlign: 'middle',
         width: 60,
         height: 60,
-        offsetX: 30,
-        offsetY: 30
+        offsetX: NODE_RADIUS,
+        offsetY: NODE_RADIUS
     });
 
     group.add(circle);
@@ -127,3 +129,98 @@ export function createDraggableNode(pos: Vector2d, val: string, layer: Konva.Lay
     const node = createNode(pos, val, true, layer);
     return node
 }
+
+function updateLine(node1: Konva.Group, node2: Konva.Group, line: Konva.Line, layer: Konva.Layer){
+    const pos1 = node1.getPosition()
+    const pos2 = node2.getPosition()
+
+    const dx = pos2.x - pos1.x;
+    const dy = pos2.y - pos1.y;
+    const length = Math.sqrt(dx * dx + dy * dy);
+
+    // Calculate shortened start and end points
+    const offsetX = (dx / length) * 30;
+    const offsetY = (dy / length) * 30;
+
+    const newStartX = pos1.x + offsetX;
+    const newStartY = pos1.y + offsetY;
+    const newEndX = pos2.x - offsetX;
+    const newEndY = pos2.y - offsetY;
+
+    line.points([newStartX, newStartY, newEndX, newEndY]);
+    layer.batchDraw();
+}
+
+export function createNodeConnection(node1: Group, node2: Group, layer: Konva.Layer){
+    const line = new Konva.Arrow({
+        points: [], // will be set below
+        stroke: 'black',
+        strokeWidth: 2,
+        pointerLength: 10,
+        pointerWidth: 10,
+        fill: 'black',
+    });
+    layer.add(line)
+
+    node1.on('dragmove', () => updateLine(node1,node2,line,layer));
+    node2.on('dragmove', () => updateLine(node1,node2,line,layer));
+    updateLine(node1,node2,line,layer)  // initial draw of lines
+}
+
+
+export function createWeightedNodeConnection(node1: Group, node2: Group, weighting: string, layer: Konva.Layer){
+
+    const group = new Konva.Group()
+
+    const line = new Konva.Arrow({
+        points: [], // will be set below
+        stroke: 'black',
+        strokeWidth: 2,
+        pointerLength: 10,
+        pointerWidth: 10,
+        fill: 'black',
+    });
+    layer.add(line)
+
+    const text = new Konva.Text({
+        text: weighting,
+        fontSize: 28,
+        fill: 'black',
+        stroke: 'black',
+        verticalAlign: 'middle',
+        width: 60,
+        height: 60,
+        offsetX: 30,
+        offsetY: 30
+    });
+
+    group.add(line)
+    group.add(text)
+    layer.add(group)
+
+
+    node1.on('dragmove', () => {updateLine(node1,node2,line,layer); updateText(line,text,layer)});
+    node2.on('dragmove', () => {updateLine(node1,node2,line,layer); updateText(line,text,layer)});
+
+      // initial draw of lines
+    updateLine(node1,node2,line,layer)
+    updateText(line,text,layer)
+}
+function updateText(line: Arrow,text: Konva.Text, layer: Layer) {
+    const linePoints = line.points()
+    const point1: Vector2d = {x:linePoints[0],y:linePoints[1]}
+    const point2: Vector2d = {x:linePoints[2],y:linePoints[3]}
+
+    const buffer: Vector2d = {x:10,y:-10}
+
+    const midpoint: Vector2d = {
+        x: ((point1.x+point2.x)/2)+buffer.x,
+        y: ((point1.y+point2.y)/2)+buffer.y
+    }
+
+    text.position(midpoint)
+    text.zIndex(1)
+    layer.batchDraw()
+
+}
+
