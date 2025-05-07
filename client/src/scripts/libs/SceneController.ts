@@ -27,7 +27,8 @@ export function initialiseStage(): Konva.Stage {
         container: 'container',
         width: width,
         height: height,
-        draggable: true
+        draggable: true,
+        scale:{x:.6,y:.6},
     });
 
     stage.on('wheel', (e) => {
@@ -186,8 +187,8 @@ export function createWeightedNodeConnection(node1: Group, node2: Group, weighti
         text: weighting,
         fontSize: 28,
         fill: 'black',
-        stroke: 'black',
         verticalAlign: 'middle',
+        align:'middle',
         width: 60,
         height: 60,
         offsetX: 30,
@@ -211,7 +212,7 @@ function updateText(line: Arrow,text: Konva.Text, layer: Layer) {
     const point1: Vector2d = {x:linePoints[0],y:linePoints[1]}
     const point2: Vector2d = {x:linePoints[2],y:linePoints[3]}
 
-    const buffer: Vector2d = {x:10,y:-10}
+    const buffer: Vector2d = {x:-0,y:-0}
 
     const midpoint: Vector2d = {
         x: ((point1.x+point2.x)/2)+buffer.x,
@@ -219,7 +220,7 @@ function updateText(line: Arrow,text: Konva.Text, layer: Layer) {
     }
 
     text.position(midpoint)
-    text.zIndex(1)
+    text.zIndex(0)
     layer.batchDraw()
 
 }

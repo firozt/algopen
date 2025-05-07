@@ -128,7 +128,13 @@ function handleSelection(index: number){
 function graphWeightedVisualiser(input: string) {
     const parseInput = (input: string) : [{ [key: string]: Konva.Group }, string[]]  => {
         // first takes out the weights in the form '(number)' then removes whitespace, now in the same form as pre weighted
-        const unique_nodes = new Set(input.replaceAll(/\(\d+\)/g, '').replaceAll(' ','').split(/[,\n:]+/)) 
+        const unique_nodes = new Set(
+            input
+              .replaceAll(/\(.*?\)/g, '')   // Remove anything inside ( )
+              .replaceAll(' ', '')            // Remove spaces
+              .split(/[,\n:]+/)               // Split by comma, newline, or colon
+        );
+
         const parsedInput = input.replaceAll(' ','').split('\n')  // contains user input, each index is new line
 
         
@@ -143,8 +149,8 @@ function graphWeightedVisualiser(input: string) {
         const [node, neighbours] = line.split(':'); // first index is parent, rest are neighbours
         neighbours.split(',').forEach(neighbour => {
             const nodeFromObj = nodeMapping[node]
-            const nodeToObj = nodeMapping[neighbour.replace(/\(\d+\)/g, '')] // remove weighting
-            const weightval = neighbour.match(/\((\d+)\)/)?.[1].toString() ?? '1'
+            const nodeToObj = nodeMapping[neighbour.replace(/\(.*?\)/g, '')] // remove weighting
+            const weightval = neighbour.match(/\(.*?\)/g)?.toString().replaceAll('(','').replaceAll(')','') ?? '1';
             createWeightedNodeConnection(nodeFromObj,nodeToObj,weightval,layer)
         })
     });
@@ -152,7 +158,10 @@ function graphWeightedVisualiser(input: string) {
 
 }
 
-
+// Places node on scene, tries to place at a random position. 
+// On the random position does checks to see if its a valid position i.e not too close
+// to another node or intersects a node/edge.
+// If valid places and goes next
 function placeAllNodes(unique_nodes: Set<string>): { [key: string]: Konva.Group } {
     const nodeMapping: { [key: string]: Konva.Group } = {} // str -> node obj
     const previousPositions: Vector2d[] = [] // holds previous x,y values
@@ -160,14 +169,17 @@ function placeAllNodes(unique_nodes: Set<string>): { [key: string]: Konva.Group 
         let random_x
         let random_y
         let attempts = 0
+        let buffer = unique_nodes.size > 7 ? (unique_nodes.size-5) * 30 : 0
+        let nodeMinDistance = unique_nodes.size < 9 ? 1500 / unique_nodes.size  : 150
         do {
-            random_x = randomInt(50,700)
-            random_y = randomInt(50,550)
+            random_x = randomInt(50,1000+buffer)
+            random_y = randomInt(50,800+buffer)
             attempts += 1
+            if (attempts == MAX_PLACEMENT_ATTEMPTS) console.log('could not find suitable position')
         } while (
             attempts <= MAX_PLACEMENT_ATTEMPTS &&
             (
-                closeToAnotherNode({x: random_x, y: random_y}, previousPositions, 150) || 
+                closeToAnotherNode({x: random_x, y: random_y}, previousPositions, nodeMinDistance) || 
                 intersectsAllLines({x: random_x, y: random_y}, previousPositions)
             )
         )
@@ -188,10 +200,7 @@ function placeAllNodes(unique_nodes: Set<string>): { [key: string]: Konva.Group 
 
 }
 
-// Places node on scene, tries to place at a random position. 
-// On the random position does checks to see if its a valid position i.e not too close
-// to another node or intersects a node/edge.
-// If valid places and goes next
+
 function graphVisualiser(input: string) {
     const parseInput = (input: string): [{ [key: string]: Konva.Group }, string[]]  => {
         // get all unique nodes
