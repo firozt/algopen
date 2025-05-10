@@ -1,6 +1,6 @@
 import Konva from 'konva';
-import { MAX_PLACEMENT_ATTEMPTS, MOBILE_WIDTH } from "./constants";
-import { connectCircles, createDraggableNode, createNode, createNodeConnection, createWeightedNodeConnection, getVisibleCenter, initialiseStage, resetStage } from "./libs/SceneController";
+import { MAX_PLACEMENT_ATTEMPTS } from "./constants";
+import { connectCircles, createDraggableNode, createNode, createNodeConnection, createWeightedNodeConnection, getSafeCorners, getVisibleCenter, initialiseStage, resetStage } from "./libs/SceneController";
 import { Vector2d } from './types';
 import { checkLocalStorageStartup, closeToAnotherNode, intersectsAllLines, loadLastSelectedTab, randomInt, saveToLocalStorage } from './libs/Misc';
 
@@ -34,43 +34,6 @@ function getLevel(index: number): number {
     return Math.floor(Math.log2(index + 1));
 }
 
-
-function getSafeCorners(stage: Konva.Stage): Vector2d[] {
-    const center = getVisibleCenter(stage)
-    const isMobile = window.innerWidth <= MOBILE_WIDTH
-
-
-
-    if (isMobile) {
-        return [
-            {x:center.x-730,y:center.y-450}, // top left
-            {x:center.x+730,y:center.y-450}, // top right
-            {x:center.x-730,y:center.y+450}, // bottome left
-            {x:center.x+730,y:center.y+450}, // bottom
-        ]
-    } else {
-        return [
-            { // top left
-                x:660,
-                y:35
-            },
-            { // top right
-                x: (center.x-400) * 2,
-                y: 35
-            },
-            { // bottom left
-                x: 660,
-                y: (center.y*2)-100
-            },
-            { // bottom right
-                x: (center.x-400)*2,
-                y: (center.y*2)-100
-            }
-        ]
-    }
-
-
-}
 
 function generateTree(tree_array: string[]) {
     const d = tree_array.filter(item => item !== 'null').length * 20;
@@ -343,8 +306,19 @@ button.addEventListener('mouseout', () => {
 
 //  TODO store in local?
 let isFullscreen = false;
-
+let lastValidTime: number = -1
 function fullscreenStage() {
+
+    if (lastValidTime != -1) {
+        const curTime = Date.now()
+        if ((curTime - lastValidTime) > 2000){ // 2s
+            lastValidTime = curTime
+        } else {
+            return // early return
+        }
+    }
+
+
     const minimiseSVG = `
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M0.75 9.75H4.25V13.25M9.75 13.25V9.75H13.25M13.25 4.25H9.75V0.75M4.25 0.75V4.25H0.75" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -370,12 +344,14 @@ function fullscreenStage() {
     if (isFullscreen) {
         // Maximize: slide out (move inputs off-screen with animation)
         inputs.forEach(item => {
-            item.classList.remove('slide-in');  // Remove slide-in before sliding out
-            item.classList.add('slide-out');    // Apply slide-out class to move off-screen
+            item.classList.remove('slide-out-fast')
+
+            item.classList.remove('slide-in'); 
+            item.classList.add('slide-out');
 
             item.addEventListener('transitionend', function handler() {
-                item.classList.add('no-display');  // Ensure element is hidden after sliding out
-                item.classList.remove('slide-out'); // Remove slide-out to reset it
+                item.classList.add('no-display');
+                item.classList.remove('slide-out');
                 item.removeEventListener('transitionend', handler);
             });
         });
@@ -383,13 +359,12 @@ function fullscreenStage() {
     } else {
         // Minimize: slide in (bring inputs back into view)
         inputs.forEach(item => {
-            item.classList.remove('no-display');  // Make the element visible
-
-            // Force a reflow to ensure the transition triggers correctly
-            void item.offsetWidth;  // This is necessary to restart the transition
-
-            item.classList.remove('slide-out');  // Remove the slide-out class
-            item.classList.add('slide-in');      // Apply the slide-in class to slide back in
+            item.classList.add('slide-out-fast'); 
+            item.addEventListener('transitionend', function handler() {
+                item.classList.remove('no-display'); 
+                item.classList.add('slide-in')
+                item.removeEventListener('transitionend', handler);
+            });
         });
         button.innerHTML = maximiseSVG;
     }

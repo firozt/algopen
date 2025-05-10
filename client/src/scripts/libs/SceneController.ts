@@ -6,6 +6,28 @@ import { Layer } from 'konva/lib/Layer';
 import { ArrowConfig } from 'konva/lib/shapes/Arrow';
 import { LineConfig } from 'konva/lib/shapes/Line';
 
+export function getSafeCorners(stage: Konva.Stage): Vector2d[] {
+    const center = getVisibleCenter(stage)
+    const isMobile = window.innerWidth <= MOBILE_WIDTH
+
+    if (isMobile) {
+        return [
+            {x:center.x-730,y:center.y-450}, // top left
+            {x:center.x+730,y:center.y-450}, // top right
+            {x:center.x-730,y:center.y+450}, // bottome left
+            {x:center.x+730,y:center.y+450}, // bottom
+        ]
+    } else {
+        return [
+            {x:660,y:35}, // top left
+            {x:(center.x-400)*2,y: 35}, // top right
+            {x:660,y:(center.y*2)-100}, // bottom left
+            {x:(center.x-400)*2,y:(center.y*2)-100} // bottom right
+        ]
+    }
+}
+
+
 export function getVisibleCenter(stage: Konva.Stage) {
     const scale = stage.scaleX(); // assuming uniform scale for x and y
     const position = stage.position();
