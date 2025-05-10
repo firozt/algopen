@@ -171,8 +171,8 @@ function placeAllNodes(unique_nodes: Set<string>): { [key: string]: Konva.Group 
         const buffer = unique_nodes.size > 7 ? (unique_nodes.size-5) * 30 : 0
         const nodeMinDistance = unique_nodes.size < 9 ? 1500 / unique_nodes.size  : 150
         do {
-            random_x = randomInt(50,1000+buffer)
-            random_y = randomInt(50,800+buffer)
+            random_x = randomInt(50,1300+buffer)
+            random_y = randomInt(50,1100+buffer)
             attempts += 1
             if (attempts == MAX_PLACEMENT_ATTEMPTS) console.log('could not find suitable position')
         } while (
@@ -293,49 +293,65 @@ button.addEventListener('mouseout', () => {
 
 // brings these function to global scope
 
-//  TODO store in local?
-let isFullscreen = false
-function fullscreenStage() {
 
+
+
+
+//  TODO store in local?
+let isFullscreen = false;
+
+function fullscreenStage() {
     const minimiseSVG = `
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M0.75 9.75H4.25V13.25M9.75 13.25V9.75H13.25M13.25 4.25H9.75V0.75M4.25 0.75V4.25H0.75" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
-    `
+    `;
 
     const maximiseSVG = `
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M4.25 13.25H0.75V9.75M13.25 9.75V13.25H9.75M9.75 0.75H13.25V4.25M0.75 4.25V0.75H4.25" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
-    `
+    `;
 
-    const prevClasses = 'inputs'
-    isFullscreen = !isFullscreen
-    console.log('in isFullscreen=' + isFullscreen)
-    const inputs = Array.from(document.getElementsByClassName(prevClasses))
-    const button = document.getElementById('fullscreen-btn')
-    if (inputs == null || button == null) {
-        throw Error('Cannot locate div inputs or button')
+    const prevClasses = 'inputs';
+    isFullscreen = !isFullscreen;
+
+    const inputs = Array.from(document.getElementsByClassName(prevClasses));
+    const button = document.getElementById('fullscreen-btn');
+
+    if (!inputs.length || !button) {
+        throw new Error('Cannot locate div inputs or button');
     }
-    console.log(inputs.length)
 
-    if (!isFullscreen) {
-        // minimize
+    if (isFullscreen) {
+        // Maximize: slide out (move inputs off-screen with animation)
         inputs.forEach(item => {
-            item.classList = prevClasses
-        })
-        // show maximise button
-        button.innerHTML = maximiseSVG
+            item.classList.remove('slide-in');  // Remove slide-in before sliding out
+            item.classList.add('slide-out');    // Apply slide-out class to move off-screen
 
+            item.addEventListener('transitionend', function handler() {
+                item.classList.add('no-display');  // Ensure element is hidden after sliding out
+                item.classList.remove('slide-out'); // Remove slide-out to reset it
+                item.removeEventListener('transitionend', handler);
+            });
+        });
+        button.innerHTML = minimiseSVG;
     } else {
-        // maximise
+        // Minimize: slide in (bring inputs back into view)
         inputs.forEach(item => {
-            item.classList = prevClasses + ' no-display'
-        })
-        //  show minimise button
-        button.innerHTML = minimiseSVG
+            item.classList.remove('no-display');  // Make the element visible
+
+            // Force a reflow to ensure the transition triggers correctly
+            void item.offsetWidth;  // This is necessary to restart the transition
+
+            item.classList.remove('slide-out');  // Remove the slide-out class
+            item.classList.add('slide-in');      // Apply the slide-in class to slide back in
+        });
+        button.innerHTML = maximiseSVG;
     }
 }
+
+
 
 interface GlobalType {
     visualise : () => void
