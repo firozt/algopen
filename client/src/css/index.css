@@ -155,6 +155,8 @@ button {
 
 
 textarea {
+    /* KEEP BELOW, safari does weird stuff */
+    border-radius: 0; 
     border: none;
     border-left: 2px solid black ;
     height: 100%;
