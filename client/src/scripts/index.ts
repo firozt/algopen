@@ -34,28 +34,43 @@ function getLevel(index: number): number {
     return Math.floor(Math.log2(index + 1));
 }
 
-// function getVisibleCorners(stage: Konva.Stage, isMobile: boolean): Vector2d[] {
-//     const box = stage.getClientRect({ relativeTo: stage.getStage(), skipTransform: false });
-//     const topLeft = { x: box.x, y: box.y } as Vector2d
-//     const topRight = { x: box.x + box.width, y: box.y } as Vector2d
-//     const bottomRight = { x: box.x + box.width, y: box.y + box.height } as Vector2d
-//     const bottomLeft = { x: box.x, y: box.y + box.height } as Vector2d
 
-//     if (isMobile) {
-//         topLeft.y += 300
-//         topRight.y += 300
-//     } else {
-//         topLeft.x += 300
-//         bottomLeft.x += 300
-//     }
+function getSafeCorners(stage: Konva.Stage): Vector2d[] {
+    const center = getVisibleCenter(stage)
+    const isMobile = window.innerWidth <= MOBILE_WIDTH
 
 
-//     [topLeft, topRight, bottomRight, bottomLeft].forEach((item,idx) => {
-//         createNode(item,JSON.stringify(idx),false,layer)
-//     })
 
-//     return [topLeft, topRight, bottomRight, bottomLeft];
-// }
+    if (isMobile) {
+        return [
+            {x:center.x-730,y:center.y-450}, // top left
+            {x:center.x+730,y:center.y-450}, // top right
+            {x:center.x-730,y:center.y+450}, // bottome left
+            {x:center.x+730,y:center.y+450}, // bottom
+        ]
+    } else {
+        return [
+            { // top left
+                x:660,
+                y:35
+            },
+            { // top right
+                x: (center.x-400) * 2,
+                y: 35
+            },
+            { // bottom left
+                x: 660,
+                y: (center.y*2)-100
+            },
+            { // bottom right
+                x: (center.x-400)*2,
+                y: (center.y*2)-100
+            }
+        ]
+    }
+
+
+}
 
 function generateTree(tree_array: string[]) {
     const d = tree_array.filter(item => item !== 'null').length * 20;
@@ -197,11 +212,13 @@ function placeAllNodes(unique_nodes: Set<string>): { [key: string]: Konva.Group 
         let random_x
         let random_y
         let attempts = 0
+
+        const safeCorners = getSafeCorners(stage)
         const buffer = unique_nodes.size > 7 ? (unique_nodes.size-5) * 30 : 0
         const nodeMinDistance = unique_nodes.size < 9 ? 1500 / unique_nodes.size  : 150
         do {
-            random_x = randomInt(50,1300+buffer)
-            random_y = randomInt(50,1100+buffer)
+            random_x = randomInt(safeCorners[0].x-buffer,safeCorners[1].x+buffer)
+            random_y = randomInt(safeCorners[0].y-buffer,safeCorners[2].y+buffer)
             attempts += 1
             if (attempts == MAX_PLACEMENT_ATTEMPTS) console.log('could not find suitable position')
         } while (
@@ -323,13 +340,6 @@ button.addEventListener('mouseout', () => {
 // brings these function to global scope
 
 
-
-// createNode({x:700,y:35},'tl',false,layer)
-// createNode({x:innerWidth+700,y:35},'tr',false,layer)
-// createNode({x:innerWidth+700,y:425+innerHeight},'br',false,layer)
-// createNode({x:700,y:425+innerHeight},'bl',false,layer)
-
-createNode(getVisibleCenter(stage),'wag1',false,layer)
 
 //  TODO store in local?
 let isFullscreen = false;

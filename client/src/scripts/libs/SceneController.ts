@@ -23,6 +23,7 @@ export function getVisibleCenter(stage: Konva.Stage) {
         center.x += 400
     }
 
+        console.log(center)
     return center;
 }
 
