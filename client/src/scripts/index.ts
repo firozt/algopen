@@ -1,5 +1,5 @@
 import Konva from 'konva';
-import { MAX_PLACEMENT_ATTEMPTS } from "./constants";
+import { MAX_PLACEMENT_ATTEMPTS, MOBILE_WIDTH } from "./constants";
 import { connectCircles, createDraggableNode, createNode, createNodeConnection, createWeightedNodeConnection, getVisibleCenter, initialiseStage, resetStage } from "./libs/SceneController";
 import { Vector2d } from './types';
 import { checkLocalStorageStartup, closeToAnotherNode, intersectsAllLines, loadLastSelectedTab, randomInt, saveToLocalStorage } from './libs/Misc';
@@ -33,6 +33,29 @@ function zoomStage(scaleBy=1.5) {
 function getLevel(index: number): number {
     return Math.floor(Math.log2(index + 1));
 }
+
+// function getVisibleCorners(stage: Konva.Stage, isMobile: boolean): Vector2d[] {
+//     const box = stage.getClientRect({ relativeTo: stage.getStage(), skipTransform: false });
+//     const topLeft = { x: box.x, y: box.y } as Vector2d
+//     const topRight = { x: box.x + box.width, y: box.y } as Vector2d
+//     const bottomRight = { x: box.x + box.width, y: box.y + box.height } as Vector2d
+//     const bottomLeft = { x: box.x, y: box.y + box.height } as Vector2d
+
+//     if (isMobile) {
+//         topLeft.y += 300
+//         topRight.y += 300
+//     } else {
+//         topLeft.x += 300
+//         bottomLeft.x += 300
+//     }
+
+
+//     [topLeft, topRight, bottomRight, bottomLeft].forEach((item,idx) => {
+//         createNode(item,JSON.stringify(idx),false,layer)
+//     })
+
+//     return [topLeft, topRight, bottomRight, bottomLeft];
+// }
 
 function generateTree(tree_array: string[]) {
     const d = tree_array.filter(item => item !== 'null').length * 20;
@@ -82,7 +105,13 @@ function generateTree(tree_array: string[]) {
         createNode(pos, tree_array[index],false,layer);
     };
 
-    dfs(0, {x:375, y: 75});
+
+    const center = getVisibleCenter(stage)
+
+    dfs(0,{
+        x:center.x,
+        y:center.y-(innerHeight/4)
+    });
     layer.draw()
 }
 
@@ -295,7 +324,12 @@ button.addEventListener('mouseout', () => {
 
 
 
+// createNode({x:700,y:35},'tl',false,layer)
+// createNode({x:innerWidth+700,y:35},'tr',false,layer)
+// createNode({x:innerWidth+700,y:425+innerHeight},'br',false,layer)
+// createNode({x:700,y:425+innerHeight},'bl',false,layer)
 
+createNode(getVisibleCenter(stage),'wag1',false,layer)
 
 //  TODO store in local?
 let isFullscreen = false;

@@ -1,7 +1,7 @@
 import Konva from 'konva'
 import { Vector2d } from '../types';
 import { Group } from 'konva/lib/Group';
-import { NODE_RADIUS, NODE_COLOR, LINE_WIDTH, TEXT_COLOR } from '../constants';
+import { NODE_RADIUS, NODE_COLOR, LINE_WIDTH, TEXT_COLOR, MOBILE_WIDTH } from '../constants';
 import { Layer } from 'konva/lib/Layer';
 import { ArrowConfig } from 'konva/lib/shapes/Arrow';
 import { LineConfig } from 'konva/lib/shapes/Line';
@@ -16,6 +16,12 @@ export function getVisibleCenter(stage: Konva.Stage) {
         x: (width / 2 - position.x) / scale,
         y: (height / 2 - position.y) / scale,
     };
+
+    if (innerWidth <= MOBILE_WIDTH) {
+        center.y += 300
+    } else {
+        center.x += 400
+    }
 
     return center;
 }
