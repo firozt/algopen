@@ -87,7 +87,7 @@ export function intersectsAllLines(nodeCenter: Vector2d,previousPositions: Vecto
     return false
 }
 
-export function loadLastSelectedTab(onLoad: (arg: any) => any) {
+export function loadLastSelectedTab(onLoad: (arg: number) => void) {
     const selected: string = localStorage.getItem('selected') ?? '0'
     onLoad(JSON.parse(selected))
 }
