@@ -328,6 +328,14 @@ button:hover {
         width: 100vw;
         overflow-x: hidden;
     }
+    .display-controls {
+        top: 0;
+        height: fit-content;
+        z-index: 1;
+    }
+    .inputs {
+        z-index: 100;
+    }
 }
 
 #portfolio:hover {
@@ -343,7 +351,7 @@ button:hover {
     position: absolute;
     right: 0px;
     opacity: .2;
-    z-index: 999;
+    z-index: 2;
     width: fit-content;
     background-color: black;
     position: absolute;
