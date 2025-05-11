@@ -1,5 +1,5 @@
 import Konva from 'konva';
-import { MAX_PLACEMENT_ATTEMPTS } from "./constants";
+import { MAX_PLACEMENT_ATTEMPTS, MOBILE_WIDTH } from "./constants";
 import { connectCircles, createDraggableNode, createNode, createNodeConnection, createWeightedNodeConnection, getSafeCorners, getVisibleCenter, initialiseStage, resetStage } from "./libs/SceneController";
 import { Vector2d } from './types';
 import { checkLocalStorageStartup, closeToAnotherNode, intersectsAllLines, loadLastSelectedTab, randomInt, saveToLocalStorage } from './libs/Misc';
@@ -252,6 +252,10 @@ function visualise() {
     const input = textarea.value
     const selected: number = JSON.parse(localStorage.getItem('selected') ?? '-1')
 
+    if (window.innerWidth < MOBILE_WIDTH) {
+        fullscreenStage()
+    }
+
     if (selected == 0) {
         const parsed_input = input.replaceAll('[','').replaceAll(']','').replaceAll(' ','').split(',')
         console.log('tree visualising')
@@ -270,6 +274,7 @@ function visualise() {
     } else {
         console.warn('Selected could not be parsed : ' + selected)
     }
+
 }
 
 
