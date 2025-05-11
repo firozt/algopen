@@ -158,7 +158,6 @@ textarea {
     /* KEEP BELOW, safari does weird stuff */
     border-radius: 0; 
     border: none;
-    border-left: 2px solid black ;
     height: 100%;
     width: 100%;
     padding: 10px;
@@ -268,8 +267,6 @@ button:hover {
     padding-left: 12.5px;
     padding-right: 12.5px;
     margin: 0;
-    border-left: 2px solid black;
-    border-right: 2px solid black;
     white-space: pre-line;
 }
 
