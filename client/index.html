@@ -6,16 +6,6 @@
     <link rel="stylesheet" href="src/css/index.css" />
     <script src="https://unpkg.com/konva@9.2.0/konva.min.js"></script>
     <script type="module" src="/src/scripts/index.ts"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var textarea = document.getElementById("text-input");
-            textarea.addEventListener("focus", function () {
-            // Prevent iOS from pushing the viewport
-            window.scrollTo(0, 0);
-            document.body.scrollTop = 0;
-        });
-        });
-    </script>
     <meta name="theme-color" content="#000">
     <title>Algorithim visualizer</title>
 </head>
@@ -81,5 +71,16 @@
             </div>
         </section>
     </div>
+    <!-- fixes ios issue of keyboard focus -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var textarea = document.getElementById("text-input");
+            textarea.addEventListener("focus", function () {
+            // Prevent iOS from pushing the viewport
+            window.scrollTo(0, 0);
+            document.body.scrollTop = 0;
+        });
+        });
+    </script>
 </body>
 </html>
