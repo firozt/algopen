@@ -271,6 +271,11 @@ button:hover {
 }
 
 @media (max-width: 968px) {
+    header {
+        position: static;
+        /* z-index: 200000; */
+    }
+
     body {
         overflow-y:auto !important;
     }
