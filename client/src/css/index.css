@@ -112,6 +112,10 @@ header h1 {
 }
 
 
+#input-header{
+    visibility: hidden;
+    display: none;
+}
 
 .inputs {
     width: 400px;
@@ -272,9 +276,22 @@ button:hover {
 @media (max-width: 968px) {
 
     header {
-        position: static;
-        /* z-index: 200000; */
+        display: none;
     }
+
+    #input-header {
+        visibility:visible;
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        background-color: black;
+        height: 45px;
+    }
+
+    #input-header>div {
+        margin: auto;
+    }
+    
 
     body {
         overflow-y:auto !important;
@@ -305,10 +322,7 @@ button:hover {
 }
 
 @media (max-width: 450px) {
-    header>div {
-        margin: auto;
-    }
-    
+
     .header-icons {
         display: none;
     }
