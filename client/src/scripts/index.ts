@@ -8,8 +8,8 @@ console.log('js running')
 
 
 // initialise stage for the website
-const stage = initialiseStage()
-const layer = new Konva.Layer();
+let stage = initialiseStage()
+let layer = new Konva.Layer();
 stage.add(layer);
 
 
@@ -178,7 +178,7 @@ function placeAllNodes(unique_nodes: Set<string>): { [key: string]: Konva.Group 
 
         const safeCorners = getSafeCorners(stage)
         const buffer = unique_nodes.size > 7 ? (unique_nodes.size-5) * 30 : 0
-        const nodeMinDistance = unique_nodes.size < 9 ? 1500 / unique_nodes.size  : 150
+        const nodeMinDistance = unique_nodes.size < 9 ? 1500 / (unique_nodes.size+1)  : 150
         do {
             random_x = randomInt(safeCorners[0].x-buffer,safeCorners[1].x+buffer)
             random_y = randomInt(safeCorners[0].y-buffer,safeCorners[2].y+buffer)
@@ -247,7 +247,13 @@ function isDirectional(input: string): [string, boolean] {
 
 // Main
 function visualise() {
-    resetStage(stage)
+    // resetStage(stage)
+    stage = initialiseStage()
+    layer = new Konva.Layer();
+    stage.add(layer);
+    
+    
+
     const textarea = document.getElementById('text-input') as HTMLTextAreaElement
     const input = textarea.value
     const selected: number = JSON.parse(localStorage.getItem('selected') ?? '-1')

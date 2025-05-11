@@ -279,6 +279,7 @@ button:hover {
     body {
         overflow-y:auto !important;
         height: 100%;
+        width: 100%;
     }
 
     .content {
@@ -286,7 +287,8 @@ button:hover {
         align-items: center;
     }
     #container {
-        width: 100vw;
+        width: 100%;
+        height: 100%;
     }
 
     .inputs {
