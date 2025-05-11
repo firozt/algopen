@@ -12,8 +12,8 @@ body {
     background-color: #eee;
     background-position: center;
     background-size: contain;
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
     
 }
 
@@ -56,11 +56,6 @@ button {
 /* css file starts  */
 
 
-#app {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-}
 header {
     height: 60px; 
     flex-shrink: 0;
@@ -270,8 +265,11 @@ button:hover {
 @media (max-width: 968px) {
     body {
         overflow-y:auto !important;
-        height: 100%;
-        width: 100%;
+    }
+
+    header {
+        position: fixed;
+        z-index: 3;
     }
 
     .content {
@@ -284,6 +282,7 @@ button:hover {
     }
 
     .inputs {
+        top: 40px;
         width: 100%;
         height: 400px;
     }
@@ -325,7 +324,7 @@ button:hover {
         overflow-x: hidden;
     }
     .display-controls {
-        top: 0;
+        /* top: 0;? */
         height: fit-content;
         z-index: 1;
     }
