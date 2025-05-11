@@ -292,7 +292,6 @@ button:hover {
     .inputs {
         width: 100%;
         height: 400px;
-        position: static;
     }
 
     .display-controls {
