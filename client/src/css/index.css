@@ -46,12 +46,12 @@ button {
     --green:      #9CD57B;
     --blue:       #78CEE9;
     --purple:     #BAA0F8;
-  
+
     /* Foreground & Neutral */
     --fg:         #E1E2E3;
     --gray:       #82878B;
-  }
-  
+}
+
 
 /* css file starts  */
 
@@ -59,18 +59,17 @@ button {
 #app {
     display: flex;
     flex-direction: column;
-    height: 100vh; /* or 100% if you're doing nested layout */
-  }
-  
-  header {
-    height: 60px; /* or whatever you want */
+    height: 100vh;
+}
+header {
+    height: 60px; 
     flex-shrink: 0;
-  }
-  
-  .content {
+}
+
+.content {
     flex: 1;
     overflow: auto;
-  }
+}
 
 
 header {
@@ -293,6 +292,7 @@ button:hover {
     .inputs {
         width: 100%;
         height: 400px;
+        position: static;
     }
 
     .display-controls {
