@@ -96,57 +96,54 @@ const Page = () => {
 	};
 
 	function generateTree(tree_array: string[]) {
-			const d = tree_array.filter(item => item !== 'null').length * 20;
-			const dy = 90;
+		const d = tree_array.filter(item => item !== 'null').length * 20;
+		const dy = 90;
 
-			const dfs = (index: number, pos: Vector2D) => {
-					if (index >= tree_array.length || tree_array[index] == 'null') return;
-					const level = getLevel(index) + 1;
+		const dfs = (index: number, pos: Vector2D) => {
+			if (index >= tree_array.length || tree_array[index] == 'null') return;
+				const level = getLevel(index) + 1;
 
-					const left = 2 * index + 1;
-					const right = 2 * index + 2;
+				const left = 2 * index + 1;
+				const right = 2 * index + 2;
 
-					const new_y = pos.y + dy;
-					const new_x = d / level;
+			const new_y = pos.y + dy;
+			const new_x = d / level;
 
-					if (left < tree_array.length &&  tree_array[left] != 'null') {
-							addNodesToRender(connectCircles(pos,
-									{
-											x: pos.x - new_x,
-											y:  new_y
-									},
-							));
-							dfs(left, 
-									{
-											x: pos.x - new_x,
-											y: new_y
-									}
-							);
+			if (left < tree_array.length &&  tree_array[left] != 'null') {
+				addNodesToRender(connectCircles(pos,
+					{
+						x: pos.x - new_x,
+						y:  new_y
+					},
+				));
+				dfs(left, 
+						{
+							x: pos.x - new_x,
+							y: new_y
+						}
+				);
+			}
+			if (right < tree_array.length  &&  tree_array[right] != 'null') {
+				addNodesToRender(connectCircles(pos, 
+					{
+						x: pos.x + new_x,
+						y:  new_y
+					},
+				));
+				dfs(
+					right,
+					{
+						x: pos.x + new_x,
+						y: new_y
 					}
-					if (right < tree_array.length  &&  tree_array[right] != 'null') {
-							addNodesToRender(connectCircles(pos, 
-									{
-											x: pos.x + new_x,
-											y:  new_y
-									},
-							));
-							dfs(
-									right,
-									{
-											x: pos.x + new_x,
-											y: new_y
-									}
-							);
-					}
-					addNodesToRender(createNode(pos, tree_array[index],false));
-			};
-
-
-
-			dfs(0,{
-					x:center.x,
-					y:center.y-(innerHeight/4)
-			});
+				);
+			}
+		addNodesToRender(createNode(pos, tree_array[index],false));
+	};
+		dfs(0,{
+			x:center.x,
+			y:center.y-(innerHeight/4)
+		});
 	}
 
 
@@ -173,8 +170,8 @@ const Page = () => {
     stage.scale({ x: newScale, y: newScale });
 
     const newPos = {
-      x: pointer.x - mousePointTo.x * newScale,
-      y: pointer.y - mousePointTo.y * newScale,
+		x: pointer.x - mousePointTo.x * newScale,
+		y: pointer.y - mousePointTo.y * newScale,
     };
     stage.position(newPos);
 };
@@ -189,8 +186,8 @@ const Page = () => {
     stage.scale({ x: newScale, y: newScale });
 
     const newPos = {
-      x: stage.width() / 2 - center.x * newScale,
-      y: stage.height() / 2 - center.y * newScale,
+		x: stage.width() / 2 - center.x * newScale,
+		y: stage.height() / 2 - center.y * newScale,
     };
 
     stage.position(newPos);
@@ -221,12 +218,14 @@ const Page = () => {
 						draggable
 					>
 						<Layer>
-							{
+							{ // binary trees
+								selectedTab == 0 &&
 								groupToRender.map((node,idx) => {
 									return (
 										<React.Fragment key={idx}>{node}</React.Fragment>
 									)
-								})
+								}) 
+
 							}
 						</Layer>
 					</Stage>
