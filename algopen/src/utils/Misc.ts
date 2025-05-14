@@ -25,6 +25,10 @@ export function saveToLocalStorage(){
     });
 }
 
+export function getLevel(index: number): number {
+    return Math.floor(Math.log2(index + 1));
+}
+
 export function checkLocalStorageStartup() {
     let textarea = localStorage.getItem('textareaContent')
     if (!textarea) {

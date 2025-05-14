@@ -3,19 +3,14 @@
 import React, { useEffect, useRef, useState } from 'react'
 import NavBar from '../components/NavBar/NavBar'
 import './index.css'
-import { Stage, Layer, Circle, Group } from "react-konva";
+import { Stage, Layer } from "react-konva";
 import { Vector2D } from '../GlobalTypes';
-import { COLORS, HEADER_HEIGHT, INPUTS_WIDTH, MOBILE_WIDTH } from '../constants';
+import { HEADER_HEIGHT, INPUTS_WIDTH, MOBILE_WIDTH } from '../constants';
 import { connectCircles, createNode, getSafeCorners, getVisibleCenter } from '../../utils/SceneController';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { motion } from 'framer-motion';
 import GraphInputs from '../components/GraphInputs/GraphInputs';
-
-
-// type Props = {}
-
-
+import { getLevel } from '../../utils/Misc';
 
 
 const Page = () => {
@@ -94,13 +89,11 @@ const Page = () => {
 			// }
 	}
 
-	function getLevel(index: number): number {
-			return Math.floor(Math.log2(index + 1));
-	}
+
 
 	const addNodesToRender = (node: React.ReactNode) => {
 		setGroupToRender(prev => [...prev, node]);
-};
+	};
 
 	function generateTree(tree_array: string[]) {
 			const d = tree_array.filter(item => item !== 'null').length * 20;
