@@ -10,15 +10,12 @@ import { connectCircles, createNode, getSafeCorners, getVisibleCenter } from '..
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { motion } from 'framer-motion';
+import GraphInputs from '../components/GraphInputs/GraphInputs';
 
 
 // type Props = {}
 
-const infoText = [
-	'Enter in array format, each node label seperated by a comma ( , ) below',
-	'Enter the graph in adjancency list format with the weighting in brackets, i.e:\nnodeX : neighbourA(2),neighbourB(3)\nnodeY...\nFor a directed graph, begin line 1 with \'directed\'',
-	'Enter the graph in adjancency list format, i.e:\nnodeX : neighbourA,neighbourB\nnodeY...\nFor a directed graph, begin line 1 with \'directed\'',
-]
+
 
 
 const Page = () => {
@@ -212,62 +209,34 @@ const Page = () => {
 		<div>
 			<NavBar/>
 			<section className="content">
-				{/* <div className="inputs"> */}
-				<motion.div
-				className="inputs"
-        initial={{ x: 0 }}
-        animate={{ x: showInputs ? 0 : innerWidth < MOBILE_WIDTH ? -1000 : -400 }}
-        transition={{ duration: .35 ,ease: 'easeInOut'}}
-				>
-					<div id="top-inputs">
-						<div className="selections">
-							<ul id="tab-container">
-								<button onClick={() => setSelectedTab(0)} className={selectedTab == 0 ? 'selected' : ''}>Binary Tree</button>
-								<button onClick={() => setSelectedTab(1)} className={selectedTab == 1 ? 'selected' : ''}>Weighted Graph</button>
-								<button onClick={() => setSelectedTab(2)} className={selectedTab == 2 ? 'selected' : ''}>Graph</button>
-							</ul>
-						</div>
-						<div id="info">
-							<p>{infoText[selectedTab]}</p>
-							<hr style={{marginTop: '10px',color: 'rgba(128, 128, 128, 0.427)'}}/>
-						</div>
-						<textarea onChange={(e) => setTextArea(e.target.value)} id="text-input"></textarea>
+				<GraphInputs selectedTab={selectedTab} setSelectedTab={setSelectedTab} visualise={visualise} showInputs={showInputs} setTextArea={setTextArea} />
+				<div className="display" id='container' >
+					<div className="display-controls">
+						<button onClick={() => setShowInputs(!showInputs)} id="fullscreen-btn">
+							<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M4.25 13.25H0.75V9.75M13.25 9.75V13.25H9.75M9.75 0.75H13.25V4.25M0.75 4.25V0.75H4.25" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+							</svg>
+						</button>
+						<button onClick={() => zoomStage(1.3)}><p>+</p></button>
+						<button onClick={() => zoomStage(0.7)}><p>-</p></button>
 					</div>
-					<div id="visualise" className="v-wrapper">
-						<a id="visualise-test" onClick={() => visualise()}>
-							<span >Visualise</span>
-						</a>
-					</div>
-				</motion.div>
-					<div className="display" id='container' >
-						<div className="display-controls">
-							<button onClick={() => setShowInputs(!showInputs)} id="fullscreen-btn">
-								<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<path d="M4.25 13.25H0.75V9.75M13.25 9.75V13.25H9.75M9.75 0.75H13.25V4.25M0.75 4.25V0.75H4.25" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-								</svg>
-							</button>
-							<button onClick={() => zoomStage(1.3)}><p>+</p></button>
-							<button onClick={() => zoomStage(0.7)}><p>-</p></button>
-						</div>
-						<Stage 
-							onWheel={(e) => handleWheelZoom(e, stageRef.current)}
-							ref={stageRef} 
-							width={dimensions.x} 
-							height={dimensions.y-HEADER_HEIGHT}
-							draggable
-						>
-							<Layer>
-								{
-									groupToRender.map((node,idx) => {
-										return (
-											<React.Fragment key={idx}>{node}</React.Fragment>
-										)
-									})
-								}
-								{/* {console.log(groupToRender.length)} */}
-							</Layer>
-
-						</Stage>
+					<Stage 
+						onWheel={(e) => handleWheelZoom(e, stageRef.current)}
+						ref={stageRef} 
+						width={dimensions.x} 
+						height={dimensions.y-HEADER_HEIGHT}
+						draggable
+					>
+						<Layer>
+							{
+								groupToRender.map((node,idx) => {
+									return (
+										<React.Fragment key={idx}>{node}</React.Fragment>
+									)
+								})
+							}
+						</Layer>
+					</Stage>
 				</div>
 			</section>
 		</div>
