@@ -5,7 +5,7 @@ import { ArrowConfig } from 'konva/lib/shapes/Arrow';
 import { LineConfig } from 'konva/lib/shapes/Line';
 import { Line } from 'react-konva';
 import { Vector2D } from '../app/GlobalTypes';
-import React from 'react';
+import React, { EventHandler } from 'react';
 import { COLORS, HEADER_HEIGHT, INPUTS_WIDTH, LINE_WIDTH, MOBILE_WIDTH, NODE_COLOR, NODE_RADIUS, TEXT_COLOR } from '../app/constants';
 
 export function getSafeCorners(center: Vector2D, width: number): Vector2D[] {
@@ -121,13 +121,14 @@ export function connectCircles(pos1: Vector2D, pos2: Vector2D): React.ReactNode 
     
 // }
 
-export function createNode(pos: Vector2D, val: string, draggable = false, key?: number): React.ReactNode {
+export function createNode(pos: Vector2D, val: string, draggable = false, onDrag?: (e: any) => void): React.ReactNode {
     return (
         <Group
-            key={key}
+            id={val}
             x={pos.x}
             y={pos.y}
             draggable={draggable}
+            onDragMove={onDrag}
             // onMouseOver={() => setFillColor(COLORS.RED)}
             // onMouseOut={() => setFillColor(NODE_COLOR)}
             >

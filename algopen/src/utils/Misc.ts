@@ -3,16 +3,12 @@ import { Vector2D } from "../app/GlobalTypes";
 import { createNode } from "./SceneController";
 import { KonvaEventObject, NodeConfig } from "konva/lib/Node";
 
-export function getBoundingRectPoints(nodeCenter: Vector2D, padding=0,): Vector2D[] {
-    const node = createNode(nodeCenter, 'test', true, new Konva.Layer());
-    const boundingRect = node.getClientRect();
-    node.destroy();
-
+export function getBoundingPoints(nodeCenter: Vector2D, radius=0,): Vector2D[] {
     return [
-        { x: boundingRect.x-padding, y: boundingRect.y-padding }, // top-left
-        { x: boundingRect.x+boundingRect.width+padding, y: boundingRect.y-padding}, // top-right
-        { x: boundingRect.x-padding, y: boundingRect.y + boundingRect.height+padding }, // bottom-left
-        { x: boundingRect.x+ boundingRect.width+padding, y: boundingRect.y + boundingRect.height+padding } // bottom-right
+        {x:nodeCenter.x-radius,y:nodeCenter.y-radius}, // top left
+        {x:nodeCenter.x+radius,y:nodeCenter.y-radius}, // top right
+        {x:nodeCenter.x-radius,y:nodeCenter.y+radius}, // bottom left
+        {x:nodeCenter.x+radius,y:nodeCenter.y+radius}, // bottom right
     ];
 }
 
@@ -61,14 +57,14 @@ function intersectsLine(p1: Vector2D,p2: Vector2D,nodeCenter: Vector2D): boolean
     
     // sub in p1 to find c
     const constant = p1.y - (grad*p1.x)
-    const boundingRectPoint = getBoundingRectPoints(nodeCenter,50)
+    const nodeCenterPoint = getBoundingPoints(nodeCenter,50)
     let previousRes
 
     // check each point is above/below line
     // for an intersection atleast one point will differ to others (max 3),
     // returns true if rect intersects line else false
-    for(let i = 0; i < boundingRectPoint.length; i++) {
-        const pos = boundingRectPoint[i]
+    for(let i = 0; i < nodeCenterPoint.length; i++) {
+        const pos = nodeCenterPoint[i]
         const res = pos.y > (grad * pos.x) + constant
         if (res == previousRes || previousRes == undefined ){
             previousRes = res
