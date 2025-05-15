@@ -10,9 +10,9 @@ import { connectCircles, createEdge, createNode, getSafeCorners, getVisibleCente
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import GraphInputs from '../components/GraphInputs/GraphInputs';
-import { closeToAnotherNode, getLevel, intersectsAllLines, randomInt } from '../../utils/Misc';
+import { getLevel, randomInt } from '../../utils/Misc';
 import { Vector2d } from 'konva/lib/types';
-import { getLinePoints } from '../../utils/GeometryHelpers';
+import { closeToAnotherNode, getLinePoints, intersectsAllLines } from '../../utils/GeometryHelpers';
 
 
 type NodeInfo = {
