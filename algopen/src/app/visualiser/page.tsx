@@ -137,7 +137,11 @@ const Page = () => {
 		setGroupToRender(prev => [...prev, node]);
 	};
 
-	function generateTree(tree_array: string[]) {
+	const pushToEdgeList = (edgeInfo: EdgeInfo) => {
+		setEdgeInfoList(prev => [...prev, edgeInfo])
+	}
+
+	const generateTree = (tree_array: string[]) => {
 		const d = tree_array.filter(item => item !== 'null').length * 20;
 		const dy = 90;
 
@@ -152,7 +156,8 @@ const Page = () => {
 			const new_x = d / level;
 
 			if (left < tree_array.length &&  tree_array[left] != 'null') {
-				addNodesToRender(connectCircles(pos,
+				addNodesToRender(connectCircles(
+					pos,
 					{
 						x: pos.x - new_x,
 						y:  new_y
@@ -166,7 +171,8 @@ const Page = () => {
 				);
 			}
 			if (right < tree_array.length  &&  tree_array[right] != 'null') {
-				addNodesToRender(connectCircles(pos, 
+				addNodesToRender(connectCircles(
+					pos, 
 					{
 						x: pos.x + new_x,
 						y:  new_y
@@ -180,8 +186,8 @@ const Page = () => {
 					}
 				);
 			}
-		addNodesToRender(createNode(pos, tree_array[index],false));
-	};
+			addNodesToRender(createNode(pos, tree_array[index],false));
+		};
 		dfs(0,{
 			x:center.x,
 			y:center.y-(innerHeight/4)
@@ -293,33 +299,33 @@ const Page = () => {
 									)
 								}) 
 							}
-							{selectedTab === 2 && (
-							<>
-								{nodeInfoList.map((item, idx) => (
-								<React.Fragment key={`node-${idx}`}>
-									{createNode(item.position, item.label, true, handleNodeDrag)}
-								</React.Fragment>
-								))}
-								{edgeInfoList.map((edge, idx) => {
-								const fromNode = nodeInfoList.find((t) => t.label === edge.labelFrom);
-								const toNode = nodeInfoList.find((t) => t.label === edge.labelTo);
-								if (!fromNode || !toNode) return null;
-								const points = getLinePoints(fromNode.position, toNode.position);
-								return (
-									<React.Fragment key={`edge-${idx}`}>
-									{createEdge(points, edge.directed)}
-									</React.Fragment>
-								);
-								})}
-							</>
+							{ // graphs
+								selectedTab === 2 && (
+									<> 
+										{nodeInfoList.map((item, idx) => (
+										<React.Fragment key={`node-${idx}`}>
+											{createNode(item.position, item.label, true, handleNodeDrag)}
+										</React.Fragment>
+										))}
+										{edgeInfoList.map((edge, idx) => {
+										const fromNode = nodeInfoList.find((t) => t.label === edge.labelFrom);
+										const toNode = nodeInfoList.find((t) => t.label === edge.labelTo);
+										if (!fromNode || !toNode) return null;
+										const points = getLinePoints(fromNode.position, toNode.position);
+										return (
+											<React.Fragment key={`edge-${idx}`}>
+											{createEdge(points, edge.directed)}
+											</React.Fragment>
+										);
+										})}
+									</>
 							)}
-
 						</Layer>
 					</Stage>
 				</div>
 			</section>
 		</div>
-  )
+	)
 }
 
 export default Page
