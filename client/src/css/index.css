@@ -320,11 +320,10 @@ button:hover {
     }
 
     .html {
-        width: 100vw;
         overflow-x: hidden;
+        font-size: 12px !important;
     }
     .display-controls {
-        /* top: 0;? */
         height: fit-content;
         z-index: 1;
     }

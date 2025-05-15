@@ -1,0 +1,50 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 300;
+    resize: none;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #eee;
+    background-position: center;
+    background-size: contain;
+    height: 100%;
+    width: 100%;
+    
+}
+
+html, body {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+button {
+    all: unset;
+}
+
+/* variables */
+
+:root {
+    /* Background and Dim Colors */
+    --black:      #1C1E1F;
+    --bg-dim:     #21282C;
+    --bg0:        #273136;
+    --bg1:        #313B42;
+    --bg2:        #353F46;
+    --bg3:        #3A444B;
+    --bg4:        #414B53;
+    --gray-dim:   #55626D;
+    /* Accent Colors */
+    --red:        #F76C7C;
+    --orange:     #F3A96A;
+    --yellow:     #E3D367;
+    --green:      #9CD57B;
+    --blue:       #78CEE9;
+    --purple:     #BAA0F8;
+    /* Foreground & Neutral */
+    --fg:         #E1E2E3;
+    --gray:       #82878B;
+}
