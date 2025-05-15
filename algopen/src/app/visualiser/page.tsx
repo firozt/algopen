@@ -4,31 +4,18 @@ import React, { useEffect, useRef, useState } from 'react'
 import NavBar from '../components/NavBar/NavBar'
 import './index.css'
 import { Stage, Layer} from "react-konva";
-import { Vector2D } from '../GlobalTypes';
-import { HEADER_HEIGHT, INPUTS_WIDTH, MAX_PLACEMENT_ATTEMPTS, MOBILE_WIDTH } from '../constants';
+import { EdgeInfo, NodeInfo, Vector2D } from '../GlobalTypes';
+import { HEADER_HEIGHT, INPUTS_WIDTH, MOBILE_WIDTH } from '../constants';
 import { connectCircles, createEdge, createNode, getSafeCorners, getVisibleCenter } from '../../utils/SceneController';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import GraphInputs from '../components/GraphInputs/GraphInputs';
-import { getLevel, randomInt } from '../../utils/Misc';
-import { Vector2d } from 'konva/lib/types';
-import { closeToAnotherNode, getLinePoints, intersectsAllLines } from '../../utils/GeometryHelpers';
+import { getLevel } from '../../utils/Misc';
+import { generateRandomPoints, getLinePoints, } from '../../utils/GeometryHelpers';
 
-
-type NodeInfo = {
-	position: Vector2D
-	label: string // unique
-}
-
-type EdgeInfo = {
-	labelFrom: string
-	labelTo: string
-	weight?: string
-	directed: boolean
-}
 
 const Page = () => {
-	const [textArea, setTextArea] = useState<string[]>(['','',''])
+	const [textArea, setTextArea] = useState<string[]>(['1,null,2,null,null,3,4','','A:B,C,D'])
 	const [groupToRender, setGroupToRender] = useState<React.ReactNode[]>([]) // list of nodes to render from konva
 
 	const [nodeInfoList, setNodeInfoList] = useState<NodeInfo[]>([])
@@ -72,6 +59,7 @@ const Page = () => {
 		}
 	}, []);
 
+	// parses input to see if user wants directional grapinh
 	const isDirectional = (input: string): [string, boolean] => {
 		console.log( input.split('\n')[0].toLowerCase())
 		const res = input.length > 0 && input.split('\n')[0].toLowerCase() == 'directed'
@@ -83,49 +71,15 @@ const Page = () => {
 	}
 
 
-	function generateAllNodePositions(unique_nodes: Set<string>): NodeInfo[] {
-		const nodeList: NodeInfo[] = []
-		const previousPositions: Vector2d[] = [] // holds previous x,y values
-		unique_nodes.forEach(node => {
-			let random_x
-			let random_y
-			let attempts = 0
 
-			const safeCorners = safeZone
-			const buffer = unique_nodes.size > 7 ? (unique_nodes.size-5) * 30 : 0
-			const nodeMinDistance = unique_nodes.size < 9 ? 1500 / (unique_nodes.size+1)  : 150
-			do {
-				random_x = randomInt(safeCorners[0].x-buffer,safeCorners[1].x+buffer)
-				random_y = randomInt(safeCorners[0].y-buffer,safeCorners[2].y+buffer)
-				attempts += 1
-				if (attempts == MAX_PLACEMENT_ATTEMPTS) console.log('could not find suitable position')
-			} while (
-				attempts <= MAX_PLACEMENT_ATTEMPTS &&
-				(
-					closeToAnotherNode({x: random_x, y: random_y}, previousPositions, nodeMinDistance) || 
-					intersectsAllLines({x: random_x, y: random_y}, previousPositions)
-				)
-			)
-			
-			const validPosition: Vector2D = {x:random_x,y:random_y}
-			previousPositions.push(validPosition)
-			nodeList.push({
-				label: node,
-				position: validPosition,
-			})
-		})
-		return nodeList
-	}
-
-
-	function graphVisualiser(input: string, directional: boolean) {
+	const graphVisualiser = (input: string, directional: boolean) => {
 		const parseInput = (input: string): [NodeInfo[], string[]]  => {
 			// get all unique nodes
 
 			const unique_nodes = new Set(input.replaceAll(' ','').split(/[,\n:]+/))  // regex splits on comma, newline and colon // contains set of all unique nodes
 			const parsedInput = input.replaceAll(' ','').split('\n')  // contains user input, each index is new line
 
-			return [generateAllNodePositions(unique_nodes),parsedInput]
+			return [generateRandomPoints(unique_nodes,safeZone),parsedInput]
 		}
 
 		const [nodeList, parsedInput] = parseInput(input)
@@ -172,9 +126,9 @@ const Page = () => {
 
 					graphVisualiser(parsed,directional)
 			} 
-			// else {
-					// console.warn('Selected could not be parsed : ' + selected)
-			// }
+			else {
+				throw new Error('Selected could not be parsed : ' + selectedTab)
+			}
 	}
 
 

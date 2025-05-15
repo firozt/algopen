@@ -1,16 +1,49 @@
 
 /**
+ * 
  *  This file contains geometry functions that will be used for vector calculations for Konvajs
  *  This file relis of the Vector2D type defined in /app/globaltypes.ts
  *  
- * 
- * 
  */
 
-import { Vector2D } from "../app/GlobalTypes"
+import { Vector2d } from "konva/lib/types"
+import { MAX_PLACEMENT_ATTEMPTS } from "../app/constants"
+import { NodeInfo, Vector2D } from "../app/GlobalTypes"
+import { randomInt } from "./Misc"
 
 
+export function generateRandomPoints(unique_nodes: Set<string>, safeCorners: Vector2D[]): NodeInfo[] {
+        const nodeList: NodeInfo[] = []
+        const previousPositions: Vector2d[] = [] // holds previous x,y values
+        unique_nodes.forEach(node => {
+            let random_x
+            let random_y
+            let attempts = 0
 
+            const buffer = unique_nodes.size > 7 ? (unique_nodes.size-5) * 30 : 0
+            const nodeMinDistance = unique_nodes.size < 9 ? 1500 / (unique_nodes.size+1)  : 150
+            do {
+                random_x = randomInt(safeCorners[0].x-buffer,safeCorners[1].x+buffer)
+                random_y = randomInt(safeCorners[0].y-buffer,safeCorners[2].y+buffer)
+                attempts += 1
+                if (attempts == MAX_PLACEMENT_ATTEMPTS) console.log('could not find suitable position')
+            } while (
+                attempts <= MAX_PLACEMENT_ATTEMPTS &&
+                (
+                    closeToAnotherNode({x: random_x, y: random_y}, previousPositions, nodeMinDistance) || 
+                    intersectsAllLines({x: random_x, y: random_y}, previousPositions)
+                )
+            )
+            
+            const validPosition: Vector2D = {x:random_x,y:random_y}
+            previousPositions.push(validPosition)
+            nodeList.push({
+                label: node,
+                position: validPosition,
+            })
+        })
+        return nodeList
+    }
 
 
 /**

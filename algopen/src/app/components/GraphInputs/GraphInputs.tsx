@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion'
 import React from 'react'
 import { MOBILE_WIDTH } from '../../constants'
+import './index.css'
+import SlideButton from '../SlideButton/SlideButton'
 
 type Props = {
 	showInputs: boolean
@@ -13,9 +15,22 @@ type Props = {
 
 
 const infoText = [
-	'Enter in array format, each node label seperated by a comma ( , ) below',
-	'Enter the graph in adjancency list format with the weighting in brackets, i.e:\nnodeX : neighbourA(2),neighbourB(3)\nnodeY...\nFor a directed graph, begin line 1 with \'directed\'',
-	'Enter the graph in adjancency list format, i.e:\nnodeX : neighbourA,neighbourB\nnodeY...\nFor a directed graph, begin line 1 with \'directed\'',
+	<p key={0}>
+		Enter in array format, each node label seperated by a comma ( , ) below <br/>
+		More info can be found <a target='_BLANK' href='https://www.w3schools.com/dsa/dsa_data_binarytrees_arrayImpl.php'>here</a>
+	</p>,
+	<p key={1}>
+		Enter the graph in adjancency list format with the weighting in brackets, i.e:
+		nodeX : neighbourA(2),neighbourB(3) <br/>
+		nodeY... <br/>
+		For a directed graph, begin line 1 with \&apos;directed\&apos;
+	</p>,
+	<p key={2}>
+		Enter the graph in adjancency list format, i.e:
+		nodeX : neighbourA,neighbourB <br/>
+		nodeY... <br/>
+		For a directed graph, begin line 1 with &apos;directed&apos;
+	</p>
 ]
 
 const GraphInputs = ({showInputs, selectedTab, setSelectedTab, setTextArea, textArea, visualise}: Props) => {
@@ -35,16 +50,13 @@ const GraphInputs = ({showInputs, selectedTab, setSelectedTab, setTextArea, text
 					</ul>
 				</div>
 				<div id="info">
-					<p>{infoText[selectedTab]}</p>
+					{infoText[selectedTab]}
 					<hr style={{marginTop: '10px',color: 'rgba(128, 128, 128, 0.427)'}}/>
 				</div>
 				<textarea value={textArea} onChange={(e)=> setTextArea(e.target.value)} id="text-input"></textarea>
 			</div>
-			<div id="visualise" className="v-wrapper">
-				<a id="visualise-test" onClick={() => visualise()}>
-					<span >Visualise</span>
-				</a>
-			</div>
+			<SlideButton onClick={visualise} />
+
 		</motion.div>
 	)
 }

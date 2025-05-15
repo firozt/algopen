@@ -1,0 +1,48 @@
+
+
+.v-wrapper{
+    width: 100%;
+    cursor: pointer;
+    background-color: black;
+    border-left: 2px solid black;
+}
+
+.v-wrapper a{
+    display: block;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    font-size: 18px;
+    font-family: sans-serif;
+    text-decoration: none;
+    color: #eee;
+    letter-spacing: 2px;
+    text-align: center;
+    position: relative;
+    transition: all .35s;
+    height: 3rem;
+}
+
+.v-wrapper a span{
+    position: relative;
+    z-index: 2;
+}
+
+.v-wrapper a:after{
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: #eee;
+    transition: all ease-in-out .35s;
+}
+
+.v-wrapper a:hover{
+    color: black;
+}
+
+.v-wrapper a:hover:after{
+    width: 100%;
+}
