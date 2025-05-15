@@ -6,12 +6,13 @@ import './index.css'
 import { Stage, Layer, Line } from "react-konva";
 import { Vector2D } from '../GlobalTypes';
 import { HEADER_HEIGHT, INPUTS_WIDTH, MAX_PLACEMENT_ATTEMPTS, MOBILE_WIDTH } from '../constants';
-import { connectCircles, createNode, createNodeConnection, getSafeCorners, getVisibleCenter } from '../../utils/SceneController';
+import { connectCircles, createEdge, createNode, createNodeConnection, getSafeCorners, getVisibleCenter } from '../../utils/SceneController';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import GraphInputs from '../components/GraphInputs/GraphInputs';
 import { closeToAnotherNode, getLevel, intersectsAllLines, randomInt } from '../../utils/Misc';
 import { Vector2d } from 'konva/lib/types';
+import { getLinePoints } from '../../utils/GeometryHelpers';
 
 
 type NodeInfo = {
@@ -331,19 +332,27 @@ const Page = () => {
 									)
 								}) 
 							}
-							{ // graphs
-								selectedTab == 2 &&
-								nodeInfoList.map((item,idx) => {
-									return (
-										createNode(
-											item.position,
-											item.label,
-											true,
-											handleNodeDrag
-										)
-									)
-								}) 
-							}
+							{selectedTab === 2 && (
+							<>
+								{nodeInfoList.map((item, idx) => (
+								<React.Fragment key={`node-${idx}`}>
+									{createNode(item.position, item.label, true, handleNodeDrag)}
+								</React.Fragment>
+								))}
+								{edgeInfoList.map((edge, idx) => {
+								const fromNode = nodeInfoList.find((t) => t.label === edge.labelFrom);
+								const toNode = nodeInfoList.find((t) => t.label === edge.labelTo);
+								if (!fromNode || !toNode) return null;
+								const points = getLinePoints(fromNode.position, toNode.position);
+								return (
+									<React.Fragment key={`edge-${idx}`}>
+									{createEdge(points, edge.directed)}
+									</React.Fragment>
+								);
+								})}
+							</>
+							)}
+
 						</Layer>
 					</Stage>
 				</div>

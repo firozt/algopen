@@ -1,5 +1,5 @@
 import Konva from 'konva'
-import { Group, Circle, Text } from 'react-konva';
+import { Group, Circle, Text, Arrow } from 'react-konva';
 import { Layer } from 'konva/lib/Layer';
 import { ArrowConfig } from 'konva/lib/shapes/Arrow';
 import { LineConfig } from 'konva/lib/shapes/Line';
@@ -26,6 +26,19 @@ export function getSafeCorners(center: Vector2D, width: number): Vector2D[] {
             {x:(center.x-400)*2,y:(center.y*2)-100} // bottom right
         ]
     }
+}
+
+
+type EdgeInfo = {
+	labelFrom: string
+	labelTo: string
+	weight?: string
+	directed: boolean
+}
+
+type NodeInfo = {
+	position: Vector2D
+	label: string // unique
 }
 
 
@@ -154,6 +167,7 @@ export function createNode(pos: Vector2D, val: string, draggable = false, onDrag
 }
 
 
+
     // group will contain circle node and text on the circle node
     // const group = new Konva.Group({ 
     //     x: pos.x, 
@@ -223,22 +237,43 @@ function updateLine(node1: Konva.Group, node2: Konva.Group, line: Konva.Line, la
     layer.batchDraw();
 }
 
-export function createNodeConnection(node1: Group, node2: Group, directional: boolean, layer: Konva.Layer){
-    const line = createLine(
-        directional
-        ,{
-        points: [], // will be set below
-        stroke: 'black',
-        strokeWidth: 2,
-        pointerLength: 10,
-        pointerWidth: 10,
-        fill: 'black',
-    });
-    layer.add(line)
+export function createEdge(points: number[], directional: boolean){
 
-    node1.on('dragmove', () => updateLine(node1,node2,line,layer));
-    node2.on('dragmove', () => updateLine(node1,node2,line,layer));
-    updateLine(node1,node2,line,layer)  // initial draw of lines
+    return directional ? (
+        <Arrow 
+            points={points}        
+            stroke={COLORS.BLACK}
+            strokeWidth={LINE_WIDTH}
+            fill={COLORS.BLACK}
+            pointerLength={10}
+            pointerWidth={10}
+        /> 
+    ) : (
+        <Line
+            points={points}        
+            stroke={COLORS.BLACK}
+            strokeWidth={LINE_WIDTH}
+            fill={COLORS.BLACK}
+            pointerLength={10}
+            pointerWidth={10}
+        />
+    )
+
+    // const line = createLine(
+    //     directional
+    //     ,{
+    //     points: [], // will be set below
+    //     stroke: 'black',
+    //     strokeWidth: 2,
+    //     pointerLength: 10,
+    //     pointerWidth: 10,
+    //     fill: 'black',
+    // });
+    // layer.add(line)
+
+    // node1.on('dragmove', () => updateLine(node1,node2,line,layer));
+    // node2.on('dragmove', () => updateLine(node1,node2,line,layer));
+    // updateLine(node1,node2,line,layer)  // initial draw of lines
 }
 
 function createLine(directional=false, config: ArrowConfig | LineConfig): Konva.Arrow | Konva.Line {

@@ -48,3 +48,21 @@ export function intersectsAllLines(nodeCenter: Vector2D,previousPositions: Vecto
     }
     return false
 }
+
+
+export function getLinePoints(pos1: Vector2D, pos2: Vector2D): number[]{
+    const dx = pos2.x - pos1.x;
+    const dy = pos2.y - pos1.y;
+    const length = Math.sqrt(dx * dx + dy * dy);
+
+    // Calculate shortened start and end points
+    const offsetX = (dx / length) * 30;
+    const offsetY = (dy / length) * 30;
+
+    const newStartX = pos1.x + offsetX;
+    const newStartY = pos1.y + offsetY;
+    const newEndX = pos2.x - offsetX;
+    const newEndY = pos2.y - offsetY;
+
+    return [newStartX, newStartY, newEndX, newEndY]
+}
