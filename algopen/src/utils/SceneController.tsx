@@ -1,12 +1,9 @@
 import Konva from 'konva'
 import { Group, Circle, Text, Arrow } from 'react-konva';
-import { Layer } from 'konva/lib/Layer';
-import { ArrowConfig } from 'konva/lib/shapes/Arrow';
-import { LineConfig } from 'konva/lib/shapes/Line';
 import { Line } from 'react-konva';
 import { Vector2D } from '../app/GlobalTypes';
-import React, { EventHandler } from 'react';
-import { COLORS, HEADER_HEIGHT, INPUTS_WIDTH, LINE_WIDTH, MOBILE_WIDTH, NODE_COLOR, NODE_RADIUS, TEXT_COLOR } from '../app/constants';
+import React from 'react';
+import { COLORS, HEADER_HEIGHT, LINE_WIDTH, MOBILE_WIDTH, NODE_COLOR, NODE_RADIUS, TEXT_COLOR } from '../app/constants';
 
 export function getSafeCorners(center: Vector2D, width: number): Vector2D[] {
     const isMobile = width <= MOBILE_WIDTH
@@ -68,8 +65,6 @@ export function createNode(pos: Vector2D, val: string, draggable = false, onDrag
             y={pos.y}
             draggable={draggable}
             onDragMove={onDrag}
-            // onMouseOver={() => setFillColor(COLORS.RED)}
-            // onMouseOut={() => setFillColor(NODE_COLOR)}
             >
         <Circle
             radius={NODE_RADIUS}

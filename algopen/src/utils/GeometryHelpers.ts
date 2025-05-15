@@ -1,4 +1,14 @@
+
+/**
+ *  This file contains geometry functions that will be used for vector calculations for Konvajs
+ *  This file relis of the Vector2D type defined in /app/globaltypes.ts
+ *  
+ * 
+ * 
+ */
+
 import { Vector2D } from "../app/GlobalTypes"
+
 
 
 
@@ -24,7 +34,7 @@ export function closeToAnotherNode(pos: Vector2D,previousPositions: Vector2D[],n
 
 
 /**
-    returns a nodes bounding box, given its radius
+ * returns a nodes bounding box, given its radius
  *
  * @param nodeCenter - vector position of the node
  * @param radius - the radius of the node
@@ -66,7 +76,7 @@ function intersectsLine(p1: Vector2D,p2: Vector2D,nodeCenter: Vector2D): boolean
 
 
 /**
-    Checks wether a node, at poistion nodecenter, will intersect a line drawn between every other node
+ * Checks wether a node, at poistion nodecenter, will intersect a line drawn between every other node
  *
  * @param nodeCenter - vector position of node 1
  * @param previousPositions - a list of vector position of all nodes to check against
@@ -86,7 +96,7 @@ export function intersectsAllLines(nodeCenter: Vector2D,previousPositions: Vecto
 }
 
 /**
-    returns the points the new line, shortened by 30 units for a node
+ * returns the points the new line, shortened by 30 units for a node
  *
  * @param pos1 - vector position of node 1
  * @param pos2 - vector position of node 2
