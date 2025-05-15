@@ -1,7 +1,11 @@
-import type { NextConfig } from "next";
+/** @type {import('next').NextConfig} */
 
-const nextConfig: NextConfig = {
-  /* config options here */
+const isGithubPages = process.env.NODE_ENV === 'production';
+
+const nextConfig = {
+  output: 'export',
+  basePath: isGithubPages ? '/algopen' : '',
+  images: { unoptimized: true },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
