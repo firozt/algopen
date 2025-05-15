@@ -10,6 +10,7 @@
     margin: 0;
     white-space: pre-line;
     border-left: 2px solid black;
+    line-height: 20px;
 }
 
 #linebreak {

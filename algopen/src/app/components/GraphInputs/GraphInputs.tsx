@@ -20,13 +20,13 @@ const infoText = [
 		More info can be found <a target='_BLANK' href='https://www.w3schools.com/dsa/dsa_data_binarytrees_arrayImpl.php'>here</a>
 	</p>,
 	<p key={1}>
-		Enter the graph in adjancency list format with the weighting in brackets, i.e:
+		Enter the graph in adjancency list format with the weighting in brackets, i.e: <br/>
 		nodeX : neighbourA(2),neighbourB(3) <br/>
 		nodeY... <br/>
 		For a directed graph, begin line 1 with \&apos;directed\&apos;
 	</p>,
 	<p key={2}>
-		Enter the graph in adjancency list format, i.e:
+		Enter the graph in adjancency list format, i.e: <br/>
 		nodeX : neighbourA,neighbourB <br/>
 		nodeY... <br/>
 		For a directed graph, begin line 1 with &apos;directed&apos;
