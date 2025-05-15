@@ -22,7 +22,7 @@ const Page = () => {
 
 	const [selectedTab, setSelectedTab] = useState<number>(0)
 	const [dimensions, setDimensions] = useState<Vector2D>({ x: 0, y: 0 });
-	const [center, setCenter] = useState<Vector2D>();
+	const [center, setCenter] = useState<Vector2D>({x:0,y:0});
 	const [safeZone, setSafeZone] = useState<Vector2D[]>([])
 	const [showInputs, setShowInputs] = useState<boolean>(true);
 	const stageRef = useRef<Konva.Stage | null>(null); 
@@ -267,6 +267,10 @@ const Page = () => {
 		const oldScale = stage.scaleX();
 		const pointer = stage.getPointerPosition();
 
+		if (pointer == null) {
+			throw new Error('pointer is null for handling wheel zoom')
+		}
+
 		const mousePointTo = {
 			x: (pointer.x - stage.x()) / oldScale,
 			y: (pointer.y - stage.y()) / oldScale,
@@ -293,6 +297,11 @@ const Page = () => {
 
 	const zoomStage = (scaleBy=1.5) => {
 		const stage = stageRef.current
+
+		if (stage == null) {
+			throw new Error('Stage is null')
+		}
+
 		const oldScale = stage.scaleX();
 		const newScale = oldScale * scaleBy;
 
@@ -350,7 +359,12 @@ const Page = () => {
 						<button onClick={() => zoomStage(0.7)}><p>-</p></button>
 					</div>
 					<Stage 
-						onWheel={(e) => handleWheelZoom(e, stageRef.current)}
+						onWheel={(e) => {
+							const stage = stageRef.current;
+							if (stage) {
+							handleWheelZoom(e, stage);
+							}
+						}}
 						ref={stageRef} 
 						width={dimensions.x} 
 						height={dimensions.y-HEADER_HEIGHT}
