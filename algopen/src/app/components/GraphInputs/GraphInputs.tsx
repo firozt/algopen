@@ -6,7 +6,8 @@ type Props = {
 	showInputs: boolean
 	selectedTab: number
 	setSelectedTab: React.Dispatch<number>
-	setTextArea: React.Dispatch<string>
+	setTextArea: (newVal: string) => void
+	textArea: string
 	visualise: () => void
 }
 
@@ -17,7 +18,7 @@ const infoText = [
 	'Enter the graph in adjancency list format, i.e:\nnodeX : neighbourA,neighbourB\nnodeY...\nFor a directed graph, begin line 1 with \'directed\'',
 ]
 
-const GraphInputs = ({showInputs, selectedTab, setSelectedTab, setTextArea, visualise}: Props) => {
+const GraphInputs = ({showInputs, selectedTab, setSelectedTab, setTextArea, textArea, visualise}: Props) => {
 	return (
 		<motion.div
 			className="inputs"
@@ -37,7 +38,7 @@ const GraphInputs = ({showInputs, selectedTab, setSelectedTab, setTextArea, visu
 					<p>{infoText[selectedTab]}</p>
 					<hr style={{marginTop: '10px',color: 'rgba(128, 128, 128, 0.427)'}}/>
 				</div>
-				<textarea onChange={(e) => setTextArea(e.target.value)} id="text-input"></textarea>
+				<textarea value={textArea} onChange={(e)=> setTextArea(e.target.value)} id="text-input"></textarea>
 			</div>
 			<div id="visualise" className="v-wrapper">
 				<a id="visualise-test" onClick={() => visualise()}>

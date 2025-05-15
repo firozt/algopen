@@ -3,10 +3,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import NavBar from '../components/NavBar/NavBar'
 import './index.css'
-import { Stage, Layer, Line } from "react-konva";
+import { Stage, Layer} from "react-konva";
 import { Vector2D } from '../GlobalTypes';
 import { HEADER_HEIGHT, INPUTS_WIDTH, MAX_PLACEMENT_ATTEMPTS, MOBILE_WIDTH } from '../constants';
-import { connectCircles, createEdge, createNode, createNodeConnection, getSafeCorners, getVisibleCenter } from '../../utils/SceneController';
+import { connectCircles, createEdge, createNode, getSafeCorners, getVisibleCenter } from '../../utils/SceneController';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import GraphInputs from '../components/GraphInputs/GraphInputs';
@@ -28,7 +28,7 @@ type EdgeInfo = {
 }
 
 const Page = () => {
-	const [textArea, setTextArea] = useState<string>('')
+	const [textArea, setTextArea] = useState<string[]>(['','',''])
 	const [groupToRender, setGroupToRender] = useState<React.ReactNode[]>([]) // list of nodes to render from konva
 
 	const [nodeInfoList, setNodeInfoList] = useState<NodeInfo[]>([])
@@ -147,7 +147,7 @@ const Page = () => {
 
 
 	const visualise = () => {
-		const input = textArea
+		const input = textArea[selectedTab]
 		console.log(textArea)
 
 		setGroupToRender([])
@@ -305,7 +305,14 @@ const Page = () => {
 		<div>
 			<NavBar/>
 			<section className="content">
-				<GraphInputs selectedTab={selectedTab} setSelectedTab={setSelectedTab} visualise={visualise} showInputs={showInputs} setTextArea={setTextArea} />
+				<GraphInputs 
+				textArea={textArea[selectedTab]} 
+				selectedTab={selectedTab} 
+				setSelectedTab={setSelectedTab} 
+				visualise={visualise} 
+				showInputs={showInputs} 
+				setTextArea={(newVal: string) => setTextArea(prev => prev.map((item,idx)=>idx==selectedTab ? newVal : item))} 
+				/>
 				<div className="display" id='container' >
 					<div className="display-controls">
 						<button onClick={() => setShowInputs(!showInputs)} id="fullscreen-btn">
