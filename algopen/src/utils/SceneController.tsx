@@ -57,7 +57,7 @@ export function connectCircles(pos1: Vector2D, pos2: Vector2D): React.ReactNode 
     />
 }
 
-export function createNode(pos: Vector2D, val: string, draggable = false, onDrag?: (e: any) => void): React.ReactNode {
+export function createNode(pos: Vector2D, val: string, draggable = false, onDrag?: (e: Konva.KonvaEventObject<DragEvent>) => void): React.ReactNode {
     return (
         <Group
             id={val}
@@ -87,17 +87,17 @@ export function createNode(pos: Vector2D, val: string, draggable = false, onDrag
     );
 }
 
-export function createEdge(points: number[], directional: boolean){
-    return directional ? (
-        <Arrow 
+export function createEdge(points: number[], directional: boolean, weight?: string){
+    const arrowNode = (
+        <Arrow
             points={points}        
             stroke={COLORS.BLACK}
             strokeWidth={LINE_WIDTH}
             fill={COLORS.BLACK}
             pointerLength={10}
             pointerWidth={10}
-        /> 
-    ) : (
+        />)
+    const lineNode = (
         <Line
             points={points}        
             stroke={COLORS.BLACK}
@@ -105,7 +105,36 @@ export function createEdge(points: number[], directional: boolean){
             fill={COLORS.BLACK}
             pointerLength={10}
             pointerWidth={10}
-        />
-    )
+        />)
+
+    if (weight) {
+        const midX = (points[0] + points[2]) / 2;
+        const midY = (points[1] + points[3]) / 2;
+        const textNode = (
+            <Text
+                x={midX}
+                y={midY}
+                text={weight}
+                fontSize={28}
+                verticalAlign= {'middle'}
+                align={'middle'}
+                width={weight.length * 28}
+                height={30}
+            />)
+        return (
+            <Group>
+                {
+                    directional ? arrowNode : lineNode
+                }
+                {
+                    textNode
+                }
+            </Group>
+        )
+    } else {
+        return (
+            directional ? arrowNode : lineNode
+        )
+    }
 }
 

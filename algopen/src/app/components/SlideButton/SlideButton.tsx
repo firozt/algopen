@@ -2,14 +2,15 @@ import React from 'react'
 import './index.css'
 
 type Props = {
+	title: string
     onClick: () => void
 }
 
-const SlideButton = ({onClick}: Props) => {
+const SlideButton = ({title,onClick}: Props) => {
 	return (
 		<div className="v-wrapper">
 			<a id="visualise-test" onClick={onClick}>
-				<span >Visualise</span>
+				<span >{title}</span>
 			</a>
 		</div>
 	)

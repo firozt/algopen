@@ -23,7 +23,7 @@ const infoText = [
 		Enter the graph in adjancency list format with the weighting in brackets, i.e: <br/>
 		nodeX : neighbourA(2),neighbourB(3) <br/>
 		nodeY... <br/>
-		For a directed graph, begin line 1 with \&apos;directed\&apos;
+		For a directed graph, begin line 1 with &apos;directed&apos;
 	</p>,
 	<p key={2}>
 		Enter the graph in adjancency list format, i.e: <br/>
@@ -55,7 +55,7 @@ const GraphInputs = ({showInputs, selectedTab, setSelectedTab, setTextArea, text
 				</div>
 				<textarea value={textArea} onChange={(e)=> setTextArea(e.target.value)} id="text-input"></textarea>
 			</div>
-			<SlideButton onClick={visualise} />
+			<SlideButton title='Visualise' onClick={visualise} />
 
 		</motion.div>
 	)
