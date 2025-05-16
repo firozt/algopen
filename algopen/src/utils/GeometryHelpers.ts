@@ -5,7 +5,6 @@
  *  This file relis of the Vector2D type defined in /app/globaltypes.ts
  *  
  */
-import { v4 as uuidv4 } from 'uuid';
 import { Vector2d } from "konva/lib/types"
 import { MAX_PLACEMENT_ATTEMPTS } from "../app/constants"
 import { NodeInfo, Vector2D } from "../app/GlobalTypes"
@@ -41,7 +40,7 @@ export function generateRandomPoints(unique_nodes: Set<string>, safeCorners: Vec
                 label: node,
                 position: validPosition,
                 id:node,
-                uuid: uuidv4()
+                dragging:false
             })
         })
         return nodeList

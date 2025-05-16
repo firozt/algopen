@@ -8,7 +8,7 @@ export type NodeInfo = {
 	position: Vector2D
 	label: string 
 	id: string
-	dragged?: boolean
+	dragging: boolean
 }
 
 export type EdgeInfo = {

@@ -60,7 +60,7 @@ const Page = () => {
 	//  -----------------------------------------------------
 	// updater / setter method wrappers for usestates
 
-	const updateNode = (nodeId: string, newData: nodeInfo) => {
+	const updateNode = (nodeId: string, newData: NodeInfo) => {
 		updateNodeList(
 			nodeInfoList[selectedTab].map((target) => 
 				target.id == nodeId ? newData : target
@@ -265,6 +265,7 @@ const Page = () => {
 				position: pos,
 				label: tree_array[index],
 				id: String(index),
+				dragging:false,
 			})
 		};
 		dfs(0,{
@@ -347,7 +348,7 @@ const Page = () => {
 			// position: newPosition,
 			position: newPosition,
 			id: id,
-			dragged: true
+			dragging: true
 		} 
 
 		updateNode(node.id,newData)
@@ -405,7 +406,7 @@ const Page = () => {
 											<GraphNode  
 												node={item}
 												onDrag={handleNodeDrag} 
-												onDragEnd={() => updateNode(item.id,{...item,dragged: false})}
+												onDragEnd={() => updateNode(item.id,{...item,dragging: false})}
 												animation={{
 													start: center,
 													duration:NODE_STARTUP_ANIMATION_DURATION,

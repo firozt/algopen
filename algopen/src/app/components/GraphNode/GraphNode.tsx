@@ -25,22 +25,22 @@ const GraphNode = ({ node, onDrag, onDragEnd, animation }: Props) => {
 
 
     useEffect(() => {
-        if (!(animation && groupRef.current) || node.dragged == true) {
-            return
-        }
+        const group = groupRef.current;
 
-        const generateAnimationObj = () => {
-            return new Konva.Tween({
-                node: groupRef.current,
-                duration: 1,
-                x: node.position.x,
-                y: node.position.y,
-                easing: Konva.Easings.EaseInOut,
-            });
+        if (animation && group && node.dragging !== true) {
+            const tween = new Konva.Tween({
+            node: group, // ✅ Type-safe
+            duration: 1,
+            x: node.position.x,
+            y: node.position.y,
+            easing: Konva.Easings.EaseInOut,
+        });
+
+        tween.play();
+        return () => tween.destroy();
         }
-        
-        generateAnimationObj().play()
-    });
+    }, [animation, node.dragging, node.position.x, node.position.y]);
+
 
     return (
         <Group
