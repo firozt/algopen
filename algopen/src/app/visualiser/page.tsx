@@ -354,8 +354,8 @@ const Page = () => {
 				setSelectedTab={(index) => {
 					if (selectedTab == index) return // no action needed
 
-					// wait for animation
-					if (edgeInfoList[selectedTab].length > 0) {
+					// wait for animation if something exists
+					if (edgeInfoList[index].length > 0) {
 						setShowEdges(false)
 						setTimeout(() => setShowEdges(true),NODE_STARTUP_ANIMATION_DURATION*2000)
 					}
