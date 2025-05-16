@@ -40,7 +40,7 @@ const GraphNode = ({ pos, label, id ,draggable = false, onDrag, animation }: Pro
 
         return () => tween.destroy(); 
         }
-    }, [animation]);
+    },[id]);
 
     return (
         <Group
