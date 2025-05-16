@@ -352,6 +352,8 @@ const Page = () => {
 				textArea={textArea[selectedTab]} 
 				selectedTab={selectedTab} 
 				setSelectedTab={(index) => {
+					if (selectedTab == index) return // no action needed
+
 					// wait for animation
 					if (edgeInfoList[selectedTab].length > 0) {
 						setShowEdges(false)
