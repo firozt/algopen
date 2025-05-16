@@ -5,7 +5,7 @@ import NavBar from '../components/NavBar/NavBar'
 import './index.css'
 import { Stage, Layer} from "react-konva";
 import { EdgeInfo, NodeInfo, Vector2D } from '../GlobalTypes';
-import { HEADER_HEIGHT, INPUTS_WIDTH, MOBILE_WIDTH } from '../constants';
+import { HEADER_HEIGHT, INPUTS_WIDTH, MOBILE_WIDTH, NODE_STARTUP_ANIMATION_DURATION } from '../constants';
 import { getSafeCorners, getVisibleCenter } from '../../utils/SceneController';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
@@ -21,7 +21,7 @@ const Page = () => {
 	const [nodeInfoList, setNodeInfoList] = useState<NodeInfo[][]>([[],[],[]]) // one for each tab
 	const [edgeInfoList, setEdgeInfoList] = useState<EdgeInfo[][]>([[],[],[]]) // one for each tab
 
-
+	const [showEdges,setShowEdges] = useState<boolean>(false)
 	const [selectedTab, setSelectedTab] = useState<number>(0)
 	const [dimensions, setDimensions] = useState<Vector2D>({ x: 0, y: 0 });
 	const [center, setCenter] = useState<Vector2D>({x:0,y:0});
@@ -186,6 +186,7 @@ const Page = () => {
 		// setSafeZone(getSafeCorners(center,dimensions.x))
 		const input = textArea[selectedTab]
 		resetStage()
+		setShowEdges(false)
 
 
 		if (selectedTab == 0) {
@@ -210,6 +211,7 @@ const Page = () => {
 		if (window.innerWidth < MOBILE_WIDTH) {
 			setShowInputs(false)
 		}
+		setTimeout(() => setShowEdges(true), NODE_STARTUP_ANIMATION_DURATION*2000)
 	}
 
 	const generateTree = (tree_array: string[]) => {
@@ -349,7 +351,12 @@ const Page = () => {
 				<GraphInputs 
 				textArea={textArea[selectedTab]} 
 				selectedTab={selectedTab} 
-				setSelectedTab={setSelectedTab} 
+				setSelectedTab={(index) => {
+					setShowEdges(false)
+					setTimeout(() => setShowEdges(true),NODE_STARTUP_ANIMATION_DURATION*2000)
+					setSelectedTab(index)
+					
+				}} 
 				visualise={visualise} 
 				showInputs={showInputs} 
 				setTextArea={(newVal: string) => setTextArea(prev => prev.map((item,idx)=>idx==selectedTab ? newVal : item))} 
@@ -387,6 +394,10 @@ const Page = () => {
 												label={item.label} 
 												draggable={true} 
 												onDrag={handleNodeDrag} 
+												animation={{
+													start: center,
+													duration:NODE_STARTUP_ANIMATION_DURATION
+												}}
 											/>
 										</React.Fragment>
 										))}
@@ -398,9 +409,9 @@ const Page = () => {
 										return (
 											<React.Fragment key={`edge-${idx}`}>
 												<GraphEdge 
-													points={points} 
+													points={showEdges ? points : [0,0,0,0]} 
 													directional={edge.directed} 
-													weight={edge.weight ?? edge.weight} 
+													weight={edge.weight} 
 												/>
 											</React.Fragment>
 										);

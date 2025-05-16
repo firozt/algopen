@@ -1,64 +1,63 @@
-import React from 'react'
-import { COLORS, LINE_WIDTH } from '../../constants'
-import { Arrow, Group, Line, Text } from 'react-konva'
+import React from 'react';
+import { COLORS, LINE_WIDTH } from '../../constants';
+import { Arrow, Group, Line, Rect, Text } from 'react-konva';
 
 type Props = {
-    points: number[]
-    directional: boolean
-    weight?: string
-}
+    points: number[];
+    directional: boolean;
+    weight?: string;
+};
 
+const GraphEdge = ({ points, directional, weight }: Props) => {
+    console.log(`weight: ${weight}`)
+    const midX = (points[0] + points[2]) / 2;
+    const midY = (points[1] + points[3]) / 2;
 
-
-const GraphEdge = ({points,directional,weight}: Props) => {
-    const arrowNode = (
-        <Arrow
-            points={points}        
+    return (
+        <Group>
+        {directional ? (
+            <Arrow
+            points={points}
             stroke={COLORS.BLACK}
             strokeWidth={LINE_WIDTH}
             fill={COLORS.BLACK}
             pointerLength={10}
             pointerWidth={10}
-        />)
-    const lineNode = (
-        <Line
-            points={points}        
+            />
+        ) : (
+            <Line
+            points={points}
             stroke={COLORS.BLACK}
             strokeWidth={LINE_WIDTH}
-            fill={COLORS.BLACK}
-            pointerLength={10}
-            pointerWidth={10}
-        />)
-
-    if (weight) {
-        const midX = (points[0] + points[2]) / 2;
-        const midY = (points[1] + points[3]) / 2;
-        const textNode = (
-            <Text
+            />
+        )}
+        {weight && (
+            <>
+                <Rect
+                    x={midX - (weight.length * 18) / 2}
+                    y={midY - 15}
+                    width={(weight.length * 18)}
+                    height={30}
+                    fill="#eee"
+                    cornerRadius={8}
+                />
+                <Text
                 x={midX}
                 y={midY}
                 text={weight}
+                fontFamily='monospace'
                 fontSize={28}
-                verticalAlign= {'middle'}
-                align={'middle'}
+                verticalAlign="middle"
+                align="center"
                 width={weight.length * 28}
                 height={30}
-            />)
-        return (
-            <Group>
-                {
-                    directional ? arrowNode : lineNode
-                }
-                {
-                    textNode
-                }
-            </Group>
-        )
-    } else {
-        return (
-            directional ? arrowNode : lineNode
-        )
-    }
-}
+                offsetX={(weight.length * 28) / 2}
+                offsetY={15}
+                />
+            </>
+        )}
+        </Group>
+    );
+};
 
-export default GraphEdge
+export default GraphEdge;
