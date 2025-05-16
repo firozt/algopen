@@ -92,7 +92,6 @@ const Page = () => {
 	const pushToNodeList = (nodeInfo: NodeInfo) => {
 		setNodeInfoList(prev => {
 			const newList = [...prev[selectedTab], nodeInfo];
-			('pushing', nodeInfo.label, 'new list len:', newList.length);
 			return prev.map((item, idx) =>
 				idx === selectedTab ? newList : item
 			);
@@ -325,7 +324,7 @@ const Page = () => {
 
 	const handleNodeDrag = (e: Konva.KonvaEventObject<DragEvent>) => {
 		const id = e.target?.id();
-		const label = nodeInfoList[selectedTab].find(node => node.id == id).label ?? 'ERROR'
+		const label = nodeInfoList[selectedTab].find(node => node.id == id)?.label ?? 'ERROR'
 
 		const newPosition: Vector2D = {
 			x: e.target.x(), 
