@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useRef } from 'react'
-import { Vector2D } from '../../GlobalTypes'
+import { NodeInfo, Vector2D } from '../../GlobalTypes'
 import Konva from 'konva'
 import { Group, Circle, Text} from 'react-konva'
 import { NODE_RADIUS, COLORS, NODE_COLOR, LINE_WIDTH, TEXT_COLOR } from '../../constants'
@@ -12,43 +12,38 @@ type AnimateProps = {
 }
 
 type Props = {
-    pos: Vector2D,
-    label: string,
-    draggable: boolean,
-    onDrag: (e: Konva.KonvaEventObject<DragEvent>) => void
+    node: NodeInfo
+    onDrag?: (e: Konva.KonvaEventObject<DragEvent>) => void
     animation?: AnimateProps
-    id: string
+    updateBroadcaster: boolean
 }
 
 
-const GraphNode = ({ pos, label, id ,draggable = false, onDrag, animation }: Props) => {
+const GraphNode = ({ node, onDrag, animation, updateBroadcaster }: Props) => {
     const groupRef = useRef<Konva.Group>(null);
-
-    const startPos = animation ? animation.start : pos;
+    const startPos = animation ? animation.start : node.position;
 
     useEffect(() => {
-        if (animation && groupRef.current) {
-        const tween = new Konva.Tween({
-            node: groupRef.current,
-            duration: 1,
-            x: pos.x,
-            y: pos.y,
-            easing: Konva.Easings.EaseInOut,
-        });
-
-        tween.play();
-
-        return () => tween.destroy(); 
+        if (animation && groupRef.current && !updateBroadcaster) {
+            const tween = new Konva.Tween({
+                node: groupRef.current,
+                duration: 1,
+                x: node.position.x,
+                y: node.position.y,
+                easing: Konva.Easings.EaseInOut,
+            });
+            tween.play();
+            return () => tween.destroy(); 
         }
-    },[id]);
+    },[node]);
 
     return (
         <Group
         ref={groupRef}
-        id={id}
+        id={node.id}
         x={startPos.x}
         y={startPos.y}
-        draggable={draggable}
+        draggable={onDrag != undefined}
         onDragMove={onDrag}
         >
         <Circle
@@ -58,7 +53,7 @@ const GraphNode = ({ pos, label, id ,draggable = false, onDrag, animation }: Pro
             strokeWidth={LINE_WIDTH}
         />
         <Text
-            text={label}
+            text={node.label}
             fontSize={20}
             fill={TEXT_COLOR}
             align="center"

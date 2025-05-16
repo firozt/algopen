@@ -380,9 +380,7 @@ const Page = () => {
 					<Stage 
 						onWheel={(e) => {
 							const stage = stageRef.current;
-							if (stage) {
-							handleWheelZoom(e, stage);
-							}
+							if (stage) handleWheelZoom(e, stage);
 						}}
 						ref={stageRef} 
 						width={dimensions.x} 
@@ -396,15 +394,13 @@ const Page = () => {
 										{nodeInfoList[selectedTab].map((item, idx) => ( // creating nodes
 										<React.Fragment key={`node-${idx}`}>
 											<GraphNode  
-												pos={item.position} 
-												label={item.label} 
-												draggable={true} 
+												node={item}
 												onDrag={handleNodeDrag} 
+												updateBroadcaster={showEdges}
 												animation={{
 													start: center,
 													duration:NODE_STARTUP_ANIMATION_DURATION
 												}}
-												id={item.id}
 											/>
 										</React.Fragment>
 										))}

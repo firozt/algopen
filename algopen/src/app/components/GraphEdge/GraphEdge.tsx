@@ -33,10 +33,10 @@ const GraphEdge = ({ points, directional, weight }: Props) => {
         {weight && (
             <>
                 <Rect
-                    x={midX - (weight.length * 18) / 2}
-                    y={midY - 15}
-                    width={(weight.length * 18)}
-                    height={30}
+                    x={midX - (weight.length * 18)/2-2}
+                    y={midY - 12}
+                    width={(weight.length * 12)}
+                    height={20}
                     fill="#eee"
                     cornerRadius={8}
                 />
@@ -45,10 +45,10 @@ const GraphEdge = ({ points, directional, weight }: Props) => {
                 y={midY}
                 text={weight}
                 fontFamily='monospace'
-                fontSize={28}
+                fontSize={18}
                 verticalAlign="middle"
                 align="center"
-                width={weight.length * 28}
+                width={weight.length * 18}
                 height={30}
                 offsetX={(weight.length * 28) / 2}
                 offsetY={15}
