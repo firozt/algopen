@@ -352,8 +352,11 @@ const Page = () => {
 				textArea={textArea[selectedTab]} 
 				selectedTab={selectedTab} 
 				setSelectedTab={(index) => {
-					setShowEdges(false)
-					setTimeout(() => setShowEdges(true),NODE_STARTUP_ANIMATION_DURATION*2000)
+					// wait for animation
+					if (edgeInfoList[selectedTab].length > 0) {
+						setShowEdges(false)
+						setTimeout(() => setShowEdges(true),NODE_STARTUP_ANIMATION_DURATION*2000)
+					}
 					setSelectedTab(index)
 					
 				}} 
