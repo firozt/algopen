@@ -9,7 +9,6 @@ type Props = {
 };
 
 const GraphEdge = ({ points, directional, weight }: Props) => {
-    console.log(`weight: ${weight}`)
     const midX = (points[0] + points[2]) / 2;
     const midY = (points[1] + points[3]) / 2;
 

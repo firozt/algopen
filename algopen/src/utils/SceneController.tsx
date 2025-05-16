@@ -4,7 +4,6 @@ import { HEADER_HEIGHT, MOBILE_WIDTH } from '../app/constants';
 
 export function getSafeCorners(center: Vector2D, width: number): Vector2D[] {
     const isMobile = width <= MOBILE_WIDTH
-    console.log('isMobile? ' + isMobile)
     if (!isMobile) {
         return [
             {x:430,y:30}, // top left
@@ -23,7 +22,6 @@ export function getSafeCorners(center: Vector2D, width: number): Vector2D[] {
 }
 
 export function getVisibleCenter(stage: Konva.Stage, windowWidth: number) {
-    console.log('width = '+windowWidth)
     const scale = stage.scaleX(); // assuming uniform scale for x and y
     const position = stage.position();
     const width = stage.width();

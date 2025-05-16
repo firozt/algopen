@@ -17,10 +17,11 @@ type Props = {
     draggable: boolean,
     onDrag: (e: Konva.KonvaEventObject<DragEvent>) => void
     animation?: AnimateProps
+    id: string
 }
 
 
-const GraphNode = ({ pos, label, draggable = false, onDrag, animation }: Props) => {
+const GraphNode = ({ pos, label, id ,draggable = false, onDrag, animation }: Props) => {
     const groupRef = useRef<Konva.Group>(null);
 
     const startPos = animation ? animation.start : pos;
@@ -44,7 +45,7 @@ const GraphNode = ({ pos, label, draggable = false, onDrag, animation }: Props) 
     return (
         <Group
         ref={groupRef}
-        id={label}
+        id={id}
         x={startPos.x}
         y={startPos.y}
         draggable={draggable}

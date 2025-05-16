@@ -92,7 +92,7 @@ const Page = () => {
 	const pushToNodeList = (nodeInfo: NodeInfo) => {
 		setNodeInfoList(prev => {
 			const newList = [...prev[selectedTab], nodeInfo];
-			console.log('pushing', nodeInfo.label, 'new list len:', newList.length);
+			('pushing', nodeInfo.label, 'new list len:', newList.length);
 			return prev.map((item, idx) =>
 				idx === selectedTab ? newList : item
 			);
@@ -135,8 +135,8 @@ const Page = () => {
 				const nodeToObj = neighbour.replace(/\(.*?\)/g, '')
 				const weightval = neighbour.match(/\(.*?\)/g)?.toString().replaceAll('(','').replaceAll(')','') ?? '1';
 				pushToEdgeList({
-					labelFrom: node,
-					labelTo: nodeToObj,
+					idFrom: node,
+					idTo: nodeToObj,
 					weight: weightval,
 					directed: directional
 				})
@@ -163,8 +163,8 @@ const Page = () => {
 			const [node, neighbours] = line.split(':') // first index goes to parent node, rest are neighbours
 			neighbours.split(',').forEach(neighbour => {
 				edgeList.push({
-					labelFrom: node,
-					labelTo: neighbour,
+					idFrom: node,
+					idTo: neighbour,
 					directed: directional,
 				})
 			}) 
@@ -191,16 +191,13 @@ const Page = () => {
 
 		if (selectedTab == 0) {
 			const parsed_input = input.replaceAll('[','').replaceAll(']','').replaceAll(' ','').split(',')
-			console.log('tree visualising')
 			generateTree(parsed_input)
 		}
 		else if (selectedTab == 1) {
-			console.log('tree traversal')
 			const [parsed, directional] = isDirectional(input)
 			graphWeightedVisualiser(parsed,directional)
 		}
 		else if (selectedTab == 2) {
-			console.log('graph visualiser')
 			const [parsed, directional] = isDirectional(input)
 
 			graphVisualiser(parsed,directional)
@@ -230,8 +227,8 @@ const Page = () => {
 
 			if (left < tree_array.length &&  tree_array[left] != 'null') {
 				pushToEdgeList({
-					labelFrom: tree_array[index],
-					labelTo: tree_array[left],
+					idFrom: String(index),
+					idTo: String(left),
 					directed: false,
 				});
 				dfs(
@@ -244,8 +241,8 @@ const Page = () => {
 			}
 			if (right < tree_array.length  &&  tree_array[right] != 'null') {
 				pushToEdgeList({
-					labelFrom: tree_array[index],
-					labelTo: tree_array[right],
+					idFrom: String(index),
+					idTo: String(right),
 					directed: false,
 				});
 				dfs(
@@ -259,7 +256,8 @@ const Page = () => {
 
 			pushToNodeList({
 				position: pos,
-				label: tree_array[index]
+				label: tree_array[index],
+				id: String(index)
 			})
 		};
 		dfs(0,{
@@ -326,19 +324,23 @@ const Page = () => {
 	}
 
 	const handleNodeDrag = (e: Konva.KonvaEventObject<DragEvent>) => {
-		const label = e.target?.id();
+		const id = e.target?.id();
+		const label = nodeInfoList[selectedTab].find(node => node.id == id).label ?? 'ERROR'
+
 		const newPosition: Vector2D = {
 			x: e.target.x(), 
 			y: e.target.y() 
 		} 
+
 		const newData: NodeInfo = {
 			label: label,
 			position: newPosition,
+			id: id
 		} 
 
 		updateNodeList(
 			nodeInfoList[selectedTab].map((target) => 
-				target.label == label ? newData : target
+				target.id == id ? newData : target
 			)
 		)
 	}
@@ -403,12 +405,13 @@ const Page = () => {
 													start: center,
 													duration:NODE_STARTUP_ANIMATION_DURATION
 												}}
+												id={item.id}
 											/>
 										</React.Fragment>
 										))}
 										{edgeInfoList[selectedTab].map((edge, idx) => { // creating edges to said nodes
-										const fromNode = nodeInfoList[selectedTab].find((t) => t.label === edge.labelFrom);
-										const toNode = nodeInfoList[selectedTab].find((t) => t.label === edge.labelTo);
+										const fromNode = nodeInfoList[selectedTab].find((t) => t.id === edge.idFrom);
+										const toNode = nodeInfoList[selectedTab].find((t) => t.id === edge.idTo);
 										if (!fromNode || !toNode) return null;
 										const points = getLinePoints(fromNode.position, toNode.position);
 										return (

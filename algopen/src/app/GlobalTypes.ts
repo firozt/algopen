@@ -6,12 +6,13 @@ export type Vector2D = {
 
 export type NodeInfo = {
 	position: Vector2D
-	label: string // unique
+	label: string 
+	id: string
 }
 
 export type EdgeInfo = {
-	labelFrom: string
-	labelTo: string
+	idFrom: string
+	idTo: string
 	weight?: string
 	directed: boolean
 }

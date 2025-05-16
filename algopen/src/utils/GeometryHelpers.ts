@@ -40,6 +40,7 @@ export function generateRandomPoints(unique_nodes: Set<string>, safeCorners: Vec
             nodeList.push({
                 label: node,
                 position: validPosition,
+                id:node
             })
         })
         return nodeList
