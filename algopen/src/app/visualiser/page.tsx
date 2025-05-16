@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useEffect, useRef, useState } from 'react'
 import NavBar from '../components/NavBar/NavBar'
 import './index.css'
@@ -60,6 +59,14 @@ const Page = () => {
 
 	//  -----------------------------------------------------
 	// updater / setter method wrappers for usestates
+
+	const updateNode = (nodeId: string, newData: nodeInfo) => {
+		updateNodeList(
+			nodeInfoList[selectedTab].map((target) => 
+				target.id == nodeId ? newData : target
+			)
+		)
+	}
 
 	const updateEdgeList = (edgeInfoList: EdgeInfo[]) => {
 		setEdgeInfoList(prev => 
@@ -156,6 +163,7 @@ const Page = () => {
 		}
 
 		const [nodeList, parsedInput] = parseInput(input)
+
 		updateNodeList(nodeList)
 		const edgeList: EdgeInfo[] = []
 		parsedInput.forEach((line) => {
@@ -256,7 +264,7 @@ const Page = () => {
 			pushToNodeList({
 				position: pos,
 				label: tree_array[index],
-				id: String(index)
+				id: String(index),
 			})
 		};
 		dfs(0,{
@@ -324,7 +332,10 @@ const Page = () => {
 
 	const handleNodeDrag = (e: Konva.KonvaEventObject<DragEvent>) => {
 		const id = e.target?.id();
-		const label = nodeInfoList[selectedTab].find(node => node.id == id)?.label ?? 'ERROR'
+		const node = nodeInfoList[selectedTab].find(node => node.id == id)
+		if (node == null) {
+			throw new Error('Node clicked cannot be found')
+		}
 
 		const newPosition: Vector2D = {
 			x: e.target.x(), 
@@ -332,16 +343,14 @@ const Page = () => {
 		} 
 
 		const newData: NodeInfo = {
-			label: label,
+			label: node.label,
+			// position: newPosition,
 			position: newPosition,
-			id: id
+			id: id,
+			dragged: true
 		} 
 
-		updateNodeList(
-			nodeInfoList[selectedTab].map((target) => 
-				target.id == id ? newData : target
-			)
-		)
+		updateNode(node.id,newData)
 	}
 
 
@@ -396,10 +405,10 @@ const Page = () => {
 											<GraphNode  
 												node={item}
 												onDrag={handleNodeDrag} 
-												updateBroadcaster={showEdges}
+												onDragEnd={() => updateNode(item.id,{...item,dragged: false})}
 												animation={{
 													start: center,
-													duration:NODE_STARTUP_ANIMATION_DURATION
+													duration:NODE_STARTUP_ANIMATION_DURATION,
 												}}
 											/>
 										</React.Fragment>

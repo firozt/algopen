@@ -14,28 +14,33 @@ type AnimateProps = {
 type Props = {
     node: NodeInfo
     onDrag?: (e: Konva.KonvaEventObject<DragEvent>) => void
+    onDragEnd?: (e: Konva.KonvaEventObject<DragEvent>) => void
     animation?: AnimateProps
-    updateBroadcaster: boolean
 }
 
 
-const GraphNode = ({ node, onDrag, animation, updateBroadcaster }: Props) => {
+const GraphNode = ({ node, onDrag, onDragEnd, animation }: Props) => {
     const groupRef = useRef<Konva.Group>(null);
     const startPos = animation ? animation.start : node.position;
 
+
     useEffect(() => {
-        if (animation && groupRef.current && !updateBroadcaster) {
-            const tween = new Konva.Tween({
+        if (!(animation && groupRef.current) || node.dragged == true) {
+            return
+        }
+
+        const generateAnimationObj = () => {
+            return new Konva.Tween({
                 node: groupRef.current,
                 duration: 1,
                 x: node.position.x,
                 y: node.position.y,
                 easing: Konva.Easings.EaseInOut,
             });
-            tween.play();
-            return () => tween.destroy(); 
         }
-    },[node]);
+        
+        generateAnimationObj().play()
+    });
 
     return (
         <Group
@@ -45,6 +50,7 @@ const GraphNode = ({ node, onDrag, animation, updateBroadcaster }: Props) => {
         y={startPos.y}
         draggable={onDrag != undefined}
         onDragMove={onDrag}
+        onDragEnd={onDragEnd}
         >
         <Circle
             radius={NODE_RADIUS}
