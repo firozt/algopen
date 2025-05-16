@@ -55,7 +55,7 @@ const GraphInputs = ({showInputs, selectedTab, setSelectedTab, setTextArea, text
 				</div>
 				<textarea value={textArea} onChange={(e)=> setTextArea(e.target.value)} id="text-input"></textarea>
 			</div>
-			<SlideButton title='Visualise' onClick={visualise} />
+			<SlideButton title='Visualise' onClick={visualise} hoveredTitle='Go' />
 
 		</motion.div>
 	)

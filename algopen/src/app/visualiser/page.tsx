@@ -6,12 +6,14 @@ import './index.css'
 import { Stage, Layer} from "react-konva";
 import { EdgeInfo, NodeInfo, Vector2D } from '../GlobalTypes';
 import { HEADER_HEIGHT, INPUTS_WIDTH, MOBILE_WIDTH } from '../constants';
-import { createEdge, createNode, getSafeCorners, getVisibleCenter } from '../../utils/SceneController';
+import { getSafeCorners, getVisibleCenter } from '../../utils/SceneController';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import GraphInputs from '../components/GraphInputs/GraphInputs';
 import { getLevel } from '../../utils/Misc';
 import { generateRandomPoints, getLinePoints, } from '../../utils/GeometryHelpers';
+import GraphEdge from '../components/GraphEdge/GraphEdge';
+import GraphNode from '../components/GraphNode/GraphNode';
 
 const Page = () => {
 	const [textArea, setTextArea] = useState<string[]>(['1,null,2,null,null,3,4','directed\nA:B(3)\nB:C(2)\nC:A(1.2)','A:B,C,D'])
@@ -35,7 +37,6 @@ const Page = () => {
 		} 
 		setDimensions(newDimensions);
 
-		
 		if (stageRef.current) {
 			let newCenter: Vector2D
 			if (newDimensions.x < MOBILE_WIDTH) {
@@ -56,6 +57,47 @@ const Page = () => {
 		setSafeZone(getSafeCorners(newCenter,newDimensions.x))
 		}
 	}, []);
+
+	//  -----------------------------------------------------
+	// updater / setter method wrappers for usestates
+
+	const updateEdgeList = (edgeInfoList: EdgeInfo[]) => {
+		setEdgeInfoList(prev => 
+			prev.map((item,idx) =>
+				idx == selectedTab ? edgeInfoList : item
+			)
+		)
+	}
+
+	const updateNodeList = (nodeInfoList: NodeInfo[]) => {
+		setNodeInfoList(prev => 
+			prev.map((item,idx) =>
+				idx == selectedTab ? nodeInfoList : item
+			)
+		)
+	}
+
+	const pushToEdgeList = (edgeInfo: EdgeInfo) => {
+		setEdgeInfoList(prev => {
+			const newList = [...prev[selectedTab], edgeInfo];
+			return prev.map((item, idx) =>
+				idx === selectedTab ? newList : item
+			);
+		});
+	};
+
+	//  -----------------------------------------------------
+
+
+	const pushToNodeList = (nodeInfo: NodeInfo) => {
+		setNodeInfoList(prev => {
+			const newList = [...prev[selectedTab], nodeInfo];
+			console.log('pushing', nodeInfo.label, 'new list len:', newList.length);
+			return prev.map((item, idx) =>
+				idx === selectedTab ? newList : item
+			);
+		});
+	};
 
 	// parses input to see if user wants directional grapinh
 	const isDirectional = (input: string): [string, boolean] => {
@@ -137,6 +179,9 @@ const Page = () => {
 	}
 
 
+	/*  -----------------------------------------------------
+	 *	event handlers
+	*/
 	const visualise = () => {
 		// setSafeZone(getSafeCorners(center,dimensions.x))
 		const input = textArea[selectedTab]
@@ -166,44 +211,6 @@ const Page = () => {
 			setShowInputs(false)
 		}
 	}
-
-
-	const updateEdgeList = (edgeInfoList: EdgeInfo[]) => {
-		setEdgeInfoList(prev => 
-			prev.map((item,idx) =>
-				idx == selectedTab ? edgeInfoList : item
-			)
-		)
-	}
-
-	const updateNodeList = (nodeInfoList: NodeInfo[]) => {
-		setNodeInfoList(prev => 
-			prev.map((item,idx) =>
-				idx == selectedTab ? nodeInfoList : item
-			)
-		)
-	}
-
-	const pushToEdgeList = (edgeInfo: EdgeInfo) => {
-		setEdgeInfoList(prev => {
-			const newList = [...prev[selectedTab], edgeInfo];
-			return prev.map((item, idx) =>
-				idx === selectedTab ? newList : item
-			);
-		});
-	};
-
-
-	const pushToNodeList = (nodeInfo: NodeInfo) => {
-		setNodeInfoList(prev => {
-			const newList = [...prev[selectedTab], nodeInfo];
-			console.log('pushing', nodeInfo.label, 'new list len:', newList.length);
-			return prev.map((item, idx) =>
-				idx === selectedTab ? newList : item
-			);
-		});
-	};
-
 
 	const generateTree = (tree_array: string[]) => {
 		const d = tree_array.filter(item => item !== 'null').length * 20;
@@ -252,7 +259,6 @@ const Page = () => {
 				position: pos,
 				label: tree_array[index]
 			})
-			// addNodesToRender(createNode(pos, tree_array[index],false));
 		};
 		dfs(0,{
 			x:center.x,
@@ -373,20 +379,29 @@ const Page = () => {
 						<Layer>
 							{ 
 								(
-									<> 
-										{nodeInfoList[selectedTab].map((item, idx) => (
+									<>  
+										{nodeInfoList[selectedTab].map((item, idx) => ( // creating nodes
 										<React.Fragment key={`node-${idx}`}>
-											{createNode(item.position, item.label, true, handleNodeDrag)}
+											<GraphNode  
+												pos={item.position} 
+												label={item.label} 
+												draggable={true} 
+												onDrag={handleNodeDrag} 
+											/>
 										</React.Fragment>
 										))}
-										{edgeInfoList[selectedTab].map((edge, idx) => {
+										{edgeInfoList[selectedTab].map((edge, idx) => { // creating edges to said nodes
 										const fromNode = nodeInfoList[selectedTab].find((t) => t.label === edge.labelFrom);
 										const toNode = nodeInfoList[selectedTab].find((t) => t.label === edge.labelTo);
 										if (!fromNode || !toNode) return null;
 										const points = getLinePoints(fromNode.position, toNode.position);
 										return (
 											<React.Fragment key={`edge-${idx}`}>
-											{createEdge(points, edge.directed,edge.weight)}
+												<GraphEdge 
+													points={points} 
+													directional={edge.directed} 
+													weight={edge.weight ?? edge.weight} 
+												/>
 											</React.Fragment>
 										);
 										})}

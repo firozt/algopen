@@ -21,7 +21,8 @@
 
 
 .inputs {
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
     background-color: var(--bg-dim);
     height: calc(100% - 40px);
     display: flex;
@@ -91,4 +92,14 @@ textarea:focus {
     border-right: 2px solid black;
     border-top: 2px solid black;
     border-bottom: none;
+}
+
+
+@media (max-width: 968px) {
+    .inputs {
+        height: 400px;
+        border-right: 5px solid black;
+        border-bottom: 5px solid black;
+    }
+
 }
