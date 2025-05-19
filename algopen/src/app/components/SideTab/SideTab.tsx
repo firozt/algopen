@@ -1,7 +1,6 @@
 'use client'
 import { motion } from 'framer-motion'
 import React from 'react'
-import { MOBILE_WIDTH } from '../../../utils/constants'
 import './index.css'
 import { Vector2D } from '../../GlobalTypes'
 

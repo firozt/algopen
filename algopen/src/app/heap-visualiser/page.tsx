@@ -1,5 +1,5 @@
 'use client'
-import React, { use, useState } from 'react'
+import React, {  useState } from 'react'
 import NavBar from '../components/NavBar/NavBar'
 import './index.css'
 import SideTab from '../components/SideTab/SideTab'
@@ -18,7 +18,7 @@ const btnStyles = {
 
 	// type Props = {}
 
-	const page = () => {
+	const Page = () => {
 
 		const [inputVal, setInputVal] = useState<string>('')
 		const [errorMsg, setErrorMsg] = useState<string>('')
@@ -90,4 +90,4 @@ const btnStyles = {
 	)
 	}
 
-	export default page
+	export default Page
