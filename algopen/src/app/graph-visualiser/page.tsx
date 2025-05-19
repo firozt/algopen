@@ -362,6 +362,7 @@ const Page = () => {
 				<GraphInputs 
 				textArea={textArea[selectedTab]} 
 				selectedTab={selectedTab} 
+				newPos={{ x:dimensions.x < MOBILE_WIDTH ? -1000 : -400,y:0 }}
 				setSelectedTab={(index) => {
 					if (selectedTab == index) return // no action needed
 
