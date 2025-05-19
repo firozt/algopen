@@ -1,6 +1,6 @@
 import Konva from 'konva'
 import { Vector2D } from '../app/GlobalTypes';
-import { HEADER_HEIGHT, MOBILE_WIDTH } from '../app/constants';
+import { HEADER_HEIGHT, MOBILE_WIDTH } from './constants';
 
 export function getSafeCorners(center: Vector2D, width: number): Vector2D[] {
     const isMobile = width <= MOBILE_WIDTH

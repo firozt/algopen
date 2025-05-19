@@ -1,0 +1,101 @@
+.heap-vis-container {
+    padding: 15px;
+    height: 100%;
+    width: 100%;
+}
+
+.heap-vis-header{
+    padding-left: 15px;
+    padding-right: 15px;
+    height: 50px;
+    background-color: black;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between
+}
+
+.heap-vis-header div:hover {
+    background-color: rgba(255, 255, 255, 0.528);
+    cursor: pointer;
+    
+}
+
+.heap-vis-header div {
+    width: 28px;
+    height: 28px;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+.heap-vis-container .btn-group {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+    width: 100%;
+    margin: 0;
+    height: 3rem;
+}
+
+.heap-vis-container .input-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+#heap-input {
+    background-color: black;
+    height: 100px;
+    width: 100px;
+    border-radius: 100px;
+    font-size: 32px;
+    text-align: center;
+    color: white;
+    transition: outline-color 0.2s ease;
+    outline: none;
+    
+}
+
+
+#heap-input:focus {
+    animation: pulse-outline 1.5s ease-in-out infinite;
+}
+
+
+.pulsate {
+    animation: pulse-outline 1.5s ease-in-out infinite;
+}
+
+.pulsate-error {
+    animation: pulse-outline-error 1.5s ease-in-out infinite;
+    outline: 2px solid rgba(149, 82, 82, 0.3);
+
+}
+
+@keyframes pulse-outline {
+    0% {
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.6);
+    }
+    100% {
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+    }
+}
+@keyframes pulse-outline-error {
+    0% {
+        box-shadow: 0 0 0 2px rgba(149, 82, 82, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 0 4px rgba(233, 36, 36, 0.6);
+    }
+    100% {
+        box-shadow: 0 0 0 2px rgba(149, 82, 82, 0.3);
+    }
+}
+

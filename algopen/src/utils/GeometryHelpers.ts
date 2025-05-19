@@ -6,7 +6,7 @@
  *  
  */
 import { Vector2d } from "konva/lib/types"
-import { MAX_PLACEMENT_ATTEMPTS } from "../app/constants"
+import { MAX_PLACEMENT_ATTEMPTS } from "./constants"
 import { NodeInfo, Vector2D } from "../app/GlobalTypes"
 import { randomInt } from "./Misc"
 

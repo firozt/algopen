@@ -1,23 +1,20 @@
 import type { Metadata } from "next";
 import './index.css'
+
+
 export const metadata: Metadata = {
   title: "AlgoPen",
   description: "A website for visualizing and understanding algorithms and data structures through interactive, intuitive visuals and step-by-step explanations. Perfect for students.",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+
+export default function RootLayout(props: { children: React.ReactNode }) {
+  const { children } = props
   return (
-    <html lang="en">
-      <head>
-        <meta name="theme-color" content="#000" />
-      </head>
+    <html>
       <body>
         {children}
       </body>
     </html>
-  );
+  )
 }

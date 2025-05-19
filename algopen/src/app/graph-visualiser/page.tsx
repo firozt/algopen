@@ -4,7 +4,7 @@ import NavBar from '../components/NavBar/NavBar'
 import './index.css'
 import { Stage, Layer} from "react-konva";
 import { EdgeInfo, NodeInfo, Vector2D } from '../GlobalTypes';
-import { HEADER_HEIGHT, INPUTS_WIDTH, MOBILE_WIDTH, NODE_STARTUP_ANIMATION_DURATION } from '../constants';
+import { HEADER_HEIGHT, INPUTS_WIDTH, MOBILE_WIDTH, NODE_STARTUP_ANIMATION_DURATION } from '../../utils/constants';
 import { getSafeCorners, getVisibleCenter } from '../../utils/SceneController';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';

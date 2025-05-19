@@ -7,13 +7,14 @@ type Props = {
 	title: string
 	hoveredTitle?: string
     onClick: () => void
+	styles?: React.CSSProperties
 }
 
-const SlideButton = ({title,hoveredTitle=title,onClick}: Props) => {
+const SlideButton = ({title,hoveredTitle=title,onClick,styles}: Props) => {
 	const [buttonText, setButtonText] = useState<string>(title)
 
 	return (
-		<div className="v-wrapper">
+		<div className="v-wrapper" style={styles}>
 			<a 
 				id="visualise-test" 
 				onClick={onClick}

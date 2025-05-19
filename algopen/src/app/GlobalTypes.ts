@@ -3,7 +3,6 @@ export type Vector2D = {
     y: number
 }
 
-
 export type NodeInfo = {
 	position: Vector2D
 	label: string 

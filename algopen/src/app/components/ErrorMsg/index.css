@@ -1,0 +1,9 @@
+#error-wrapper {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 2px solid rgba(245, 245, 245, 0.386);
+    margin-bottom: 15px;
+    margin-top: 15px;
+    font-size: 14px;
+}

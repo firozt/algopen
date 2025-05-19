@@ -1,8 +1,8 @@
-import { motion } from 'framer-motion'
 import React from 'react'
-import { MOBILE_WIDTH } from '../../constants'
 import './index.css'
 import SlideButton from '../SlideButton/SlideButton'
+import SideTab from '../SideTab/SideTab'
+import { MOBILE_WIDTH } from '../../../utils/constants'
 
 type Props = {
 	showInputs: boolean
@@ -35,11 +35,9 @@ const infoText = [
 
 const GraphInputs = ({showInputs, selectedTab, setSelectedTab, setTextArea, textArea, visualise}: Props) => {
 	return (
-		<motion.div
-			className="inputs"
-			initial={{ x: 0 }}
-			animate={{ x: showInputs ? 0 : innerWidth < MOBILE_WIDTH ? -1000 : -400 }}
-			transition={{ duration: .35 ,ease: 'easeInOut'}}
+		<SideTab 
+		showContent={showInputs}
+		newPos={{ x:window?.innerWidth < MOBILE_WIDTH ? -1000 : -400,y:0 }}
 		>
 			<div id="top-inputs">
 				<div className="selections">
@@ -55,9 +53,10 @@ const GraphInputs = ({showInputs, selectedTab, setSelectedTab, setTextArea, text
 				</div>
 				<textarea value={textArea} onChange={(e)=> setTextArea(e.target.value)} id="text-input"></textarea>
 			</div>
-			<SlideButton title='Visualise' onClick={visualise} hoveredTitle='Go' />
+			<SlideButton title='Visualise' onClick={visualise} hoveredTitle='Go' styles={{height:'3rem'}} />
+		</SideTab>
 
-		</motion.div>
+
 	)
 }
 
