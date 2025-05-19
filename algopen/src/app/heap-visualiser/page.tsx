@@ -1,10 +1,11 @@
 'use client'
-import React, {  useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import NavBar from '../components/NavBar/NavBar'
 import './index.css'
 import SideTab from '../components/SideTab/SideTab'
 import SlideButton from '../components/SlideButton/SlideButton'
 import ErrorMsg from '../components/ErrorMsg/ErrorMsg'
+import { Vector2D } from '../GlobalTypes'
 
 
 enum ERROR_MESSAGES {
@@ -19,6 +20,11 @@ const btnStyles = {
 	// type Props = {}
 
 	const Page = () => {
+		const [dimensions, setDimensions] = useState<Vector2D>({x:-1,y:-1});
+
+		useEffect(() => {
+			setDimensions({x:dimensions.x ,y:dimensions.y});
+		}, [dimensions]);
 
 		const [inputVal, setInputVal] = useState<string>('')
 		const [errorMsg, setErrorMsg] = useState<string>('')
@@ -28,15 +34,16 @@ const btnStyles = {
 
 			if (inputVal.length < 1) {
 				setErrorMsg(ERROR_MESSAGES.EmptyInput)
-				return
+				return false
 			}
 
 			const numberOnly = inputVal.match(/-?\d+(\.\d+)?/)
 
 			if (numberOnly == null) {
 				setErrorMsg(ERROR_MESSAGES.NoValidNumbers)
-				return
+				return false
 			}
+			return true
 		}
 
 		const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>) => {
