@@ -77,8 +77,7 @@ export const handleWheelZoom = (e: KonvaEventObject<WheelEvent, unknown>, stage:
 };
 
 
-export const zoomStage = (scaleBy=1.5, stageRef, screenWidth) => {
-    const stage = stageRef.current
+export const zoomStage = (scaleBy=1.5, stage: Konva.Stage|null, screenWidth: number) => {
 
     if (stage == null) {
         throw new Error('Stage is null')

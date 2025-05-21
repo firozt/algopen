@@ -5,7 +5,7 @@ import './index.css'
 import SideTab from '../components/SideTab/SideTab'
 import SlideButton from '../components/SlideButton/SlideButton'
 import ErrorMsg from '../components/ErrorMsg/ErrorMsg'
-import { EdgeInfo, NodeInfo, TreeNode, Vector2D } from '../GlobalTypes'
+import {  Vector2D } from '../GlobalTypes'
 import Konva from 'konva'
 import { Circle, Layer, Stage } from 'react-konva'
 import { HEADER_HEIGHT, SlideDirection } from '../../utils/constants'
@@ -30,9 +30,9 @@ const Page = () => {
 	const [inputVal, setInputVal] = useState<string>('')
 	const [errorMsg, setErrorMsg] = useState<string>('')
 	const [showSideBar, setShowSidebar] = useState<boolean>(true)
-	const [heapHead,setHeapHead] = useState<TreeNode|null>(null)
-	const [edgeNodeList, setEdgeNodeList] = useState<EdgeInfo[]>([])
-	const [nodeInfoList, setNodeInfoList] = useState<NodeInfo[]>([])
+	// const [heapHead,setHeapHead] = useState<TreeNode|null>(null)
+	// const [edgeNodeList, setEdgeNodeList] = useState<EdgeInfo[]>([])
+	// const [nodeInfoList, setNodeInfoList] = useState<NodeInfo[]>([])
 	const [selectedTab, setSelectedTab] = useState<number>(0)
 	const stageRef = useRef<Konva.Stage | null>(null);
 
@@ -66,26 +66,26 @@ const Page = () => {
 		setInputVal(e.target.value)
 	}
 
-	const arrayToHeap = (inputArray: number[]): TreeNode => {
-		const dfsTraversal = (curIndex): TreeNode => {
-			if (curIndex >= inputArray.length || inputArray[curIndex] == null ) return null
-			const curNode: TreeNode = {
-				val: inputArray[curIndex],
-				left: null,
-				right: null,
-			}
-			const left = 2 * curIndex + 1;
-			const right = 2 * curIndex + 2;
-			if (left < inputArray.length && inputArray[left] != null) {
-				curNode.left = dfsTraversal(left)
-			}
-			if (right < inputArray.length && inputArray[right] != null) {
-				curNode.right = dfsTraversal(right)
-			}
-			return curNode
-		}
-		return dfsTraversal(inputArray)
-	}
+	// const arrayToHeap = (inputArray: number[]): TreeNode => {
+	// 	const dfsTraversal = (curIndex): TreeNode => {
+	// 		if (curIndex >= inputArray.length || inputArray[curIndex] == null ) return null
+	// 		const curNode: TreeNode = {
+	// 			val: inputArray[curIndex],
+	// 			left: null,
+	// 			right: null,
+	// 		}
+	// 		const left = 2 * curIndex + 1;
+	// 		const right = 2 * curIndex + 2;
+	// 		if (left < inputArray.length && inputArray[left] != null) {
+	// 			curNode.left = dfsTraversal(left)
+	// 		}
+	// 		if (right < inputArray.length && inputArray[right] != null) {
+	// 			curNode.right = dfsTraversal(right)
+	// 		}
+	// 		return curNode
+	// 	}
+	// 	return dfsTraversal(inputArray)
+	// }
 
 
 	const handlePush = () => {
@@ -93,11 +93,11 @@ const Page = () => {
 
 	}
 
-	const createHeap =(input: string)  => {
-		const parseInput = (input: string): string[] => {
+	// const createHeap =(input: string)  => {
+	// 	const parseInput = (input: string): string[] => {
 
-		}
-	}
+	// 	}
+	// }
 
 return (
 	<>

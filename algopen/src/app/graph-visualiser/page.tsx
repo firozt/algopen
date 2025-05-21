@@ -328,8 +328,8 @@ const Page = () => {
 								<path d="M4.25 13.25H0.75V9.75M13.25 9.75V13.25H9.75M9.75 0.75H13.25V4.25M0.75 4.25V0.75H4.25" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
 							</svg>
 						</button>
-						<button onClick={() => zoomStage(1.3,stageRef,dimensions.x)}><p>+</p></button>
-						<button onClick={() => zoomStage(0.7,stageRef,dimensions.x)}><p>-</p></button>
+						<button onClick={() => zoomStage(1.3,stageRef?.current,dimensions.x)}><p>+</p></button>
+						<button onClick={() => zoomStage(0.7,stageRef?.current,dimensions.x)}><p>-</p></button>
 					</div>
 					<Stage 
 						onWheel={(e) => {

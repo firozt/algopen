@@ -89,10 +89,6 @@ header+section p:hover {
 }
 
 
-#heap-input:focus {
-    /* animation: pulse-outline 1.5s ease-in-out infinite; */
-}
-
 
 .pulsate {
     animation: pulse-outline 1.5s ease-in-out infinite;

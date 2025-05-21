@@ -23,8 +23,8 @@ const SideTab = ({showContent=true, children,styles,slide, slideBuffer=0}: Props
     const containerRef = useRef<HTMLDivElement|null>(null)
     
     const slideMapping = {
-    'down':{x:0,y:  containerRef?.current?.offsetHeight-slideBuffer}, // - container height
-    'left':{x:-containerRef?.current?.offsetWidth+slideBuffer,y:0}
+    'down':{x:0,y:  (containerRef?.current?.offsetHeight ?? 0)-slideBuffer}, // - container height
+    'left':{x:(containerRef?.current?.offsetWidth ?? 0) * -1 +slideBuffer,y:0}
     }
 
 
@@ -34,7 +34,7 @@ const SideTab = ({showContent=true, children,styles,slide, slideBuffer=0}: Props
 			className="side-tab"
             style={styles}
 			initial={{x:0,y:0}}
-            animate={!showContent ? slideMapping[slide] : {x:0,y:0}}
+            animate={!showContent && slide ? slideMapping[slide] : {x:0,y:0}}
 			transition={{ duration: .35 ,ease: 'easeInOut'}}
 		>
             {
