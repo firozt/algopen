@@ -4,6 +4,7 @@
     width: 100%;
 }
 
+
 .heap-vis-header{
     padding-left: 15px;
     padding-right: 15px;
@@ -15,9 +16,36 @@
     justify-content: space-between
 }
 
+header+section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background-color: black;
+    height: 2rem;
+}
+
+header+section p {
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    text-align: center;
+    height: 100%;
+    transition: all .2s;
+}
+
+.selected {
+    background-color: #21282c;
+}
+
+
+header+section p:hover {
+    background-color: white;
+    color: black;
+}
 .heap-vis-header div:hover {
     background-color: rgba(255, 255, 255, 0.528);
-    cursor: pointer;
     
 }
 
@@ -62,7 +90,7 @@
 
 
 #heap-input:focus {
-    animation: pulse-outline 1.5s ease-in-out infinite;
+    /* animation: pulse-outline 1.5s ease-in-out infinite; */
 }
 
 
@@ -73,8 +101,8 @@
 .pulsate-error {
     animation: pulse-outline-error 1.5s ease-in-out infinite;
     outline: 2px solid rgba(149, 82, 82, 0.3);
-
 }
+
 
 @keyframes pulse-outline {
     0% {

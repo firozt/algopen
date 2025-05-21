@@ -16,3 +16,10 @@ export type EdgeInfo = {
 	weight?: string
 	directed: boolean
 }
+
+export type TreeNode = {
+	val: number,
+	left: TreeNode
+	right: TreeNode
+}
+

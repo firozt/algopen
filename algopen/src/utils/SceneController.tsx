@@ -1,6 +1,7 @@
 import Konva from 'konva'
 import { Vector2D } from '../app/GlobalTypes';
 import { HEADER_HEIGHT, MOBILE_WIDTH } from './constants';
+import { KonvaEventObject } from 'konva/lib/Node';
 
 export function getSafeCorners(center: Vector2D, width: number): Vector2D[] {
     const isMobile = width <= MOBILE_WIDTH
@@ -39,4 +40,61 @@ export function getVisibleCenter(stage: Konva.Stage, windowWidth: number) {
     }
 
     return center;
+}
+
+
+export const handleWheelZoom = (e: KonvaEventObject<WheelEvent, unknown>, stage: Konva.Stage) => {
+    e.evt.preventDefault();
+
+    const oldScale = stage.scaleX();
+    const pointer = stage.getPointerPosition();
+
+    if (pointer == null) {
+        throw new Error('pointer is null for handling wheel zoom')
+    }
+
+    const mousePointTo = {
+        x: (pointer.x - stage.x()) / oldScale,
+        y: (pointer.y - stage.y()) / oldScale,
+    };
+
+    let direction = e.evt.deltaY > 0 ? 1 : -1;
+
+    if (e.evt.ctrlKey) {
+        direction = -direction;
+    }
+
+    const scaleBy = 1.05;
+    const newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+
+    stage.scale({ x: newScale, y: newScale });
+
+    const newPos = {
+        x: pointer.x - mousePointTo.x * newScale,
+        y: pointer.y - mousePointTo.y * newScale,
+    };
+    stage.position(newPos);
+};
+
+
+export const zoomStage = (scaleBy=1.5, stageRef, screenWidth) => {
+    const stage = stageRef.current
+
+    if (stage == null) {
+        throw new Error('Stage is null')
+    }
+
+    const oldScale = stage.scaleX();
+    const newScale = oldScale * scaleBy;
+
+    const center = getVisibleCenter(stage, screenWidth)
+    stage.scale({ x: newScale, y: newScale });
+
+    const newPos = {
+        x: stage.width() / 2 - center.x * newScale,
+        y: stage.height() / 2 - center.y * newScale,
+    };
+
+    stage.position(newPos);
+    stage.batchDraw();
 }

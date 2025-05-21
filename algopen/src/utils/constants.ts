@@ -4,6 +4,12 @@ export enum COLORS {
     RED = 'red'
 }
 
+export enum SlideDirection {
+    LEFT='left',
+    DOWN='down'
+} 
+
+
 export enum ROUTEMAPPINGS {
     GraphVisualiser = 'graph-visualiser',
     MazeSolver = 'maze-solver',

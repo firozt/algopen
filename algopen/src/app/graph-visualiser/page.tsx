@@ -4,10 +4,9 @@ import NavBar from '../components/NavBar/NavBar'
 import './index.css'
 import { Stage, Layer} from "react-konva";
 import { EdgeInfo, NodeInfo, Vector2D } from '../GlobalTypes';
-import { HEADER_HEIGHT, INPUTS_WIDTH, MOBILE_WIDTH, NODE_STARTUP_ANIMATION_DURATION } from '../../utils/constants';
-import { getSafeCorners, getVisibleCenter } from '../../utils/SceneController';
+import { HEADER_HEIGHT, INPUTS_WIDTH, MOBILE_WIDTH, NODE_STARTUP_ANIMATION_DURATION, SlideDirection } from '../../utils/constants';
+import { getSafeCorners, handleWheelZoom, zoomStage } from '../../utils/SceneController';
 import Konva from 'konva';
-import { KonvaEventObject } from 'konva/lib/Node';
 import GraphInputs from '../components/GraphInputs/GraphInputs';
 import { getLevel } from '../../utils/Misc';
 import { generateRandomPoints, getLinePoints, } from '../../utils/GeometryHelpers';
@@ -274,63 +273,6 @@ const Page = () => {
 		});
 	}
 
-
-	const  handleWheelZoom = (e: KonvaEventObject<WheelEvent, unknown>, stage: Konva.Stage) => {
-		e.evt.preventDefault();
-
-		const oldScale = stage.scaleX();
-		const pointer = stage.getPointerPosition();
-
-		if (pointer == null) {
-			throw new Error('pointer is null for handling wheel zoom')
-		}
-
-		const mousePointTo = {
-			x: (pointer.x - stage.x()) / oldScale,
-			y: (pointer.y - stage.y()) / oldScale,
-		};
-
-		let direction = e.evt.deltaY > 0 ? 1 : -1;
-
-		if (e.evt.ctrlKey) {
-			direction = -direction;
-		}
-
-		const scaleBy = 1.05;
-		const newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
-
-		stage.scale({ x: newScale, y: newScale });
-
-		const newPos = {
-			x: pointer.x - mousePointTo.x * newScale,
-			y: pointer.y - mousePointTo.y * newScale,
-		};
-		stage.position(newPos);
-	};
-
-
-	const zoomStage = (scaleBy=1.5) => {
-		const stage = stageRef.current
-
-		if (stage == null) {
-			throw new Error('Stage is null')
-		}
-
-		const oldScale = stage.scaleX();
-		const newScale = oldScale * scaleBy;
-
-		const center = getVisibleCenter(stage, dimensions.x)
-		stage.scale({ x: newScale, y: newScale });
-
-		const newPos = {
-			x: stage.width() / 2 - center.x * newScale,
-			y: stage.height() / 2 - center.y * newScale,
-		};
-
-		stage.position(newPos);
-		stage.batchDraw();
-	}
-
 	const handleNodeDrag = (e: Konva.KonvaEventObject<DragEvent>) => {
 		const id = e.target?.id();
 		const node = nodeInfoList[selectedTab].find(node => node.id == id)
@@ -362,7 +304,8 @@ const Page = () => {
 				<GraphInputs 
 				textArea={textArea[selectedTab]} 
 				selectedTab={selectedTab} 
-				newPos={{ x:dimensions.x < MOBILE_WIDTH ? -1000 : -400,y:0 }}
+				// newPos={{ x:dimensions.x < MOBILE_WIDTH ? -1000 : -400,y:0 }}
+				slideDirection={SlideDirection.LEFT}
 				setSelectedTab={(index) => {
 					if (selectedTab == index) return // no action needed
 
@@ -385,8 +328,8 @@ const Page = () => {
 								<path d="M4.25 13.25H0.75V9.75M13.25 9.75V13.25H9.75M9.75 0.75H13.25V4.25M0.75 4.25V0.75H4.25" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
 							</svg>
 						</button>
-						<button onClick={() => zoomStage(1.3)}><p>+</p></button>
-						<button onClick={() => zoomStage(0.7)}><p>-</p></button>
+						<button onClick={() => zoomStage(1.3,stageRef,dimensions.x)}><p>+</p></button>
+						<button onClick={() => zoomStage(0.7,stageRef,dimensions.x)}><p>-</p></button>
 					</div>
 					<Stage 
 						onWheel={(e) => {

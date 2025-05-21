@@ -2,7 +2,7 @@ import React from 'react'
 import './index.css'
 import SlideButton from '../SlideButton/SlideButton'
 import SideTab from '../SideTab/SideTab'
-import { Vector2D } from '../../GlobalTypes'
+import { SlideDirection } from '../../../utils/constants'
 
 type Props = {
 	showInputs: boolean
@@ -11,7 +11,7 @@ type Props = {
 	setTextArea: (newVal: string) => void
 	textArea: string
 	visualise: () => void
-	newPos?: Vector2D
+	slideDirection?: SlideDirection
 }
 
 
@@ -34,11 +34,11 @@ const infoText = [
 	</p>
 ]
 
-const GraphInputs = ({showInputs, selectedTab, setSelectedTab, setTextArea, textArea, visualise, newPos={x:0,y:0}}: Props) => {
+const GraphInputs = ({showInputs, selectedTab, setSelectedTab, setTextArea, textArea, visualise, slideDirection}: Props) => {
 	return (
 		<SideTab 
 		showContent={showInputs}
-		newPos={newPos}
+		slide={slideDirection}
 		>
 			<div id="top-inputs">
 				<div className="selections">
