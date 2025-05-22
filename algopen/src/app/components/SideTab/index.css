@@ -9,9 +9,8 @@
 
 .side-tab {
     width: 400px;
-    /* max-width: 400px; */
     background-color: var(--bg-dim);
-    height: calc(100% - 40px);
+    height: calc(100% - 60px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;

@@ -1,0 +1,248 @@
+body {
+    background-color: #FFFFFF;
+    
+}
+
+.landing-page {
+    width: 90%;
+    max-width: 1600px;
+    margin: auto;
+    min-height: 90vh;
+}
+
+.landing-page .title-card {
+    background-image: url('/title-bg.svg');
+    background-repeat: no-repeat;
+    background-position: center 100%;
+    background-size: min(100%,600px) min(100%,600px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.landing-page #title {
+    width: 100%;
+}
+
+#get-started {
+    width: fit-content;
+    margin: auto;
+    margin-top: 3rem;
+    /* margin-bottom: 3rem; */
+    
+}
+
+
+.landing-page .title-card h2 {
+    
+    margin-top: 3rem;
+    font-size: min(8vw,72px);
+    font-weight: bold;
+    color: black;
+    letter-spacing: -2px;
+    padding-left: 5px;
+    padding-right: 5px;
+
+}
+
+.landing-page section {
+    margin-top: 2rem;
+    display: flex;
+}
+
+.landing-page .about {
+    width: 60%;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: flex-end;
+    position: relative;
+    top: 100px;
+}
+
+.landing-page .about img{
+    max-width: 80%;
+}
+
+
+.landing-page .about h3 {
+    padding-left: 10px;
+    font-style: italic;
+    font-size: 26px;
+    font-weight: bold;
+    text-align: left;
+}
+.landing-page .about p {
+    line-height: 20px;
+    font-size: 18px;
+    z-index: 2;
+    color: #303030d4;
+}
+
+.about > div {
+    width: min(450px,60%);
+    background-color: rgba(214, 214, 214, 0.226);
+    padding: 10px;
+    border: 3px solid black;
+    border-top: 40px solid black;
+    transition: all .5s ease;
+}
+
+.about > div:hover {
+    border-top: 3px solid black;
+    border-bottom: 40px solid black;
+}
+
+
+.landing-page .about img {
+    z-index: 1;
+}
+
+
+
+.landing-services{
+    
+    background-color: black;
+    color: white;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    background-image: url('/bg.svg');
+    /* background-image: url('/heapIcon.svg');
+    background-repeat: repeat; */
+}
+
+.landing-services header {
+    padding-top: 2rem;
+    width: 100%;
+    font-size: 72px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    margin-bottom: 3rem;
+    background-image: url('/public/title.svg');
+    background-repeat: repeat !important;
+}
+
+
+.landing-services header p {
+    font-size: 18px;
+    color: rgb(182, 182, 182);
+}
+
+.landing-services #card-container {
+    grid-template-columns: auto auto auto;
+    display: grid;
+    gap:1px;
+    margin-top: 5rem;
+    width: fit-content;
+    margin: auto;
+    margin-bottom: 15rem;
+}
+
+#divider {
+    background-color: black;
+}
+
+#divider div {
+    width: 90%;
+    margin: auto;
+    height: 1px;
+    background-color: gray;
+}
+
+footer {
+    padding: 25px;
+    height: fit-content;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: rgb(147, 147, 147);
+}
+
+footer > div:nth-child(2) {
+    margin: auto;
+    display: flex;
+    width: min(100%,400px);
+    justify-content: space-around;
+    text-decoration: underline;
+}
+footer > div:nth-child(2) p{
+    cursor: pointer;
+}
+
+footer p, footer a, footer h3{
+    text-align: center;
+    height: 30px;
+}
+
+#last-footer {
+    
+    width: 100%;
+    display: flex;
+    justify-content: center !important;
+    gap: 20px;
+}
+
+@media (max-width: 1000px) {
+    .landing-services #card-container {
+        grid-template-columns: auto 2 auto;
+    }
+    .landing-page {
+        width: 98%;
+    }
+
+    .landing-page section {
+        flex-direction: column;
+    }
+
+    .landing-page .about {
+        flex-direction: row;
+        width: 95%;
+        margin: auto;
+        justify-content: center;
+        align-items: center;
+        max-width: 400px;
+    }
+
+    .about > div {
+        width: 100% ;
+    }
+
+    .landing-page .about img {
+        width: 100%;
+    }
+
+    #get-started {
+        margin-top: 8rem;
+    }
+}
+
+@media (max-width: 677px) {
+    .landing-services #card-container {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    #last-footer {
+        flex-direction: column-reverse;
+    }
+}
+
+
+@media (max-width: 560px) {
+    .landing-page .about img {
+        display: none;
+    }
+
+    .landing-page .about {
+        top: 0;
+        margin-top: 2rem;
+    }
+
+}
+

@@ -4,7 +4,7 @@ import NavBar from '../components/NavBar/NavBar'
 import './index.css'
 import { Stage, Layer} from "react-konva";
 import { EdgeInfo, NodeInfo, Vector2D } from '../GlobalTypes';
-import { HEADER_HEIGHT, INPUTS_WIDTH, MOBILE_WIDTH, NODE_STARTUP_ANIMATION_DURATION, SlideDirection } from '../../utils/constants';
+import { HEADER_HEIGHT, INPUTS_WIDTH, MOBILE_WIDTH, NODE_STARTUP_ANIMATION_DURATION, SlideDirection, Theme } from '../../utils/constants';
 import { getSafeCorners, handleWheelZoom, zoomStage } from '../../utils/SceneController';
 import Konva from 'konva';
 import GraphInputs from '../components/GraphInputs/GraphInputs';
@@ -296,10 +296,9 @@ const Page = () => {
 		updateNode(node.id,newData)
 	}
 
-
 	return (
 		<div>
-			<NavBar/>
+			<NavBar theme={Theme.DARK}/>
 			<section className="content">
 				<GraphInputs 
 				textArea={textArea[selectedTab]} 

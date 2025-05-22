@@ -8,7 +8,7 @@ import ErrorMsg from '../components/ErrorMsg/ErrorMsg'
 import {  Vector2D } from '../GlobalTypes'
 import Konva from 'konva'
 import { Circle, Layer, Stage } from 'react-konva'
-import { HEADER_HEIGHT, SlideDirection } from '../../utils/constants'
+import { HEADER_HEIGHT, SlideDirection, Theme } from '../../utils/constants'
 import { handleWheelZoom } from '../../utils/SceneController'
 
 
@@ -100,8 +100,8 @@ const Page = () => {
 	// }
 
 return (
-	<>
-		<NavBar />
+	<div className='heap-vis'>
+		<NavBar theme={Theme.DARK} />
 		<SideTab
 		showContent={showSideBar}
 		styles={{
@@ -164,7 +164,7 @@ return (
 				/>
 			</Layer>
 		</Stage>
-	</>
+	</div>
 )
 }
 

@@ -1,18 +1,19 @@
 
 
+#logo {
+    height: 25px;
+}
+
 
 header {
-    background-color: black;
-    color: white;
     width: 100vw;
-    height: 40px;
     padding-top: .5rem;
     padding-bottom: .5rem;
     display: flex;
     flex-direction: row;
     justify-content:space-between;
     align-items: center;
-    height: 40px; 
+    height: 60px; 
     flex-shrink: 0;
 }
 
