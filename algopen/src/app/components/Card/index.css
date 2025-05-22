@@ -32,7 +32,7 @@
 .card-container:hover {
     background-color: rgb(239, 239, 239);
     box-shadow: 0 0 0 0 #e7ffe7;
-    transform: translate(20,20);
+    transform: translate(20px,20px);
     z-index: 0;
 
 }
