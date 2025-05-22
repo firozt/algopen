@@ -217,7 +217,7 @@ footer p, footer a, footer h3{
     .landing-page .about {
         top: 0;
         flex-direction: row;
-        width: 95%;
+        width: 100%;
         margin: auto;
         justify-content: center;
         align-items: center;
