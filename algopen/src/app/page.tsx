@@ -6,7 +6,7 @@ import { ROUTEMAPPINGS } from "../utils/constants";
 
 export default function Home() {
   useEffect(() => {
-    redirect(`/${ROUTEMAPPINGS.GraphVisualiser}`);
+    redirect(`/${ROUTEMAPPINGS.LandingPage}`);
   },[])
   return (
     <div>

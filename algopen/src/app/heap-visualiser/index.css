@@ -16,7 +16,7 @@
     justify-content: space-between
 }
 
-header+section {
+.heap-vis header+section {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -24,7 +24,7 @@ header+section {
     height: 2rem;
 }
 
-header+section p {
+.heap-vis header+section p {
     width: 100%;
     justify-content: center;
     display: flex;
@@ -40,7 +40,7 @@ header+section p {
 }
 
 
-header+section p:hover {
+.heap-vis header+section p:hover {
     background-color: white;
     color: black;
 }
@@ -88,6 +88,7 @@ header+section p:hover {
     
 }
 
+/*  */
 
 
 .pulsate {
