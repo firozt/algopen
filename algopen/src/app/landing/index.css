@@ -37,7 +37,7 @@ body {
 .landing-page .title-card h2 {
     
     margin-top: 3rem;
-    font-size: min(8vw,64px);
+    font-size: min(8vw,42px);
     font-weight: bold;
     color: black;
     letter-spacing: -2px;
