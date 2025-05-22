@@ -231,7 +231,11 @@ footer p, footer a, footer h3{
     #last-footer {
         flex-direction: column-reverse;
     }
+    #get-started {
+        margin-top: 12rem;
+    }
 }
+
 
 
 @media (max-width: 560px) {
