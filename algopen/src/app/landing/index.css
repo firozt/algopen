@@ -91,12 +91,19 @@ body {
     color: #303030d4;
 }
 
+.about > div p {
+    padding: 10px;
+    font-size: 14px !important;
+}
+
+.about > div h3 {
+    background-color: black;
+    color: white;
+}
 .about > div {
     width: min(450px,60%);
     background-color: rgba(214, 214, 214, 0.226);
-    padding: 10px;
     border: 3px solid black;
-    border-top: 40px solid black;
     transition: all .5s ease;
 }
 
@@ -161,7 +168,8 @@ body {
 }
 
 footer {
-    padding: 25px;
+    font-size: 12px;
+    padding: 12px;
     height: fit-content;
     background-color: black;
     display: flex;

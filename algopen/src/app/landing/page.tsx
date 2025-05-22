@@ -34,8 +34,8 @@ const Index = () => {
 				<section>
 					<motion.div
 					className='title-card'
-					initial={{x:-200,y:100,opacity:0}}
-					transition={{duration:1,ease:'easeOut'}}
+					initial={{x:-50,y:50,opacity:0}}
+					transition={{duration:.5,ease:'easeOut'}}
 					animate={{x:0,y:0,opacity:'1'}}
 					>
 						<img id='title' src={'/title.svg'}/>
@@ -44,8 +44,8 @@ const Index = () => {
 					</motion.div>
 					<motion.div
 					className='about'
-					initial={{x:200,y:100,opacity:0}}
-					transition={{duration:1,ease:'easeOut'}}
+					initial={{x:50,y:50,opacity:0}}
+					transition={{duration:.5,ease:'easeOut'}}
 					animate={{x:0,y:0,opacity:'1'}}
 					>
 						<div>
