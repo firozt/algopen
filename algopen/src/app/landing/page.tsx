@@ -18,7 +18,7 @@ const getStartedStyles: React.CSSProperties = {
 
 
 
-const index = () => {
+const Index = () => {
 	const router = useRouter();
 	const scrollToSection = (id: string) => {
 		const el = document.getElementById(id);
@@ -108,4 +108,4 @@ const index = () => {
 	)
 }
 
-export default index
+export default Index

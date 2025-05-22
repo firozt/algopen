@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import { Typewriter } from 'react-simple-typewriter'
 
 type Props = {
@@ -9,7 +8,7 @@ const TypeWriter = ({text}: Props) => {
   return (
     <div>
         <Typewriter
-        words={text}
+        words={text ?? []}
         loop={1} 
         cursor
         cursorStyle="_"
