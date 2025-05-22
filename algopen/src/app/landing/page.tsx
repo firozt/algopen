@@ -8,6 +8,7 @@ import { motion } from 'framer-motion'
 import TypeWriter from '../components/TypeWriter/TypeWriter'
 import Card from '../components/Card/Card'
 import { useRouter } from 'next/navigation'
+
 const getStartedStyles: React.CSSProperties = {
 	height:'60px',
 	width:'220px',
@@ -15,8 +16,6 @@ const getStartedStyles: React.CSSProperties = {
 	overflow:'hidden',
 	borderRadius:'15px'
 }
-
-
 
 const Index = () => {
 	const router = useRouter();
