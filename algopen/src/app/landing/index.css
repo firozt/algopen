@@ -34,11 +34,15 @@ body {
     
 }
 
+.landing-page .about {
+    will-change: transform, opacity;
+    backface-visibility: hidden; 
+}
 
 .landing-page .title-card h2 {
     
     margin-top: 3rem;
-    font-size: min(8vw,72px);
+    font-size: min(8vw,64px);
     font-weight: bold;
     color: black;
     letter-spacing: -2px;
