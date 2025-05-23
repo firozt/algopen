@@ -74,6 +74,7 @@ const Index = () => {
 				</motion.div>
 			</div>
 			<div className='landing-services'>
+				<img src={'/transition.svg'}/>
 				<div id='services'>
 					<header>
 						<h1>Services⚙️</h1>

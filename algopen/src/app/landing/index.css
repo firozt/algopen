@@ -1,6 +1,5 @@
 body {
-    background-color: #FFFFFF;
-    
+    background-color: white;
 }
 
 .landing-page {
@@ -126,6 +125,10 @@ body {
     background-repeat: repeat; */
 }
 
+#services {
+    margin-top: 1rem;
+}
+
 .landing-services header {
     padding-top: 2rem;
     width: 100%;
@@ -138,6 +141,7 @@ body {
     background-image: url('/public/title.svg');
     background-repeat: repeat !important;
 }
+
 
 
 .landing-services header p {
