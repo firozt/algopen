@@ -7,7 +7,7 @@ body {
     width: 90%;
     max-width: 1500px;
     margin: auto;
-    min-height: 90vh;
+    min-height: 650px;
 }
 
 .landing-page .title-card {
@@ -30,7 +30,6 @@ body {
     width: fit-content;
     margin: auto;
     margin-top: 3rem;
-    /* margin-bottom: 3rem; */
     
 }
 
