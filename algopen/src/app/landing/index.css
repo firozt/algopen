@@ -149,12 +149,12 @@ body {
 .landing-services #card-container {
     display: flex;
     flex-wrap: wrap;
-    gap:1px;
     margin: auto;
     margin-top: 5rem;
     width: min(90%,1000px);
     margin-bottom: 15rem;
     justify-content: center;
+    gap: 25px;
 }
 
 #divider {
@@ -200,9 +200,11 @@ footer p, footer a, footer h3{
 #last-footer {
     width: 100%;
     display: flex;
-    justify-content: center !important;
-    gap: 5px
+    justify-content: space-between !important;
+    gap: 5px;
+
 }
+
 
 @media (max-width: 1100px) {
     .landing-page {

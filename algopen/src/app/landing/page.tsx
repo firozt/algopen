@@ -81,7 +81,7 @@ const Index = () => {
 					</header>
 					<section id='card-container'>
 						<Card onClick={() => router.push(ROUTEMAPPINGS.GraphVisualiser)} heading='Graph Data Structure' iconSrc='/graphIcon.svg' />
-						<Card onClick={() => router.push(ROUTEMAPPINGS.HeapVisualiser)} heading='Heap Algorithm Visualiser' iconSrc='/heapIcon.svg' />
+						<Card onClick={() => router.push(ROUTEMAPPINGS.HeapVisualiser)} heading='Heap Algorithm' iconSrc='/heapIcon.svg' />
 						<Card onClick={() => 1} heading='Coming Soon...' />
 						<Card onClick={() => 1} heading='Coming Soon...'  />
 						<Card onClick={() => 1} heading='Coming Soon...'  />
@@ -99,7 +99,7 @@ const Index = () => {
 				</div>
 				<div id='last-footer'>
 					<p>Designed and Developed by <span style={{color:'#DE5454'}}>Ramiz Abdulla</span></p>
-					<p>© Copyright algopen.ramizabdulla.me All Rights Reserved 2025</p>
+					{/* <p>© Copyright algopen.ramizabdulla.me All Rights Reserved 2025</p> */}
 					<p onClick={() => router.push(ROUTEMAPPINGS.Terms)} style={{textDecoration:'underline',cursor:'pointer'}}> Terms and Services</p>
 				</div>
 			</footer>
