@@ -1,7 +1,8 @@
 
 # Algorithm Visualizer
 
-This web application gives users ways of visualising complex algorithms, allowing users to more easily understand their code and datastructures it interacts with
+This web application gives users ways of visualising complex algorithms, allowing users to more easily understand their code and datastructures it interacts with.
+This site is now live at http://algopen.ramizabdulla.me
 
 ## Table of Contents
 
