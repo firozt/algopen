@@ -7,7 +7,7 @@ import SlideButton from '../components/SlideButton/SlideButton'
 import ErrorMsg from '../components/ErrorMsg/ErrorMsg'
 import {  EdgeInfo, NodeInfo, Vector2D } from '../GlobalTypes'
 import Konva from 'konva'
-import { Circle, Layer, Stage } from 'react-konva'
+import { Layer, Stage } from 'react-konva'
 import { COLORS, HEADER_HEIGHT, SlideDirection, Theme } from '../../utils/constants'
 import { handleWheelZoom } from '../../utils/SceneController'
 import { Heap, HEAP_TYPE } from '../../utils/Heap'
@@ -15,7 +15,6 @@ import { getLevel } from '../../utils/Misc'
 import GraphNode from '../components/GraphNode/GraphNode'
 import GraphEdge from '../components/GraphEdge/GraphEdge'
 import { getLinePoints } from '../../utils/GeometryHelpers'
-import { color } from 'framer-motion'
 
 
 enum ERROR_MESSAGES {
@@ -36,9 +35,9 @@ const Page = () => {
 	const [inputVal, setInputVal] = useState<string>('')
 	const [errorMsg, setErrorMsg] = useState<string>('')
 	const [showSideBar, setShowSidebar] = useState<boolean>(true)
-	const [heapArr,setHeapArr] = useState<number[]>([])
-	const [edgeNodeList, setEdgeNodeList] = useState<EdgeInfo[]>([])
-	const [nodeInfoList, setNodeInfoList] = useState<NodeInfo[]>([])
+	const [heapArr,setHeapArr] = useState<number[][]>([[],[]])
+	const [edgeNodeList, setEdgeNodeList] = useState<EdgeInfo[][]>([[],[]])
+	const [nodeInfoList, setNodeInfoList] = useState<NodeInfo[][]>([[],[]])
 	const [selectedTab, setSelectedTab] = useState<number>(0)
 	const stageRef = useRef<Konva.Stage | null>(null);
 
@@ -58,30 +57,38 @@ const Page = () => {
 		generateTree(heapArr)
 
 		const runHeapify = async () => {
-			await Heap.heapify(heapArr, onSwap,()=>generateTree(heapArr));
+			await Heap.heapify(heapArr[selectedTab], onSwap,()=>generateTree(heapArr));
 			generateTree(heapArr);
 		};
 		runHeapify();
-	}, [heapArr]);
+	}, [heapArr[selectedTab]]);
 
 
 
 	const onSwap = (parent: number, child: number) => {
 	return new Promise<void>((resolve) => {
 		setNodeInfoList(prev =>
-		prev.map(a =>
-			a.id == String(parent) || a.id == String(child)
-			? { ...a, fill: COLORS.RED }
-			: a
+		prev.map((tab, index) =>
+			index === selectedTab
+			? tab.map(a =>
+				a.id == String(parent) || a.id == String(child)
+					? { ...a, fill: COLORS.RED }
+					: a
+				)
+			: tab
 		)
 		);
 
 		setTimeout(() => {
-		setNodeInfoList(prev =>
-			prev.map(a =>
-			a.id === String(parent) || a.id === String(child)
-				? { ...a, fill: COLORS.BLACK }
-				: a
+			setNodeInfoList(prev =>
+			prev.map((tab, index) =>
+				index === selectedTab
+				? tab.map(a =>
+					a.id === String(parent) || a.id === String(child)
+						? { ...a, fill: COLORS.BLACK }
+						: a
+					)
+				: tab
 			)
 			);
 			resolve();  // resolve promise after timeout finishes
@@ -131,21 +138,33 @@ const Page = () => {
 	// 	return dfsTraversal(inputArray)
 	// }
 
+
 	const pushToEdgeList = (edgeInfo: EdgeInfo) => {
-		setEdgeNodeList(prev => [...prev,edgeInfo])
+		setEdgeNodeList(prev => {
+			const newList = [...prev[selectedTab], edgeInfo];
+			return prev.map((item, idx) =>
+				idx === selectedTab ? newList : item
+			);
+		});
 	};
 
 	//  -----------------------------------------------------
 
 
 	const pushToNodeList = (nodeInfo: NodeInfo) => {
-		setNodeInfoList(prev => [...prev,nodeInfo])
+		setNodeInfoList(prev => {
+			const newList = [...prev[selectedTab], nodeInfo];
+			return prev.map((item, idx) =>
+				idx === selectedTab ? newList : item
+			);
+		});
 	};
 
+	const generateTree = (input: any[][]) => {
+		const tree_array = input[selectedTab]
 
-	const generateTree = (tree_array: any[]) => {
-		setNodeInfoList([])
-		setEdgeNodeList([])
+		setNodeInfoList([[],[]])
+		setEdgeNodeList([[],[]])
 		const d = 100;
 		const dy = 90;
 
@@ -206,14 +225,33 @@ const Page = () => {
 
 
 	const handlePush = () => {
-		// setEdgeNodeList([])
-		// setNodeInfoList([])
 		setInputVal('')
 		if (!parseInput()) return // invalid input
 		const input = Number(inputVal)
+		setHeapArr(prev =>
+			prev.map((tab, index) =>
+				index === selectedTab
+				? [...tab, input]
+				: tab
+			)
+		)
 
-		setHeapArr(prev => Heap.insert(prev,input))
+
+		// setHeapArr(prev => Heap.insert(prev,input))
 	}
+
+const popHeap = async () => {
+	const newHeap = await Heap.pop(heapArr[selectedTab], onSwap, () => generateTree(heapArr));
+	generateTree(heapArr);
+	
+	setHeapArr(prev =>
+		prev.map((tab, index) =>
+			index === selectedTab ? newHeap : tab
+		)
+	);
+	generateTree(heapArr);
+
+};
 
 
 return (
@@ -255,7 +293,7 @@ return (
 				}
 				<div className='btn-group'>
 					<SlideButton onClick={() => handlePush()} title='Push Node' styles={btnStyles} />
-					<SlideButton onClick={() => 1} title='Pop Heap'  styles={btnStyles}/>
+					<SlideButton onClick={() => popHeap()} title='Pop Heap'  styles={btnStyles}/>
 				</div>
 			</div>
 		</SideTab>
@@ -274,7 +312,7 @@ return (
 		>
 			<Layer>
 				{
-					nodeInfoList.map((item,idx) => {
+					nodeInfoList[selectedTab].map((item,idx) => {
 						return (
 							<React.Fragment key={`node-${idx}`}>
 							<GraphNode
@@ -291,9 +329,9 @@ return (
 					})
 				}
 				{
-					edgeNodeList.map((edge,idx) => {
-						const fromNode = nodeInfoList.find((t) => t.id === edge.idFrom);
-						const toNode = nodeInfoList.find((t) => t.id === edge.idTo);
+					edgeNodeList[selectedTab].map((edge,idx) => {
+						const fromNode = nodeInfoList[selectedTab].find((t) => t.id === edge.idFrom);
+						const toNode = nodeInfoList[selectedTab].find((t) => t.id === edge.idTo);
 						const points = getLinePoints(fromNode.position, toNode.position);
 
 						return (
