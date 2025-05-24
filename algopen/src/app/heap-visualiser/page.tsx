@@ -160,7 +160,7 @@ const Page = () => {
 		});
 	};
 
-	const generateTree = (input: any[][]) => {
+	const generateTree = (input: number[][]) => {
 		const tree_array = input[selectedTab]
 
 		setNodeInfoList([[],[]])
@@ -170,7 +170,6 @@ const Page = () => {
 
 
 		const dfs = (index: number, pos: Vector2D) => {
-			if (index >= tree_array.length || tree_array[index] == 'null') return;
 				const level = getLevel(index) + 1;
 
 				const left = 2 * index + 1;
@@ -179,7 +178,7 @@ const Page = () => {
 			const new_y = pos.y + dy;
 			const new_x = d / level;
 
-			if (left < tree_array.length &&  tree_array[left] != 'null') {
+			if (left < tree_array.length) {
 				pushToEdgeList({
 					idFrom: String(index),
 					idTo: String(left),
@@ -193,7 +192,7 @@ const Page = () => {
 					}
 				);
 			}
-			if (right < tree_array.length  &&  tree_array[right] != 'null') {
+			if (right < tree_array.length) {
 				pushToEdgeList({
 					idFrom: String(index),
 					idTo: String(right),
@@ -210,7 +209,7 @@ const Page = () => {
 
 			pushToNodeList({
 				position: pos,
-				label: tree_array[index],
+				label: String(tree_array[index]),
 				id: String(index),
 				dragging:false,
 			})
