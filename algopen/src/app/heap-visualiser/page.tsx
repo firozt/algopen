@@ -62,6 +62,10 @@ const Page = () => {
 		};
 		runHeapify();
 	}, [heapArr]);
+	
+	useEffect(() => {
+		generateTree(heapArr)
+	}, [selectedTab]);
 
 
 
