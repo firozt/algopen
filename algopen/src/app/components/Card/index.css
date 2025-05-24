@@ -8,8 +8,9 @@
     transition: all 0.35s;
     justify-content: center;
     align-items: center;
-    position: relative; /* Needed for absolute positioning */
+    position: relative;
     overflow: hidden;
+    backdrop-filter: blur(4px);;
 }
 
 .card-container img {

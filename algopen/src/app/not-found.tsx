@@ -20,18 +20,16 @@ const NotFound = () => {
         backgroundImage:'url(/bg.svg)'
       }}>
         <div style={{
-          backgroundColor:'rgb(234, 234, 234)',
           padding:'25px',
           borderRadius:'10px',
           width:'400px',
           border:'3px solid rgb(148, 148, 148)',
-          backgroundImage:'url(/card-bg.svg)',
-          backgroundBlendMode:'initial'
+          backdropFilter:'blur(5px)',
         }}>
-          <h1 style={{fontSize:'72px',textAlign:'center',color:'black'}}>404</h1>
-          <p style={{fontSize:'32px',textAlign:'center',color:'black', position:'relative',bottom:'30px'}}>Page Not Found</p>
+          <h1 style={{fontSize:'72px',textAlign:'center',color:'white'}}>404</h1>
+          <p style={{fontSize:'32px',textAlign:'center',color:'white', position:'relative',bottom:'30px'}}>Page Not Found</p>
           <ErrorMsg severity={0} message='This page could not be found, if issues persist please email dev@ramizabdulla.me'/>
-          <SlideButton hoveredTitle='Go' styles={{height:'50px'}} onClick={() => redirect(ROUTEMAPPINGS.LandingPage)} title='Home 🏠' />
+          <SlideButton hoveredTitle='🏠' styles={{height:'50px',backgroundColor:'#cf4c43',color:'black'}} onClick={() => redirect(ROUTEMAPPINGS.LandingPage)} title='Home' />
           
         </div>
     </div>

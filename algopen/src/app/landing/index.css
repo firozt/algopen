@@ -140,7 +140,6 @@ body {
     flex-direction: column;
     height: fit-content;
     margin-bottom: 3rem;
-    background-image: url('/public/title.svg');
     background-repeat: repeat !important;
 }
 
