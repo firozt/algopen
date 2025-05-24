@@ -29,6 +29,7 @@ body {
     width: fit-content;
     margin: auto;
     margin-top: 3rem;
+    z-index: 1;
     
 }
 
@@ -57,6 +58,7 @@ body {
 }
 
 .landing-page .about {
+    z-index: 1;
     will-change: transform, opacity;
     backface-visibility: hidden; 
     background-image: url('/text-bg.svg');

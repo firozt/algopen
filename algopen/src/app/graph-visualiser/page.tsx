@@ -217,7 +217,7 @@ const Page = () => {
 		setTimeout(() => setShowEdges(true), NODE_STARTUP_ANIMATION_DURATION*2000)
 	}
 
-	const generateTree = (tree_array: string[]) => {
+	const generateTree = (tree_array: any[]) => {
 		const d = tree_array.filter(item => item !== 'null').length * 20;
 		const dy = 90;
 

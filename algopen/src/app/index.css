@@ -10,6 +10,15 @@
     box-sizing: border-box;
 }
 
+img {
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    pointer-events: none;
+}
+
 body {
     background-color: #eee;
     background-position: center;

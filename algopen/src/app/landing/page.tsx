@@ -39,7 +39,7 @@ const Index = () => {
 					animate={{x:0,y:0,opacity:'1'}}
 					>
 						<img id='title' src={'/title.svg'}/>
-						<h2><TypeWriter text={['An algorithm simulator?','A visualising tool?','We do it all.']}/></h2>
+						<h2><TypeWriter text={['An algorithm simulator?','A visualising tool?','The all in one.']}/></h2>
 						
 					</motion.div>
 					<motion.div
@@ -74,7 +74,7 @@ const Index = () => {
 				</motion.div>
 			</div>
 			<div className='landing-services'>
-				<img src={'/transition.svg'}/>
+				<img style={{position:'relative',bottom:'10px',zIndex:'0',marginBottom:'5rem'}} src={'/transition.svg'}/>
 				<div id='services'>
 					<header>
 						<h1>Services⚙️</h1>

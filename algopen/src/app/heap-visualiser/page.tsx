@@ -5,11 +5,17 @@ import './index.css'
 import SideTab from '../components/SideTab/SideTab'
 import SlideButton from '../components/SlideButton/SlideButton'
 import ErrorMsg from '../components/ErrorMsg/ErrorMsg'
-import {  Vector2D } from '../GlobalTypes'
+import {  EdgeInfo, NodeInfo, Vector2D } from '../GlobalTypes'
 import Konva from 'konva'
 import { Circle, Layer, Stage } from 'react-konva'
-import { HEADER_HEIGHT, SlideDirection, Theme } from '../../utils/constants'
+import { COLORS, HEADER_HEIGHT, SlideDirection, Theme } from '../../utils/constants'
 import { handleWheelZoom } from '../../utils/SceneController'
+import { Heap, HEAP_TYPE } from '../../utils/Heap'
+import { getLevel } from '../../utils/Misc'
+import GraphNode from '../components/GraphNode/GraphNode'
+import GraphEdge from '../components/GraphEdge/GraphEdge'
+import { getLinePoints } from '../../utils/GeometryHelpers'
+import { color } from 'framer-motion'
 
 
 enum ERROR_MESSAGES {
@@ -30,9 +36,9 @@ const Page = () => {
 	const [inputVal, setInputVal] = useState<string>('')
 	const [errorMsg, setErrorMsg] = useState<string>('')
 	const [showSideBar, setShowSidebar] = useState<boolean>(true)
-	// const [heapHead,setHeapHead] = useState<TreeNode|null>(null)
-	// const [edgeNodeList, setEdgeNodeList] = useState<EdgeInfo[]>([])
-	// const [nodeInfoList, setNodeInfoList] = useState<NodeInfo[]>([])
+	const [heapArr,setHeapArr] = useState<number[]>([])
+	const [edgeNodeList, setEdgeNodeList] = useState<EdgeInfo[]>([])
+	const [nodeInfoList, setNodeInfoList] = useState<NodeInfo[]>([])
 	const [selectedTab, setSelectedTab] = useState<number>(0)
 	const stageRef = useRef<Konva.Stage | null>(null);
 
@@ -45,6 +51,44 @@ const Page = () => {
 		window.addEventListener('resize',updateSize);
 		return () => window.removeEventListener('resize', updateSize);
 	}, []);
+
+	
+	useEffect(() => {
+		// just inserted
+		generateTree(heapArr)
+
+		const runHeapify = async () => {
+			await Heap.heapify(heapArr, onSwap,()=>generateTree(heapArr));
+			generateTree(heapArr);
+		};
+		runHeapify();
+	}, [heapArr]);
+
+
+
+	const onSwap = (parent: number, child: number) => {
+	return new Promise<void>((resolve) => {
+		setNodeInfoList(prev =>
+		prev.map(a =>
+			a.id == String(parent) || a.id == String(child)
+			? { ...a, fill: COLORS.RED }
+			: a
+		)
+		);
+
+		setTimeout(() => {
+		setNodeInfoList(prev =>
+			prev.map(a =>
+			a.id === String(parent) || a.id === String(child)
+				? { ...a, fill: COLORS.BLACK }
+				: a
+			)
+			);
+			resolve();  // resolve promise after timeout finishes
+			generateTree(heapArr)
+			}, 1000);
+		});
+	};
 
 
 	const parseInput = (): boolean => {
@@ -87,17 +131,90 @@ const Page = () => {
 	// 	return dfsTraversal(inputArray)
 	// }
 
+	const pushToEdgeList = (edgeInfo: EdgeInfo) => {
+		setEdgeNodeList(prev => [...prev,edgeInfo])
+	};
 
-	const handlePush = () => {
-		if (!parseInput()) return // invalid input
+	//  -----------------------------------------------------
 
+
+	const pushToNodeList = (nodeInfo: NodeInfo) => {
+		setNodeInfoList(prev => [...prev,nodeInfo])
+	};
+
+
+	const generateTree = (tree_array: any[]) => {
+		setNodeInfoList([])
+		setEdgeNodeList([])
+		const d = 100;
+		const dy = 90;
+
+
+		const dfs = (index: number, pos: Vector2D) => {
+			if (index >= tree_array.length || tree_array[index] == 'null') return;
+				const level = getLevel(index) + 1;
+
+				const left = 2 * index + 1;
+				const right = 2 * index + 2;
+
+			const new_y = pos.y + dy;
+			const new_x = d / level;
+
+			if (left < tree_array.length &&  tree_array[left] != 'null') {
+				pushToEdgeList({
+					idFrom: String(index),
+					idTo: String(left),
+					directed: false,
+				});
+				dfs(
+					left, 
+					{
+						x: pos.x - new_x,
+						y: new_y
+					}
+				);
+			}
+			if (right < tree_array.length  &&  tree_array[right] != 'null') {
+				pushToEdgeList({
+					idFrom: String(index),
+					idTo: String(right),
+					directed: false,
+				});
+				dfs(
+					right,
+					{
+						x: pos.x + new_x,
+						y: new_y
+					}
+				);
+			}
+
+			pushToNodeList({
+				position: pos,
+				label: tree_array[index],
+				id: String(index),
+				dragging:false,
+			})
+		};
+
+		dfs(0,{
+			x:700,
+			y:500-(innerHeight/4)
+		});
 	}
 
-	// const createHeap =(input: string)  => {
-	// 	const parseInput = (input: string): string[] => {
 
-	// 	}
-	// }
+
+	const handlePush = () => {
+		// setEdgeNodeList([])
+		// setNodeInfoList([])
+		setInputVal('')
+		if (!parseInput()) return // invalid input
+		const input = Number(inputVal)
+
+		setHeapArr(prev => Heap.insert(prev,input))
+	}
+
 
 return (
 	<div className='heap-vis'>
@@ -122,8 +239,8 @@ return (
 				</div>
 			</header>
 			<section>
-				<p className={selectedTab == 0 ? 'selected': ''} onClick={() => setSelectedTab(0)}>Min Heap</p>
-				<p className={selectedTab == 1 ? 'selected': ''} onClick={() => setSelectedTab(1)}>Max Heap</p>
+				<p className={selectedTab == 0 ? 'selected': ''} onClick={() => {setSelectedTab(0);Heap.type = HEAP_TYPE.MIN}}>Min Heap</p>
+				<p className={selectedTab == 1 ? 'selected': ''} onClick={() => {setSelectedTab(1);Heap.type = HEAP_TYPE.MAX}}>Max Heap</p>
 			</section>
 			<div className='heap-vis-container'>
 				<p>
@@ -156,12 +273,39 @@ return (
 			}}
 		>
 			<Layer>
-				<Circle
-					radius={30}
-					fill={'black'}
-					x={500}
-					y={500}
-				/>
+				{
+					nodeInfoList.map((item,idx) => {
+						return (
+							<React.Fragment key={`node-${idx}`}>
+							<GraphNode
+							node={{
+								position: item.position,
+								label: item.label,
+								id: item.id,
+								dragging: item.dragging,
+							}}
+							fill={item.fill}
+							/>
+							</React.Fragment>
+						)
+					})
+				}
+				{
+					edgeNodeList.map((edge,idx) => {
+						const fromNode = nodeInfoList.find((t) => t.id === edge.idFrom);
+						const toNode = nodeInfoList.find((t) => t.id === edge.idTo);
+						const points = getLinePoints(fromNode.position, toNode.position);
+
+						return (
+							<React.Fragment key={`edge-${idx}`}>
+								<GraphEdge 
+									directional ={false}
+									points={points}
+								/>
+							</React.Fragment>
+						)
+					})
+				}
 			</Layer>
 		</Stage>
 	</div>

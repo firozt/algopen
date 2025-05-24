@@ -16,10 +16,11 @@ type Props = {
     onDrag?: (e: Konva.KonvaEventObject<DragEvent>) => void
     onDragEnd?: (e: Konva.KonvaEventObject<DragEvent>) => void
     animation?: AnimateProps
+    fill?: COLORS
 }
 
 
-const GraphNode = ({ node, onDrag, onDragEnd, animation }: Props) => {
+const GraphNode = ({ node, onDrag, onDragEnd, animation, fill=COLORS.BLACK }: Props) => {
     const groupRef = useRef<Konva.Group>(null);
     const startPos = animation ? animation.start : node.position;
 
@@ -54,8 +55,8 @@ const GraphNode = ({ node, onDrag, onDragEnd, animation }: Props) => {
         >
         <Circle
             radius={NODE_RADIUS}
-            fill={COLORS.BLACK}
-            stroke={NODE_COLOR}
+            fill={fill}
+            stroke={fill}
             strokeWidth={LINE_WIDTH}
         />
         <Text
