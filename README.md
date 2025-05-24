@@ -25,10 +25,11 @@ Below depicts the binary tree visualiser, by entering the array notation of a bi
 ## Features
 
 - ✅ Visualising binary tree data structures
-- ✅ Visualising directional graphs
+- ✅ Visualising directed+undirected graphs
 - ✅ Visualising weighted graphs
-- ☑️ Visualising sorting algorithms
+- ✅ Visualising heaps graphs
 - ☑️ Visualising path finding algorithms
+- ☑️ Visualising sorting algorithms
 - ☑️ Visualising tree traversal algorithms
 
 ## Tech Stack
@@ -44,8 +45,4 @@ Below depicts the binary tree visualiser, by entering the array notation of a bi
 
 ### Setup
 
-```bash
-cd server
-python manage.py runserver
-cd ../client
-firefox index.html
+
