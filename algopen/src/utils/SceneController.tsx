@@ -97,26 +97,3 @@ export const zoomStage = (scaleBy=1.5, stage: Konva.Stage|null, screenWidth: num
     stage.position(newPos);
     stage.batchDraw();
 }
-
-	const handleNodeDrag = (e: Konva.KonvaEventObject<DragEvent>) => {
-		const id = e.target?.id();
-		const node = nodeInfoList[selectedTab].find(node => node.id == id)
-		if (node == null) {
-			throw new Error('Node clicked cannot be found')
-		}
-
-		const newPosition: Vector2D = {
-			x: e.target.x(), 
-			y: e.target.y() 
-		} 
-
-		const newData: NodeInfo = {
-			label: node.label,
-			// position: newPosition,
-			position: newPosition,
-			id: id,
-			dragging: true
-		} 
-
-		updateNode(node.id,newData)
-	}
