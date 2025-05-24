@@ -2,7 +2,7 @@ import React from 'react'
 import './index.css'
 import SlideButton from '../SlideButton/SlideButton'
 import SideTab from '../SideTab/SideTab'
-import { HEADER_HEIGHT, SlideDirection } from '../../../utils/constants'
+import { HEADER_HEIGHT } from '../../../utils/constants'
 
 type Props = {
 	showInputs: boolean
@@ -11,7 +11,7 @@ type Props = {
 	setTextArea: (newVal: string) => void
 	textArea: string
 	visualise: () => void
-	slideDirection?: SlideDirection
+	slideDirection?: 'up' | 'left'
 }
 
 

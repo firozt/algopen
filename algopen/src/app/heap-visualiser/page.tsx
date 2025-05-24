@@ -8,7 +8,7 @@ import ErrorMsg from '../components/ErrorMsg/ErrorMsg'
 import {  EdgeInfo, NodeInfo, Vector2D } from '../GlobalTypes'
 import Konva from 'konva'
 import { Layer, Stage } from 'react-konva'
-import { COLORS, HEADER_HEIGHT, SlideDirection, Theme } from '../../utils/constants'
+import { COLORS, HEADER_HEIGHT, Theme } from '../../utils/constants'
 import { handleWheelZoom } from '../../utils/SceneController'
 import { Heap, HEAP_TYPE } from '../../utils/Heap'
 import { getLevel } from '../../utils/Misc'
@@ -270,7 +270,7 @@ return (
 			transformOrigin: 'bottom',
 			zIndex:'1'
 		}}
-		slide={SlideDirection.UP}
+		slide={'up'}
 		slideBuffer={50}
 		>
 

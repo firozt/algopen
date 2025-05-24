@@ -2,15 +2,13 @@
 import { motion } from 'framer-motion'
 import React, { useRef } from 'react'
 import './index.css'
-import { SlideDirection } from '../../../utils/constants'
-import { Vector2D } from '../../GlobalTypes'
 
 
 type Props = {
     showContent?: boolean,
     children?: React.ReactNode
     styles?: React.CSSProperties
-    slide?: SlideDirection
+    slide?: 'up' | 'left'
     slideBuffer?: number // doesnt slide off screen fully, by x px
 }
 
@@ -23,17 +21,10 @@ const SideTab = ({showContent=true, children,styles,slide, slideBuffer=0}: Props
     
     const containerRef = useRef<HTMLDivElement|null>(null)
     
-
-        const slideMapping: Partial<Record<SlideDirection, Vector2D>> = {
-        [SlideDirection.UP]: {
-            x: 0,
-            y: -1 * ((containerRef.current?.offsetHeight ?? 0) - slideBuffer),
-        },
-        [SlideDirection.LEFT]: {
-            x: -1 * ((containerRef.current?.offsetWidth ?? 0) - slideBuffer),
-            y: 0,
-        },
-        }
+    const slideMapping = {
+    'up':{x:0,y:  -1*(containerRef?.current?.offsetHeight ?? 0)+slideBuffer}, 
+    'left':{x:(containerRef?.current?.offsetWidth ?? 0) * -1 +slideBuffer,y:0}
+    }
 
 
     return (
