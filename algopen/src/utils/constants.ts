@@ -9,11 +9,6 @@ export enum Theme {
     LIGHT = 'light'
 }
 
-export enum SlideDirection {
-    LEFT='left',
-    DOWN='down'
-} 
-
 
 export enum ROUTEMAPPINGS {
     GraphVisualiser = 'graph-visualiser',

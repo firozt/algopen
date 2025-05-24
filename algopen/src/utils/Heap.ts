@@ -19,7 +19,7 @@ export class Heap {
         const newHeap = heap
         await Heap.swap(newHeap,0,newHeap.length-1, beforeSwap, afterSwap)
         newHeap.pop()
-        afterSwap()
+        if (afterSwap) afterSwap()
 
         return await Heap.buildHeap(newHeap,beforeSwap,afterSwap)
     }
@@ -72,12 +72,12 @@ export class Heap {
         return heap;
     }
 
-    public static getLeftChild(heap,index): number| null{
+    public static getLeftChild(heap: number[],index:number): number| null{
         if (2*index+1 >= heap.length) return null
         return heap[2*index+1]
     }
 
-    public static getRightChild(heap,index): number | null{
+    public static getRightChild(heap: number[],index:number): number | null{
         if (2*index+2 >= heap.length) return null
         return heap[2*index+2]
     }
