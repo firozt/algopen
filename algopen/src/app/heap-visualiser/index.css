@@ -4,7 +4,6 @@
     width: 100%;
 }
 
-
 .heap-vis-header{
     padding-left: 15px;
     padding-right: 15px;
@@ -16,7 +15,7 @@
     justify-content: space-between
 }
 
-.heap-vis header+section {
+.heap-vis section {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -24,7 +23,7 @@
     height: 2rem;
 }
 
-.heap-vis header+section p {
+.heap-vis section p {
     width: 100%;
     justify-content: center;
     display: flex;
@@ -40,7 +39,7 @@
 }
 
 
-.heap-vis header+section p:hover {
+.heap-vis section p:hover {
     background-color: white;
     color: black;
 }

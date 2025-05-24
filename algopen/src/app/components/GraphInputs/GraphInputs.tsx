@@ -2,7 +2,7 @@ import React from 'react'
 import './index.css'
 import SlideButton from '../SlideButton/SlideButton'
 import SideTab from '../SideTab/SideTab'
-import { SlideDirection } from '../../../utils/constants'
+import { HEADER_HEIGHT, SlideDirection } from '../../../utils/constants'
 
 type Props = {
 	showInputs: boolean
@@ -39,6 +39,9 @@ const GraphInputs = ({showInputs, selectedTab, setSelectedTab, setTextArea, text
 		<SideTab 
 		showContent={showInputs}
 		slide={slideDirection}
+		styles={{
+			height: `calc(100% - ${HEADER_HEIGHT}px)`
+		}}
 		>
 			<div id="top-inputs">
 				<div className="selections">

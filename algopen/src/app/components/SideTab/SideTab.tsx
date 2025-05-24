@@ -22,9 +22,17 @@ const SideTab = ({showContent=true, children,styles,slide, slideBuffer=0}: Props
     
     const containerRef = useRef<HTMLDivElement|null>(null)
     
-    const slideMapping = {
-    'down':{x:0,y:  (containerRef?.current?.offsetHeight ?? 0)-slideBuffer}, // - container height
-    'left':{x:(containerRef?.current?.offsetWidth ?? 0) * -1 +slideBuffer,y:0}
+type SlideVector = { x: number; y: number }
+
+    const slideMapping: Partial<Record<SlideDirection, SlideVector>> = {
+    [SlideDirection.UP]: {
+        x: 0,
+        y: -1 * ((containerRef.current?.offsetHeight ?? 0) - slideBuffer),
+    },
+    [SlideDirection.LEFT]: {
+        x: -1 * ((containerRef.current?.offsetWidth ?? 0) - slideBuffer),
+        y: 0,
+    },
     }
 
 

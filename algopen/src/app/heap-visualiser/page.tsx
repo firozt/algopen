@@ -19,7 +19,7 @@ import { getLinePoints } from '../../utils/GeometryHelpers'
 
 enum ERROR_MESSAGES {
 	EmptyInput='The input you wrote is empty, please enter a (max 4 digit) number inside the node',
-	NoValidNumbers='The input you wrote does not contain any numbers, please enter a max 4 digit number within the node, note that this feature does not support floating points'
+	NoValidNumbers='Your input contains a non numeric character, please enter a 4 digit number'
 }
 
 
@@ -61,7 +61,7 @@ const Page = () => {
 			generateTree(heapArr);
 		};
 		runHeapify();
-	}, [heapArr[selectedTab]]);
+	}, [heapArr]);
 
 
 
@@ -260,22 +260,20 @@ return (
 		<SideTab
 		showContent={showSideBar}
 		styles={{
-			height:'fit-content',
-			borderRight:'3px solid black',
-			borderBottom:'3px solid black',
-			bottom:'0'
+			position: 'fixed',
+			top: `${HEADER_HEIGHT}px`,
+			border: '3px solid black',
+			maxHeight:`${errorMsg.length > 0 ? '480' : '400'}px`,
+			justifyContent:'center',
+			overflowY: 'hidden',
+			transition:'all .5s ease',
+			transformOrigin: 'bottom',
+			zIndex:'1'
 		}}
-		slide={SlideDirection.DOWN}
+		slide={SlideDirection.UP}
 		slideBuffer={50}
 		>
-			<header className='heap-vis-header'>
-				<p>Heap Input Controller</p>
-				<div onClick={() => setShowSidebar(prev => !prev)}>
-					<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M4.25 13.25H0.75V9.75M13.25 9.75V13.25H9.75M9.75 0.75H13.25V4.25M0.75 4.25V0.75H4.25" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-					</svg>
-				</div>
-			</header>
+
 			<section>
 				<p className={selectedTab == 0 ? 'selected': ''} onClick={() => {setSelectedTab(0);Heap.type = HEAP_TYPE.MIN}}>Min Heap</p>
 				<p className={selectedTab == 1 ? 'selected': ''} onClick={() => {setSelectedTab(1);Heap.type = HEAP_TYPE.MAX}}>Max Heap</p>
@@ -296,6 +294,14 @@ return (
 					<SlideButton onClick={() => popHeap()} title='Pop Heap'  styles={btnStyles}/>
 				</div>
 			</div>
+			<header className='heap-vis-header'>
+				<p>Heap Input Controller</p>
+				<div onClick={() => setShowSidebar(prev => !prev)}>
+					<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M4.25 13.25H0.75V9.75M13.25 9.75V13.25H9.75M9.75 0.75H13.25V4.25M0.75 4.25V0.75H4.25" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+					</svg>
+				</div>
+			</header>
 		</SideTab>
 		<Stage 
 			onWheel={(e) => {
@@ -332,6 +338,9 @@ return (
 					edgeNodeList[selectedTab].map((edge,idx) => {
 						const fromNode = nodeInfoList[selectedTab].find((t) => t.id === edge.idFrom);
 						const toNode = nodeInfoList[selectedTab].find((t) => t.id === edge.idTo);
+						if (fromNode == undefined || toNode == undefined) {
+							return <></>
+						}
 						const points = getLinePoints(fromNode.position, toNode.position);
 
 						return (
