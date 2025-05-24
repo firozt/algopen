@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react'
 import { NodeInfo, Vector2D } from '../../GlobalTypes'
 import Konva from 'konva'
 import { Group, Circle, Text} from 'react-konva'
-import { NODE_RADIUS, COLORS, NODE_COLOR, LINE_WIDTH, TEXT_COLOR } from '../../../utils/constants'
+import { NODE_RADIUS, COLORS, LINE_WIDTH, TEXT_COLOR } from '../../../utils/constants'
 
 
 type AnimateProps = {
