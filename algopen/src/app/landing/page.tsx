@@ -76,14 +76,14 @@ const Index = () => {
 			<div className='landing-services'>
 				<img style={{position:'relative',bottom:'10px',zIndex:'0',marginBottom:'5rem'}} src={'/transition.svg'}/>
 				<div id='services'>
-					<header>
+					<header style={{textAlign:'center',position:'relative',top:'-100px'}}>
 						<h1>Services⚙️</h1>
 						<p>(its all free forever)</p>
 					</header>
 					<section id='card-container'>
 						<Card onClick={() => router.push(ROUTEMAPPINGS.GraphVisualiser)} heading='Graph Data Structure' iconSrc='/graphIcon.svg' />
 						<Card onClick={() => router.push(ROUTEMAPPINGS.HeapVisualiser)} heading='Heap Algorithm' iconSrc='/heapIcon.svg' />
-						<Card onClick={() => 1} heading='Coming Soon...' />
+						<Card onClick={() => router.push(ROUTEMAPPINGS.SortingVisualiser)} heading='Sorting Visualiser' iconSrc='/sortingIcon.svg' />
 						<Card onClick={() => 1} heading='Coming Soon...'  />
 						<Card onClick={() => 1} heading='Coming Soon...'  />
 						<Card onClick={() => 1} heading='Coming Soon...'  />

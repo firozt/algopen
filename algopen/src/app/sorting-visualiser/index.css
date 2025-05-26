@@ -1,0 +1,72 @@
+.sorting-vis .side-input {
+    height: calc(100vh - 160px);
+}
+
+.sorting-vis .side-input .selection-input p {
+    cursor: pointer;
+    padding: 8px;
+    font-size: 14px;
+    transition: all .25s;
+    background-color: black;
+
+}
+
+.sorting-vis .side-input .selection-input p:hover {
+    background-color: white;
+    color: black;
+}
+.sorting-vis .side-input .selection-input{
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 15px;
+    row-gap: 2px;
+    margin: auto;
+    background-color: black;
+    width: 100%;
+    padding: 10px;
+}
+
+.sorting-vis .side-input header h1 {
+    font-size: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.sorting-vis textarea {
+    border-radius: 0; 
+    border: none;
+    height: 100%;
+    width: 100%;
+    padding: 25px;
+    padding-top: 10px;
+    font-size: 16px;    
+    background-color:  var(--bg-dim);
+    color: #E1E2E3;
+    font-family: 'Courier New', monospace;
+    
+}
+
+
+textarea:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.061);
+}
+
+.sorting-vis .selected {
+    background-color: white !important;
+    color: black !important;
+}
+
+.sorting-vis .side-tab #algo-desc {
+    transition: all .5s;
+    padding: 15px;
+    color: rgba(255, 255, 255, 0.526);
+    line-height: 18px;
+}
+
+.sorting-vis .side-tab .text-area-wrapper {
+    width: 98%;
+    max-height: calc(100% - 275px);
+    height: 100%;
+    margin: auto;
+}
+
