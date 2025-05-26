@@ -17,9 +17,9 @@ import DisplayControls from '../components/DisplayControls/DisplayControls';
 const RECT_WIDTH = 30
 const RECT_GAP = 10
 
-type Props = {
-
-}
+// type Props = {
+// 
+// }
 
 
 const sortingDesc = [
@@ -30,7 +30,7 @@ const sortingDesc = [
     ''
 ]
 
-const Page = ({}: Props) => {
+const Page = () => {
     const [selectedTab, setSelectedTab] = useState<number>(0)
     const [textArea, setTextArea] = useState<string>('')
     const [showSideTab, setShowSideTab] = useState<boolean>(true)

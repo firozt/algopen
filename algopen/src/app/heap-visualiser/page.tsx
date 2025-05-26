@@ -8,7 +8,7 @@ import ErrorMsg from '../components/ErrorMsg/ErrorMsg'
 import {  EdgeInfo, NodeInfo, Vector2D } from '../GlobalTypes'
 import Konva from 'konva'
 import { Layer, Stage } from 'react-konva'
-import { COLORS, HEADER_HEIGHT, Theme } from '../../utils/constants'
+import { COLORS, HEADER_HEIGHT, MOBILE_WIDTH, Theme } from '../../utils/constants'
 import { handleWheelZoom } from '../../utils/SceneController'
 import { Heap, HEAP_TYPE } from '../../utils/Heap'
 import { getLevel } from '../../utils/Misc'
@@ -221,8 +221,9 @@ const Page = () => {
 		};
 
 		dfs(0,{
-			x:700,
-			y:500-(innerHeight/4)
+			// x:dimensions.x/2 + dimensions.x < MOBILE_WIDTH ? 425 : 425 ,
+			x:dimensions.x/2+ (dimensions.x < MOBILE_WIDTH/2? 0 : 200),
+			y:  500-(innerHeight/4)
 		});
 	}
 
