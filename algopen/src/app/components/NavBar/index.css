@@ -17,6 +17,7 @@ header#navbar {
     flex-shrink: 0;
     position: relative;
     z-index: 999;
+
 }
 
 
@@ -41,7 +42,7 @@ header#navbar h1 {
         justify-content: center;
     }
 
-    .header#navbar-icons {
+    header#navbar .header-icons {
         display: none;
     }
 }
