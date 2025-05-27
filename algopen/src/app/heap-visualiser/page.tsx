@@ -15,6 +15,7 @@ import { getLevel } from '../../utils/Misc'
 import GraphNode from '../components/GraphNode/GraphNode'
 import GraphEdge from '../components/GraphEdge/GraphEdge'
 import { getLinePoints } from '../../utils/GeometryHelpers'
+import ToolBar from '../components/ToolBar/ToolBar'
 
 
 enum ERROR_MESSAGES {
@@ -260,106 +261,109 @@ const popHeap = async () => {
 
 
 return (
-	<div className='heap-vis'>
+	<>
 		<NavBar theme={Theme.DARK} />
-		<SideTab
-		showContent={showSideBar}
-		styles={{
-			position: 'fixed',
-			top: `${HEADER_HEIGHT}px`,
-			border: '3px solid black',
-			maxHeight:`${errorMsg.length > 0 ? '480' : '400'}px`,
-			justifyContent:'center',
-			overflowY: 'hidden',
-			transition:'all .5s ease',
-			transformOrigin: 'bottom',
-			zIndex:'1'
-		}}
-		slide={'up'}
-		slideBuffer={50}
-		>
-			<section>
-				<p className={selectedTab == 0 ? 'selected': ''} onClick={() => {setSelectedTab(0);Heap.type = HEAP_TYPE.MIN}}>Min Heap</p>
-				<p className={selectedTab == 1 ? 'selected': ''} onClick={() => {setSelectedTab(1);Heap.type = HEAP_TYPE.MAX}}>Max Heap</p>
-			</section>
-			<div className='heap-vis-container'>
-				<p>
-					To push to the heap click on the node below and write the desired
-					number to push onto the heap
-				</p>
-				<div className='input-container'>
-					<input value={inputVal} placeholder='0000' onChange={handleInputChange} id='heap-input' className={errorMsg.length > 1 ? 'pulsate-error' : inputVal.length < 1 ? 'pulsate' : ''}/>
-				</div>
-				{
-					errorMsg && <ErrorMsg message={errorMsg} severity={0} />
-				}
-				<div className='btn-group'>
-					<SlideButton onClick={() => handlePush()} title='Push Node' styles={btnStyles} />
-					<SlideButton onClick={() => popHeap()} title='Pop Heap'  styles={btnStyles}/>
-				</div>
-			</div>
-			<header className='heap-vis-header'>
-				<p>Sorting Input Controller</p>
-				<div style={{width:'50px',height:'50px'}} onClick={() => setShowSidebar(prev => !prev)}>
-					<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M4.25 13.25H0.75V9.75M13.25 9.75V13.25H9.75M9.75 0.75H13.25V4.25M0.75 4.25V0.75H4.25" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-					</svg>
-				</div>
-			</header>
-		</SideTab>
-		<Stage 
-			onWheel={(e) => {
-				const stage = stageRef.current;
-				if (stage) handleWheelZoom(e, stage);
+		<div className='heap-vis'>
+			<SideTab
+			showContent={showSideBar}
+			styles={{
+				position: 'fixed',
+				top: `${HEADER_HEIGHT}px`,
+				border: '3px solid black',
+				maxHeight:`${errorMsg.length > 0 ? '480' : '400'}px`,
+				justifyContent:'center',
+				overflowY: 'hidden',
+				transition:'all .5s ease',
+				transformOrigin: 'bottom',
+				zIndex:'1'
 			}}
-			ref={stageRef} 
-			width={dimensions.x} 
-			height={dimensions.y-HEADER_HEIGHT}
-			draggable
-			style={{
-				cursor:'pointer'
-			}}
-		>
-			<Layer>
-				{
-					nodeInfoList[selectedTab].map((item,idx) => {
-						return (
-							<React.Fragment key={`node-${idx}`}>
-							<GraphNode
-							node={{
-								position: item.position,
-								label: item.label,
-								id: item.id,
-								dragging: item.dragging,
-							}}
-							fill={item.fill}
-							/>
-							</React.Fragment>
-						)
-					})
-				}
-				{
-					edgeNodeList[selectedTab].map((edge,idx) => {
-						const fromNode = nodeInfoList[selectedTab].find((t) => t.id === edge.idFrom);
-						const toNode = nodeInfoList[selectedTab].find((t) => t.id === edge.idTo);
-						if (fromNode == undefined || toNode == undefined) {
-							return <></>
-						}
-						const points = getLinePoints(fromNode.position, toNode.position);
-
-						return (
-							<React.Fragment key={`edge-${idx}`}>
-								<GraphEdge 
-									directional ={false}
-									points={points}
+			slide={'up'}
+			slideBuffer={50}
+			>
+				<section>
+					<p className={selectedTab == 0 ? 'selected': ''} onClick={() => {setSelectedTab(0);Heap.type = HEAP_TYPE.MIN}}>Min Heap</p>
+					<p className={selectedTab == 1 ? 'selected': ''} onClick={() => {setSelectedTab(1);Heap.type = HEAP_TYPE.MAX}}>Max Heap</p>
+				</section>
+				<div className='heap-vis-container'>
+					<p>
+						To push to the heap click on the node below and write the desired
+						number to push onto the heap
+					</p>
+					<div className='input-container'>
+						<input value={inputVal} placeholder='0000' onChange={handleInputChange} id='heap-input' className={errorMsg.length > 1 ? 'pulsate-error' : inputVal.length < 1 ? 'pulsate' : ''}/>
+					</div>
+					{
+						errorMsg && <ErrorMsg message={errorMsg} severity={0} />
+					}
+					<div className='btn-group'>
+						<SlideButton onClick={() => handlePush()} title='Push Node' styles={btnStyles} />
+						<SlideButton onClick={() => popHeap()} title='Pop Heap'  styles={btnStyles}/>
+					</div>
+				</div>
+				{/* <header className='heap-vis-header'>
+					<p>Sorting Input Controller</p>
+					<div style={{width:'50px',height:'50px'}} onClick={() => setShowSidebar(prev => !prev)}>
+						<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M4.25 13.25H0.75V9.75M13.25 9.75V13.25H9.75M9.75 0.75H13.25V4.25M0.75 4.25V0.75H4.25" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+						</svg>
+					</div>
+				</header> */}
+				<ToolBar title='Sorting Input Controller' toggle={() => setShowSidebar(prev => !prev)} />
+			</SideTab>
+			<Stage 
+				onWheel={(e) => {
+					const stage = stageRef.current;
+					if (stage) handleWheelZoom(e, stage);
+				}}
+				ref={stageRef} 
+				width={dimensions.x} 
+				height={dimensions.y-HEADER_HEIGHT-5}
+				draggable
+				style={{
+					cursor:'pointer'
+				}}
+			>
+				<Layer>
+					{
+						nodeInfoList[selectedTab].map((item,idx) => {
+							return (
+								<React.Fragment key={`node-${idx}`}>
+								<GraphNode
+								node={{
+									position: item.position,
+									label: item.label,
+									id: item.id,
+									dragging: item.dragging,
+								}}
+								fill={item.fill}
 								/>
-							</React.Fragment>
-						)
-					})
-				}
-			</Layer>
-		</Stage>
-	</div>
+								</React.Fragment>
+							)
+						})
+					}
+					{
+						edgeNodeList[selectedTab].map((edge,idx) => {
+							const fromNode = nodeInfoList[selectedTab].find((t) => t.id === edge.idFrom);
+							const toNode = nodeInfoList[selectedTab].find((t) => t.id === edge.idTo);
+							if (fromNode == undefined || toNode == undefined) {
+								return <></>
+							}
+							const points = getLinePoints(fromNode.position, toNode.position);
+
+							return (
+								<React.Fragment key={`edge-${idx}`}>
+									<GraphEdge 
+										directional ={false}
+										points={points}
+									/>
+								</React.Fragment>
+							)
+						})
+					}
+				</Layer>
+			</Stage>
+		</div>
+	</>
 )
 }
 

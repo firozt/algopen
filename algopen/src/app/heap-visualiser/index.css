@@ -1,32 +1,3 @@
-.heap-vis-container {
-    padding: 15px;
-    height: 100%;
-    width: 100%;
-}
-
-
-.heap-vis-header svg{
-    margin: auto;
-}
-
-.heap-vis-header{
-    padding-left: 15px;
-    padding-right: 15px;
-    height: 60px;
-    background-color: black;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.heap-vis-header p {
-    width: 80%;
-}
-.heap-vis-header div {
-    width: 20%;
-}
 
 
 .heap-vis section {
