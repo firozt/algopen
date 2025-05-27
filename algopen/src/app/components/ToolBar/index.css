@@ -5,11 +5,22 @@
 }
 
 
-.heap-vis-header svg{
+.toolbar div {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.toolbar div:hover {
+    background-color: white;
+}
+
+.toolbar svg{
     margin: auto;
 }
 
-.heap-vis-header{
+.toolbar{
     padding-left: 15px;
     height: 60px;
     background-color: black;
@@ -20,9 +31,9 @@
     align-items: center;
 }
 
-.heap-vis-header p {
+.toolbar p {
     width: 80%;
 }
-.heap-vis-header div {
+.toolbar div {
     width: 20%;
 }

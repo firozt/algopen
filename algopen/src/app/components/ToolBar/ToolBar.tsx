@@ -7,7 +7,7 @@ type Props = {
 
 const ToolBar = ({toggle, title}: Props) => {
   return (
-    <header className='heap-vis-header'>
+    <header className='toolbar'>
         <p>{title}</p>
         <div style={{width:'50px',height:'50px'}} onClick={toggle}>
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -9,7 +9,7 @@
 }
 
 
-button {
+ul button {
     background-color: black;
     color: white;
     text-align: center;
@@ -52,10 +52,7 @@ button {
 
 
     .display-controls {
-        display: flex;
-        position: relative;
         bottom: 0;
-        border: 5px solid black
     }
 }
 
