@@ -3,10 +3,13 @@
     position: absolute;
     right: 0px;
     opacity: .2;
+    display: flex;
     z-index: 2;
     background-color: black;
     position: absolute;
-
+    font-size: 32px;
+    font-weight: 100;
+    cursor: pointer;
 }
 
 .display-controls button p {
@@ -14,31 +17,22 @@
     line-height: 100%;
     width: 100%;
     color: white;
-    cursor: pointer;
 }
 
 
 .display-controls button {
     margin: 0;
-    width: 30px;
-    height: 30px;
-    border-top: none;
-    border-left: 2px solid black;
+    width: 45px;
+    height: 45px;
+
 }
 
-
-.display-controls>button {
-    border-right: 2px solid black;
-    border-bottom: 2px solid black;
-}
 
 .display-controls button:hover {
-    background-color: #eee;
+    background-color: #592d2d;
     color: black;
-    border: 1px solid black;
 }
 
 #fullscreen-btn svg{
     margin: auto;
-    cursor: pointer;
 }

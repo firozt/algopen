@@ -7,7 +7,7 @@ import './index.css'
 import SideTab from '../components/SideTab/SideTab'
 import ErrorMsg from '../components/ErrorMsg/ErrorMsg'
 import NavBar from '../components/NavBar/NavBar'
-import { COLORS, HEADER_HEIGHT, Theme } from '../../utils/constants'
+import { COLORS, HEADER_HEIGHT, PHONE_WIDTH, Theme } from '../../utils/constants'
 import SlideButton from '../components/SlideButton/SlideButton'
 import { Stage, Layer, Rect} from "react-konva";
 import { Vector2D } from '../GlobalTypes';
@@ -35,19 +35,22 @@ const Page = () => {
     const [selectedTab, setSelectedTab] = useState<number>(0)
     const [textArea, setTextArea] = useState<string>('')
     const [showSideTab, setShowSideTab] = useState<boolean>(true)
-	const [dimensions, setDimensions] = useState<Vector2D>({ x: 0, y: 0 });
+	const [dimensions, setDimensions] = useState<Vector2D>({ x: 500, y: 500 });
     const [parsedInput, setParsedInput] = useState<number[]>([])
     const [errorMsg, setErrorMsg] = useState<string>('')
     const stageRef = useRef<Konva.Stage | null>(null); 
     
+    useEffect(() => {
+        const updateSize = () => {
+            setDimensions({ x: window.innerWidth, y: window.innerHeight });
+            console.log(dimensions.x<=PHONE_WIDTH)
 
-        useEffect(() => {
-            const newDimensions: Vector2D = {
-                x: window.innerWidth,
-                y: window.innerHeight,
-            } 
-            setDimensions(newDimensions);
-        },[])
+        };
+        updateSize()
+        window.addEventListener('resize',updateSize);
+        return () => window.removeEventListener('resize', updateSize);
+    },[dimensions.x]);
+
 
         const parseInputs = () => {
             let curInput = textArea
@@ -93,26 +96,22 @@ const Page = () => {
             <NavBar theme={Theme.DARK}/>
             <div className='sorting-vis'>
                 <SideTab
-                slide='left'
+                slide={dimensions.x <= PHONE_WIDTH ? 'up' : 'left'}
                 showContent={showSideTab}
+                slideBuffer={dimensions.x <= PHONE_WIDTH ? 45 : 0}
                 >
                     <div className='side-input'>
                         <header>
                             <div className='selection-input'>
-                                {/* <p className={selectedTab == 0 ? 'selected' : ''} onClick={() => setSelectedTab(0)}>Bubble Sort</p> */}
-                                {/* <p className={selectedTab == 1 ? 'selected' : ''} onClick={() => setSelectedTab(1)}>Merge Sort</p> */}
-                                {/* <p className={selectedTab == 2 ? 'selected' : ''} onClick={() => setSelectedTab(2)}>Quick Sort</p> */}
-                                {/* <p className={selectedTab == 3 ? 'selected' : ''} onClick={() => setSelectedTab(3)}>Selection Sort</p> */}
-                                {/* <p className={selectedTab == 4 ? 'selected' : ''} onClick={() => setSelectedTab(4)}>Insertion Sort</p> */}
-                            {sortedAlgorithms.map(({ label, index }) => (
-                                <p
-                                key={index}
-                                className={selectedTab === index ? 'selected' : ''}
-                                onClick={() => setSelectedTab(index)}
-                                >
-                                {label}
-                                </p>
-                            ))}
+                                {sortedAlgorithms.map(({ label, index }) => (
+                                    <p
+                                    key={index}
+                                    className={selectedTab === index ? 'selected' : ''}
+                                    onClick={() => setSelectedTab(index)}
+                                    >
+                                    {label}
+                                    </p>
+                                ))}
                             </div>
                         </header>
                         <hr style={{border:'1px solid #9999', margin:'1rem',marginTop:'0',marginBottom:'0'}}/>
@@ -122,14 +121,23 @@ const Page = () => {
                         </div>
                         <hr style={{border:'1px solid #9999', margin:'1rem',marginTop:'0',marginBottom:'0'}}/>
 
-                        <div className='text-area-wrapper'>
-                            <textarea placeholder='[16,32,-10,4,0..,3,-1]' value={textArea} onChange={(e)=> setTextArea(e.target.value)} id="text-input"></textarea>
+                        <textarea placeholder='[16,32,-10,4,0..,3,-1]' value={textArea} onChange={(e)=> setTextArea(e.target.value)} id="text-input"></textarea>
+                        <div className='btn-wrapper'>
+                            <SlideButton onClick={parseInputs} styles={{height:'40px',width:'100%'}} title='Create Array'/>
+                            <SlideButton onClick={() => 1} styles={{height:'40px',width:'100%'}} title='Run Algorithm'/>
                         </div>
                     </div>
-                    <div className='btn-wrapper'>
-                        <SlideButton onClick={parseInputs} styles={{height:'50px'}} title='Create Array'/>
-                        <SlideButton onClick={() => 1} styles={{height:'50px'}} title='Run Algorithm'/>
-                    </div>
+                    {
+                        dimensions.x <= PHONE_WIDTH &&
+                        <header style={{height:'50px',alignItems:'center'}}>
+                            <p>Heap Input Controller</p>
+                            <div style={{width:'50px',height:'50px',display:'flex'}} onClick={() => setShowSideTab(prev => !prev)}>
+                                <svg style={{margin:'auto'}} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4.25 13.25H0.75V9.75M13.25 9.75V13.25H9.75M9.75 0.75H13.25V4.25M0.75 4.25V0.75H4.25" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                            </div>
+                        </header>
+                    }
                 </SideTab>
                 <DisplayControls
                 zoomStage={(zoomBy) => zoomStage(zoomBy,stageRef?.current,dimensions.x)}

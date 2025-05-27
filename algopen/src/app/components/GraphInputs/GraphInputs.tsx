@@ -40,7 +40,8 @@ const GraphInputs = ({showInputs, selectedTab, setSelectedTab, setTextArea, text
 		showContent={showInputs}
 		slide={slideDirection}
 		styles={{
-			height: `calc(100% - ${HEADER_HEIGHT}px)`
+			height: `calc(100% - ${HEADER_HEIGHT}px)`,
+			top:`${HEADER_HEIGHT}px`
 		}}
 		>
 			<div id="top-inputs">

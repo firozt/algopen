@@ -63,6 +63,8 @@ button {
 
     .side-tab {
         width: 100vw !important;
+        z-index: 100;
+
     }
 
     #container {
@@ -82,9 +84,6 @@ button {
     .display-controls {
         height: fit-content;
         z-index: 1;
-    }
-    .side-tab{
-        z-index: 100;
     }
 }
 
