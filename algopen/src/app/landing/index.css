@@ -248,6 +248,7 @@ footer p, footer a, footer h3{
 
     #last-footer {
         flex-direction: column-reverse;
+        bottom: 0;
     }
 
 }

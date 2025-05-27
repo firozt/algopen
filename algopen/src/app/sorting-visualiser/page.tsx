@@ -24,10 +24,11 @@ const RECT_GAP = 10
 
 const sortingDesc = [
     'Bubble sort is a simple comparison-based sorting algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. This process is repeated until the list is sorted.This algorithm has a complexity of big O of O(N*N)',
-    '',
-    '',
-    '',
-    ''
+    'under construction, please check again at a later date',
+    'under construction, please check again at a later date',
+    'under construction, please check again at a later date',
+    'under construction, please check again at a later date',
+
 ]
 
 const Page = () => {
@@ -73,6 +74,20 @@ const Page = () => {
         }
         }
 
+
+    const sortingAlgorithms = [
+        { label: 'Bubble Sort', index: 0 },
+        { label: 'Merge Sort', index: 1 },
+        { label: 'Quick Sort', index: 2 },
+        { label: 'Selection Sort', index: 3 },
+        { label: 'Insertion Sort', index: 4 },
+    ];
+
+    const sortedAlgorithms = [...sortingAlgorithms].sort((a, b) => {
+        if (a.index === selectedTab) return -1;
+        if (b.index === selectedTab) return 1;
+        return a.index - b.index;
+    });
     return (    
         <>
             <NavBar theme={Theme.DARK}/>
@@ -84,18 +99,29 @@ const Page = () => {
                     <div className='side-input'>
                         <header>
                             <div className='selection-input'>
-                                <p className={selectedTab == 0 ? 'selected' : ''} onClick={() => setSelectedTab(0)}>Bubble Sort</p>
-                                <p className={selectedTab == 1 ? 'selected' : ''} onClick={() => setSelectedTab(1)}>Merge Sort</p>
-                                <p className={selectedTab == 2 ? 'selected' : ''} onClick={() => setSelectedTab(2)}>Quick Sort</p>
-                                <p className={selectedTab == 3 ? 'selected' : ''} onClick={() => setSelectedTab(3)}>Selection Sort</p>
-                                <p className={selectedTab == 4 ? 'selected' : ''} onClick={() => setSelectedTab(4)}>Insertion Sort</p>
+                                {/* <p className={selectedTab == 0 ? 'selected' : ''} onClick={() => setSelectedTab(0)}>Bubble Sort</p> */}
+                                {/* <p className={selectedTab == 1 ? 'selected' : ''} onClick={() => setSelectedTab(1)}>Merge Sort</p> */}
+                                {/* <p className={selectedTab == 2 ? 'selected' : ''} onClick={() => setSelectedTab(2)}>Quick Sort</p> */}
+                                {/* <p className={selectedTab == 3 ? 'selected' : ''} onClick={() => setSelectedTab(3)}>Selection Sort</p> */}
+                                {/* <p className={selectedTab == 4 ? 'selected' : ''} onClick={() => setSelectedTab(4)}>Insertion Sort</p> */}
+                            {sortedAlgorithms.map(({ label, index }) => (
+                                <p
+                                key={index}
+                                className={selectedTab === index ? 'selected' : ''}
+                                onClick={() => setSelectedTab(index)}
+                                >
+                                {label}
+                                </p>
+                            ))}
                             </div>
                         </header>
+                        <hr style={{border:'1px solid #9999', margin:'1rem',marginTop:'0',marginBottom:'0'}}/>
                         <p id='algo-desc'>{sortingDesc[selectedTab]}</p>
                         <div style={{paddingLeft:'20px',paddingRight:'20px'}}>
                             {errorMsg.length > 0 && <ErrorMsg message={errorMsg} severity={0}/>}
                         </div>
-                        <hr style={{border:'1px solid #9999', margin:'1rem'}}/>
+                        <hr style={{border:'1px solid #9999', margin:'1rem',marginTop:'0',marginBottom:'0'}}/>
+
                         <div className='text-area-wrapper'>
                             <textarea placeholder='[16,32,-10,4,0..,3,-1]' value={textArea} onChange={(e)=> setTextArea(e.target.value)} id="text-input"></textarea>
                         </div>

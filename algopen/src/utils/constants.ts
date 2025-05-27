@@ -16,7 +16,8 @@ export enum ROUTEMAPPINGS {
     HeapVisualiser = 'heap-visualiser',
     LandingPage = 'landing',
     Terms = 'terms-and-services',
-    SortingVisualiser='sorting-visualiser'
+    SortingVisualiser='sorting-visualiser',
+    PathfindingVisualiser='pathfinding-visualiser'
 }
 
 export const NODE_RADIUS = 30

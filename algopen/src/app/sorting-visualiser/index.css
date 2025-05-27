@@ -5,10 +5,8 @@
 .sorting-vis .side-input .selection-input p {
     cursor: pointer;
     padding: 8px;
-    font-size: 14px;
-    transition: all .25s;
-    background-color: black;
-
+    font-size: 16px;
+    background-color: rgba(0, 0, 0, 0.146);
 }
 
 .sorting-vis .side-input .selection-input p:hover {
@@ -18,10 +16,9 @@
 .sorting-vis .side-input .selection-input{
     display: flex;
     flex-wrap: wrap;
-    column-gap: 15px;
+    column-gap: 2px;
     row-gap: 2px;
     margin: auto;
-    background-color: black;
     width: 100%;
     padding: 10px;
 }
@@ -52,8 +49,13 @@ textarea:focus {
 }
 
 .sorting-vis .selected {
-    background-color: white !important;
-    color: black !important;
+    /* background-color: white !important; */
+    /* color: black !important; */
+    width: 100% !important;
+    font-weight: 600;
+    font-size: 18px !important;
+    background-color: black !important;
+    color: white !important;
 }
 
 .sorting-vis .side-tab #algo-desc {
