@@ -9,13 +9,14 @@ import {  EdgeInfo, NodeInfo, Vector2D } from '../GlobalTypes'
 import Konva from 'konva'
 import { Layer, Stage } from 'react-konva'
 import { COLORS, HEADER_HEIGHT, MOBILE_WIDTH, Theme } from '../../utils/constants'
-import { handleWheelZoom } from '../../utils/SceneController'
+import { handleWheelZoom, zoomStage } from '../../utils/SceneController'
 import { Heap, HEAP_TYPE } from '../../utils/Heap'
 import { getLevel } from '../../utils/Misc'
 import GraphNode from '../components/GraphNode/GraphNode'
 import GraphEdge from '../components/GraphEdge/GraphEdge'
 import { getLinePoints } from '../../utils/GeometryHelpers'
 import ToolBar from '../components/ToolBar/ToolBar'
+import DisplayControls from '../components/DisplayControls/DisplayControls'
 
 
 enum ERROR_MESSAGES {
@@ -310,6 +311,7 @@ return (
 				</header> */}
 				<ToolBar title='Sorting Input Controller' toggle={() => setShowSidebar(prev => !prev)} />
 			</SideTab>
+			<DisplayControls toggleShow={() => setShowSidebar(prev=>!prev)} zoomStage={(scaleBy: number) => zoomStage(scaleBy,stageRef.current,dimensions.x)} />
 			<Stage 
 				onWheel={(e) => {
 					const stage = stageRef.current;

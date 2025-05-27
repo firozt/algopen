@@ -111,6 +111,11 @@ textarea:focus {
 }
 
 
+@media (max-width: 1000px) {
+    .display-controls {
+        bottom: 0;
+    }
+}
 @media (max-width: 450px) {
     .sorting-vis .side-tab {
         width: 100vw !important;
@@ -126,9 +131,5 @@ textarea:focus {
         overflow: scroll;
     }
 
-    .sorting-vis .display-controls {
-        bottom: 0px;
-        right: 0;
-    }
 
 }
