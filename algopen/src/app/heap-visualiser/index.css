@@ -1,22 +1,7 @@
-.heap-vis-container {
-    padding: 15px;
-    height: 100%;
+
+
+.heap-vis section {
     width: 100%;
-}
-
-
-.heap-vis-header{
-    padding-left: 15px;
-    padding-right: 15px;
-    height: 50px;
-    background-color: black;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between
-}
-
-.heap-vis header+section {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -24,7 +9,7 @@
     height: 2rem;
 }
 
-.heap-vis header+section p {
+.heap-vis section p {
     width: 100%;
     justify-content: center;
     display: flex;
@@ -40,22 +25,11 @@
 }
 
 
-.heap-vis header+section p:hover {
+.heap-vis section p:hover {
     background-color: white;
     color: black;
 }
-.heap-vis-header div:hover {
-    background-color: rgba(255, 255, 255, 0.528);
-    
-}
 
-.heap-vis-header div {
-    width: 28px;
-    height: 28px;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-}
 
 .heap-vis-container .btn-group {
     display: flex;
@@ -86,6 +60,22 @@
     transition: outline-color 0.2s ease;
     outline: none;
     
+}
+
+
+@media (max-width: 800px) {
+    .heap-vis .display-controls {
+        width: fit-content;
+        bottom: 0;
+    }
+}
+@media (max-width: 450px) {
+    .heap-vis div {
+        width: 100%;
+        border: none;
+    }
+
+
 }
 
 /*  */

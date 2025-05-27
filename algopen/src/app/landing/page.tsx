@@ -34,18 +34,18 @@ const Index = () => {
 				<section>
 					<motion.div
 					className='title-card'
-					initial={{x:-200,y:100,opacity:0}}
-					transition={{duration:1,ease:'easeOut'}}
+					initial={{x:-50,y:50,opacity:0}}
+					transition={{duration:.5,ease:'easeOut'}}
 					animate={{x:0,y:0,opacity:'1'}}
 					>
 						<img id='title' src={'/title.svg'}/>
-						<h2><TypeWriter text={['An algorithm simulator?','A visualising tool?','We do it all.']}/></h2>
+						<h2><TypeWriter text={['An algorithm simulator?','A visualising tool?','The all in one.']}/></h2>
 						
 					</motion.div>
 					<motion.div
 					className='about'
-					initial={{x:200,y:100,opacity:0}}
-					transition={{duration:1,ease:'easeOut'}}
+					initial={{x:50,y:50,opacity:0}}
+					transition={{duration:.5,ease:'easeOut'}}
 					animate={{x:0,y:0,opacity:'1'}}
 					>
 						<div>
@@ -61,7 +61,6 @@ const Index = () => {
 								with foundational data structures and algorithms.
 							</p>
 						</div>
-						{/* <img src={'/graph.svg'}/> */}
 					</motion.div>
 				</section>
 				<motion.div 
@@ -74,16 +73,17 @@ const Index = () => {
 				</motion.div>
 			</div>
 			<div className='landing-services'>
+				<img style={{position:'relative',bottom:'10px',zIndex:'0',marginBottom:'5rem'}} src={'/transition.svg'}/>
 				<div id='services'>
-					<header>
+					<header style={{textAlign:'center',position:'relative',top:'-100px'}}>
 						<h1>Services⚙️</h1>
 						<p>(its all free forever)</p>
 					</header>
 					<section id='card-container'>
 						<Card onClick={() => router.push(ROUTEMAPPINGS.GraphVisualiser)} heading='Graph Data Structure' iconSrc='/graphIcon.svg' />
-						<Card onClick={() => router.push(ROUTEMAPPINGS.HeapVisualiser)} heading='Heap Algorithm Visualiser' iconSrc='/heapIcon.svg' />
-						<Card onClick={() => 1} heading='Coming Soon...' />
-						<Card onClick={() => 1} heading='Coming Soon...'  />
+						<Card onClick={() => router.push(ROUTEMAPPINGS.HeapVisualiser)} heading='Heap Algorithm' iconSrc='/heapIcon.svg' />
+						<Card onClick={() => router.push(ROUTEMAPPINGS.SortingVisualiser)} heading='Sorting Visualiser' iconSrc='/sortingIcon.svg' />
+						<Card onClick={() => router.push(ROUTEMAPPINGS.PathfindingVisualiser)} heading='Path finding Algorithm' iconSrc='/pathfindingIcon.svg' />
 						<Card onClick={() => 1} heading='Coming Soon...'  />
 						<Card onClick={() => 1} heading='Coming Soon...'  />
 					</section>
@@ -91,15 +91,15 @@ const Index = () => {
 			</div>
 			<div id='divider'><div></div></div>
 			<footer id='landing-footer'>
-				<h3>AlgoPen visualising tool</h3>
-				<div>
+				{/* <h3>AlgoPen visualising tool</h3> */}
+				<div style={{display:'flex',flexDirection:'row',gap:'15px'}}>
 					<p onClick={() => scrollToSection('top')}>About</p>
 					<p onClick={() => scrollToSection('services')}>Services</p>
 					<a href='https://ramizabdulla.me/#contact'>Contact</a>
 				</div>
+					<p style={{textAlign:'center'}}>© Copyright algopen.ramizabdulla.me All Rights Reserved 2025</p>
 				<div id='last-footer'>
 					<p>Designed and Developed by <span style={{color:'#DE5454'}}>Ramiz Abdulla</span></p>
-					<p>© Copyright algopen.ramizabdulla.me All Rights Reserved 2025</p>
 					<p onClick={() => router.push(ROUTEMAPPINGS.Terms)} style={{textDecoration:'underline',cursor:'pointer'}}> Terms and Services</p>
 				</div>
 			</footer>

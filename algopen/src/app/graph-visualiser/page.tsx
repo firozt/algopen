@@ -4,7 +4,7 @@ import NavBar from '../components/NavBar/NavBar'
 import './index.css'
 import { Stage, Layer} from "react-konva";
 import { EdgeInfo, NodeInfo, Vector2D } from '../GlobalTypes';
-import { HEADER_HEIGHT, INPUTS_WIDTH, MOBILE_WIDTH, NODE_STARTUP_ANIMATION_DURATION, SlideDirection, Theme } from '../../utils/constants';
+import { HEADER_HEIGHT, INPUTS_WIDTH, MOBILE_WIDTH, NODE_STARTUP_ANIMATION_DURATION, Theme } from '../../utils/constants';
 import { getSafeCorners, handleWheelZoom, zoomStage } from '../../utils/SceneController';
 import Konva from 'konva';
 import GraphInputs from '../components/GraphInputs/GraphInputs';
@@ -12,6 +12,7 @@ import { getLevel } from '../../utils/Misc';
 import { generateRandomPoints, getLinePoints, } from '../../utils/GeometryHelpers';
 import GraphEdge from '../components/GraphEdge/GraphEdge';
 import GraphNode from '../components/GraphNode/GraphNode';
+import DisplayControls from '../components/DisplayControls/DisplayControls';
 
 const Page = () => {
 	const [textArea, setTextArea] = useState<string[]>(['1,null,2,null,null,3,4','directed\nA:B(3)\nB:C(2)\nC:A(1.2)','A:B,C,D'])
@@ -217,7 +218,7 @@ const Page = () => {
 		setTimeout(() => setShowEdges(true), NODE_STARTUP_ANIMATION_DURATION*2000)
 	}
 
-	const generateTree = (tree_array: string[]) => {
+	const generateTree = (tree_array: string[] | number[]) => {
 		const d = tree_array.filter(item => item !== 'null').length * 20;
 		const dy = 90;
 
@@ -262,7 +263,7 @@ const Page = () => {
 
 			pushToNodeList({
 				position: pos,
-				label: tree_array[index],
+				label: String(tree_array[index]),
 				id: String(index),
 				dragging:false,
 			})
@@ -304,7 +305,7 @@ const Page = () => {
 				textArea={textArea[selectedTab]} 
 				selectedTab={selectedTab} 
 				// newPos={{ x:dimensions.x < MOBILE_WIDTH ? -1000 : -400,y:0 }}
-				slideDirection={SlideDirection.LEFT}
+				slideDirection={'left'}
 				setSelectedTab={(index) => {
 					if (selectedTab == index) return // no action needed
 
@@ -321,15 +322,10 @@ const Page = () => {
 				setTextArea={(newVal: string) => setTextArea(prev => prev.map((item,idx)=>idx==selectedTab ? newVal : item))} 
 				/>
 				<div className="display" id='container' >
-					<div className="display-controls">
-						<button onClick={() => setShowInputs(!showInputs)} id="fullscreen-btn">
-							<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<path d="M4.25 13.25H0.75V9.75M13.25 9.75V13.25H9.75M9.75 0.75H13.25V4.25M0.75 4.25V0.75H4.25" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-							</svg>
-						</button>
-						<button onClick={() => zoomStage(1.3,stageRef?.current,dimensions.x)}><p>+</p></button>
-						<button onClick={() => zoomStage(0.7,stageRef?.current,dimensions.x)}><p>-</p></button>
-					</div>
+					<DisplayControls
+					zoomStage={(zoomBy) => zoomStage(zoomBy,stageRef?.current,dimensions.x)}
+					toggleShow={() =>setShowInputs(prev => !prev)}
+					/>
 					<Stage 
 						onWheel={(e) => {
 							const stage = stageRef.current;
@@ -337,7 +333,7 @@ const Page = () => {
 						}}
 						ref={stageRef} 
 						width={dimensions.x} 
-						height={dimensions.y-HEADER_HEIGHT}
+						height={dimensions.y-HEADER_HEIGHT-5}
 						draggable
 					>
 						<Layer>

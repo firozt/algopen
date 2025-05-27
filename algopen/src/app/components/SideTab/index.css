@@ -9,13 +9,13 @@
 
 .side-tab {
     width: 400px;
+    position: fixed;
     background-color: var(--bg-dim);
-    height: calc(100% - 60px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     transition: transform 0.3s ease, opacity 0.3s ease;
-    position: fixed;
+    bottom: 0;
     z-index: 999;
     color:#ffffffc3;
 }

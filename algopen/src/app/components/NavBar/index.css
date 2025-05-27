@@ -5,7 +5,7 @@
 }
 
 
-header {
+header#navbar {
     width: 100vw;
     padding-top: .5rem;
     padding-bottom: .5rem;
@@ -15,10 +15,13 @@ header {
     align-items: center;
     height: 60px; 
     flex-shrink: 0;
+    position: relative;
+    z-index: 999;
+
 }
 
 
-header > div {
+header#navbar > div {
     margin-left: 2rem;
     margin-right: 2rem;
     display: flex;
@@ -26,7 +29,7 @@ header > div {
     gap: 10px;
 }
 
-header h1 {
+header#navbar h1 {
     font-weight: 600;
 }
 
@@ -35,11 +38,11 @@ header h1 {
 
 @media (max-width: 450px) {
 
-    header {
+    header#navbar {
         justify-content: center;
     }
 
-    .header-icons {
+    header#navbar .header-icons {
         display: none;
     }
 }

@@ -1,7 +1,8 @@
 
 # Algorithm Visualizer
 
-This web application gives users ways of visualising complex algorithms, allowing users to more easily understand their code and datastructures it interacts with
+This web application gives users ways of visualising complex algorithms, allowing users to more easily understand their code and datastructures it interacts with.
+This site is now live at http://algopen.ramizabdulla.me
 
 ## Table of Contents
 
@@ -24,10 +25,11 @@ Below depicts the binary tree visualiser, by entering the array notation of a bi
 ## Features
 
 - ✅ Visualising binary tree data structures
-- ✅ Visualising directional graphs
+- ✅ Visualising directed+undirected graphs
 - ✅ Visualising weighted graphs
-- ☑️ Visualising sorting algorithms
+- ✅ Visualising heaps graphs
 - ☑️ Visualising path finding algorithms
+- ☑️ Visualising sorting algorithms
 - ☑️ Visualising tree traversal algorithms
 
 ## Tech Stack
@@ -43,8 +45,4 @@ Below depicts the binary tree visualiser, by entering the array notation of a bi
 
 ### Setup
 
-```bash
-cd server
-python manage.py runserver
-cd ../client
-firefox index.html
+

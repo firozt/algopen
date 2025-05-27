@@ -1,0 +1,38 @@
+
+.display-controls {
+    position: absolute;
+    right: 0px;
+    opacity: .2;
+    display: flex;
+    z-index: 2;
+    background-color: black;
+    position: absolute;
+    font-size: 32px;
+    font-weight: 100;
+    cursor: pointer;
+}
+
+.display-controls button p {
+    text-align: center;
+    line-height: 100%;
+    width: 100%;
+    color: white;
+}
+
+
+.display-controls button {
+    margin: 0;
+    width: 45px;
+    height: 45px;
+
+}
+
+
+.display-controls button:hover {
+    background-color: #592d2d;
+    color: black;
+}
+
+#fullscreen-btn svg{
+    margin: auto;
+}

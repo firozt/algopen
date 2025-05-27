@@ -1,13 +1,12 @@
 body {
-    background-color: #FFFFFF;
-    
+    background-color: white;
 }
 
 .landing-page {
     width: 90%;
-    max-width: 1600px;
+    max-width: 1500px;
     margin: auto;
-    min-height: 90vh;
+    min-height: 650px;
 }
 
 .landing-page .title-card {
@@ -30,19 +29,14 @@ body {
     width: fit-content;
     margin: auto;
     margin-top: 3rem;
-    /* margin-bottom: 3rem; */
+    z-index: 1;
     
-}
-
-.landing-page .about {
-    will-change: transform, opacity;
-    backface-visibility: hidden; 
 }
 
 .landing-page .title-card h2 {
     
-    margin-top: 3rem;
-    font-size: min(8vw,64px);
+    margin-top: 5rem;
+    font-size: min(8vw,42px);
     font-weight: bold;
     color: black;
     letter-spacing: -2px;
@@ -54,21 +48,33 @@ body {
 .landing-page section {
     margin-top: 2rem;
     display: flex;
+    justify-content: space-between;
+    gap: 100px
+}
+
+.landing-page .about div {
+    background-color: white;
+    width: min(80%,350px);
 }
 
 .landing-page .about {
-    width: 60%;
+    z-index: 1;
+    will-change: transform, opacity;
+    backface-visibility: hidden; 
+    background-image: url('/text-bg.svg');
+    background-size: 100% 90%;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 70%;
     display: flex;
     justify-content: space-around;
     flex-direction: column;
     align-items: flex-end;
     position: relative;
-    top: 100px;
+    top: 160px;
+    align-items: center;
 }
 
-.landing-page .about img{
-    max-width: 80%;
-}
 
 
 .landing-page .about h3 {
@@ -85,19 +91,22 @@ body {
     color: #303030d4;
 }
 
+.about > div p {
+    padding: 10px;
+    font-size: 14px !important;
+}
+
+.about > div h3 {
+    background-color: black;
+    color: white;
+}
 .about > div {
     width: min(450px,60%);
     background-color: rgba(214, 214, 214, 0.226);
-    padding: 10px;
     border: 3px solid black;
-    border-top: 40px solid black;
     transition: all .5s ease;
 }
 
-.about > div:hover {
-    border-top: 3px solid black;
-    border-bottom: 40px solid black;
-}
 
 
 .landing-page .about img {
@@ -118,6 +127,10 @@ body {
     background-repeat: repeat; */
 }
 
+#services {
+    margin-top: 1rem;
+}
+
 .landing-services header {
     padding-top: 2rem;
     width: 100%;
@@ -127,9 +140,9 @@ body {
     flex-direction: column;
     height: fit-content;
     margin-bottom: 3rem;
-    background-image: url('/public/title.svg');
     background-repeat: repeat !important;
 }
+
 
 
 .landing-services header p {
@@ -138,13 +151,14 @@ body {
 }
 
 .landing-services #card-container {
-    grid-template-columns: auto auto auto;
-    display: grid;
-    gap:1px;
-    margin-top: 5rem;
-    width: fit-content;
+    display: flex;
+    flex-wrap: wrap;
     margin: auto;
+    margin-top: 5rem;
+    width: min(90%,1000px);
     margin-bottom: 15rem;
+    justify-content: center;
+    gap: 25px;
 }
 
 #divider {
@@ -159,7 +173,8 @@ body {
 }
 
 footer {
-    padding: 25px;
+    font-size: 12px;
+    padding: 12px;
     height: fit-content;
     background-color: black;
     display: flex;
@@ -167,6 +182,7 @@ footer {
     justify-content: center;
     flex-direction: column;
     color: rgb(147, 147, 147);
+    gap: 5px;
 }
 
 footer > div:nth-child(2) {
@@ -175,6 +191,7 @@ footer > div:nth-child(2) {
     width: min(100%,400px);
     justify-content: space-around;
     text-decoration: underline;
+    gap: 5px;
 }
 footer > div:nth-child(2) p{
     cursor: pointer;
@@ -182,23 +199,21 @@ footer > div:nth-child(2) p{
 
 footer p, footer a, footer h3{
     text-align: center;
-    height: 30px;
 }
 
 #last-footer {
-    
     width: 100%;
     display: flex;
-    justify-content: center !important;
-    gap: 20px;
+    justify-content: space-between !important;
+    gap: 5px;
+
 }
 
-@media (max-width: 1000px) {
-    .landing-services #card-container {
-        grid-template-columns: auto 2 auto;
-    }
+
+@media (max-width: 1100px) {
     .landing-page {
         width: 98%;
+        max-width: 650px;
     }
 
     .landing-page section {
@@ -206,12 +221,14 @@ footer p, footer a, footer h3{
     }
 
     .landing-page .about {
+        top: 0;
         flex-direction: row;
-        width: 95%;
+        width: 100%;
         margin: auto;
         justify-content: center;
         align-items: center;
         max-width: 400px;
+        background-size: 400px 500px;
     }
 
     .about > div {
@@ -223,18 +240,17 @@ footer p, footer a, footer h3{
     }
 
     #get-started {
-        margin-top: 8rem;
+        margin-bottom: 3rem;
     }
 }
 
 @media (max-width: 677px) {
-    .landing-services #card-container {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    }
 
     #last-footer {
         flex-direction: column-reverse;
+        bottom: 0;
     }
+
 }
 
 
@@ -245,7 +261,6 @@ footer p, footer a, footer h3{
 
     .landing-page .about {
         top: 0;
-        margin-top: 2rem;
     }
 
 }

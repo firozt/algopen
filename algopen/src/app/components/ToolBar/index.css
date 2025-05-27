@@ -1,0 +1,39 @@
+.heap-vis-container {
+    padding: 15px;
+    height: 100%;
+    width: 100%;
+}
+
+
+.toolbar div {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.toolbar div:hover {
+    background-color: white;
+}
+
+.toolbar svg{
+    margin: auto;
+}
+
+.toolbar{
+    padding-left: 15px;
+    height: 60px;
+    background-color: black;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toolbar p {
+    width: 80%;
+}
+.toolbar div {
+    width: 20%;
+}

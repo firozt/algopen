@@ -2,14 +2,13 @@
 import { motion } from 'framer-motion'
 import React, { useRef } from 'react'
 import './index.css'
-import { SlideDirection } from '../../../utils/constants'
 
 
 type Props = {
     showContent?: boolean,
     children?: React.ReactNode
     styles?: React.CSSProperties
-    slide?: SlideDirection
+    slide?: 'up' | 'left'
     slideBuffer?: number // doesnt slide off screen fully, by x px
 }
 
@@ -23,7 +22,7 @@ const SideTab = ({showContent=true, children,styles,slide, slideBuffer=0}: Props
     const containerRef = useRef<HTMLDivElement|null>(null)
     
     const slideMapping = {
-    'down':{x:0,y:  (containerRef?.current?.offsetHeight ?? 0)-slideBuffer}, // - container height
+    'up':{x:0,y:  -1*(containerRef?.current?.offsetHeight ?? 0)+slideBuffer}, 
     'left':{x:(containerRef?.current?.offsetWidth ?? 0) * -1 +slideBuffer,y:0}
     }
 

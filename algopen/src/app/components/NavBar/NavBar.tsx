@@ -1,6 +1,8 @@
+'use client'
 import React from 'react'
 import './index.css'
-import { Theme } from '../../../utils/constants'
+import { ROUTEMAPPINGS, Theme } from '../../../utils/constants'
+import { redirect } from 'next/navigation'
 
 
 type Props = {
@@ -10,13 +12,13 @@ type Props = {
 
 const NavBar = ({theme}: Props) => {
   return (
-    <header
+    <header id='navbar'
 		style={ 
 			theme == Theme.DARK ? {backgroundColor:'black', color:'white'} :
 			theme == Theme.LIGHT ? {backgroundColor:'white',borderBottom:'2px solid black',color:'black'} :
 			{backgroundColor:'green'}
 		}>
-			<div>
+			<div style={{cursor:'pointer'}} onClick={() => redirect(ROUTEMAPPINGS.LandingPage)}>
 				<img id='logo' src={theme == Theme.LIGHT ?'/logo-dark.svg' : '/logo-light.svg'}/>
 			</div>
 			<div className="header-icons">
