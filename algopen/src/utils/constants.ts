@@ -15,8 +15,9 @@ export enum ROUTEMAPPINGS {
     MazeSolver = 'maze-solver',
     HeapVisualiser = 'heap-visualiser',
     LandingPage = 'landing',
-    Terms = 'terms-and-services'
-
+    Terms = 'terms-and-services',
+    SortingVisualiser='sorting-visualiser',
+    PathfindingVisualiser='pathfinding-visualiser'
 }
 
 export const NODE_RADIUS = 30

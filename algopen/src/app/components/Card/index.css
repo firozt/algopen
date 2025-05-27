@@ -53,6 +53,8 @@
 .card-container:hover .title {
     top: 50%;
     left: 50%;
-    transform: translate(-18%, 0%);
+    transform: translate(-8%, 0%);
     font-size: 22px;
+    width: 100%;
+    text-align: center;
 }

@@ -9,10 +9,6 @@
 }
 
 
-#fullscreen-btn svg{
-    margin: auto;
-}
-
 button {
     background-color: black;
     color: white;
@@ -23,12 +19,6 @@ button {
     user-select: none;
 }
 
-
-button:hover {
-    background-color: #eee;
-    color: black;
-    border: 1px solid black;
-}
 
 
 
@@ -105,37 +95,4 @@ button:hover {
 #portfolio {
     display: block;
     width: fit-content;
-}
-
-.display-controls {
-    position: absolute;
-    right: 0px;
-    opacity: .2;
-    z-index: 2;
-    width: fit-content;
-    background-color: black;
-    position: absolute;
-
-}
-
-
-.display-controls button p {
-    text-align: center;
-    line-height: 100%;
-    width: 100%;
-}
-
-
-.display-controls button {
-    margin: 0;
-    width: 30px;
-    height: 30px;
-    border-top: none;
-    border-left: 2px solid black;
-}
-
-
-.display-controls>button {
-    border-right: 2px solid black;
-    border-bottom: 2px solid black;
 }

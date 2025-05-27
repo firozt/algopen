@@ -12,7 +12,7 @@ type Props = {
 
 const NavBar = ({theme}: Props) => {
   return (
-    <header
+    <header id='navbar'
 		style={ 
 			theme == Theme.DARK ? {backgroundColor:'black', color:'white'} :
 			theme == Theme.LIGHT ? {backgroundColor:'white',borderBottom:'2px solid black',color:'black'} :
