@@ -333,7 +333,7 @@ const Page = () => {
 						}}
 						ref={stageRef} 
 						width={dimensions.x} 
-						height={dimensions.y-HEADER_HEIGHT}
+						height={dimensions.y-HEADER_HEIGHT-5}
 						draggable
 					>
 						<Layer>

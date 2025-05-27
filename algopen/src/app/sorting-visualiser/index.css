@@ -1,8 +1,15 @@
 .sorting-vis .side-input {
     height: calc(100vh - 59px);
     overflow: scroll;
-
+    display: flex;
+    flex-direction: column;
 }
+
+.sorting-vis .side-input #top-inputs {
+    overflow: scroll;
+}
+
+
 
 
 .sorting-vis .side-input+header {
@@ -22,6 +29,7 @@
     width: 95%;
     margin: auto;
     height: 40px;
+    margin-bottom: .3rem;
 }
 
 .sorting-vis .side-input .selection-input p {
@@ -43,6 +51,7 @@
     margin: auto;
     width: 100%;
     padding: 10px;
+    padding-top: 5px;
 }
 
 .sorting-vis .side-input header h1 {
@@ -63,6 +72,13 @@
     color: #E1E2E3;
     font-family: 'Courier New', monospace;
     
+}
+#top-inputs {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    padding-bottom: 15px;
 }
 
 
@@ -98,7 +114,7 @@ textarea:focus {
 @media (max-width: 450px) {
     .sorting-vis .side-tab {
         width: 100vw !important;
-        height: 400px !important;
+        height: 425px !important;
         border-top: 5px solid black;
         top: 60px;
         z-index: 99;
@@ -106,14 +122,13 @@ textarea:focus {
     }
 
     .sorting-vis textarea {
-        height: 150px;
+        min-height: 150px;
         overflow: scroll;
     }
 
     .sorting-vis .display-controls {
         bottom: 0px;
         right: 0;
-        flex-direction: column;
     }
 
 }
