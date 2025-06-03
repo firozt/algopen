@@ -30,7 +30,7 @@ const GraphNode = ({ node, onDrag, onDragEnd, animation, fill=COLORS.BLACK }: Pr
 
         if (animation && group && node.dragging !== true) {
             const tween = new Konva.Tween({
-            node: group, // ✅ Type-safe
+            node: group,
             duration: 1,
             x: node.position.x,
             y: node.position.y,
