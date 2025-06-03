@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
-import { handleWheelZoom, zoomStage } from '../../utils/SceneController';
 
 import './index.css'
 import SideTab from '../components/SideTab/SideTab'
@@ -12,13 +11,10 @@ import SlideButton from '../components/SlideButton/SlideButton'
 import { Stage, Layer } from "react-konva";
 import { Vector2D } from '../GlobalTypes';
 import Konva from 'konva';
-import DisplayControls from '../components/DisplayControls/DisplayControls';
 import ToolBar from '../components/ToolBar/ToolBar';
 import { BubbleSort, MergeSort } from './sortingAlgorithms';
 import SortingRect from '../components/SortingRect/SortingRect';
 
-const RECT_WIDTH = 30
-const RECT_GAP = 10
 
 enum AlgoName {
     BUBBLE_SORT = 'Bubble Sort',
@@ -82,7 +78,7 @@ const Page = () => {
                 throw new Error('Array contains non-number elements');
             }
 
-            setParsedInput(parsedArray as number[]);
+            setParsedInput(normalizeInput(parsedArray as number[]));
             setErrorMsg('');
         } catch {
             setErrorMsg('Unable to parse text input, make sure it’s a valid JSON array of numbers');
@@ -141,6 +137,17 @@ const Page = () => {
         setCurSelectedIdx([-1])
     }
 
+    const normalizeInput = (arr: number[]): number[] => {
+        const maxAbs = Math.max(...arr.map(Math.abs));
+        if (maxAbs === 0) return arr.map(() => 0); // Avoid division by zero
+        return arr.map(n => n / maxAbs);
+    }
+
+    const rectGap = 0.02*dimensions.x / parsedInput.length // 2% padding
+    const inputsWidth = 400 + rectGap
+    const workAreaWidth = 0.99*dimensions.x - (dimensions.x < MOBILE_WIDTH/2 ? 0 : inputsWidth) 
+    const rectWidth = (0.98*workAreaWidth/parsedInput.length) 
+    const maxHeight = 0.45*dimensions.y
     return (    
         <>
             <NavBar theme={Theme.DARK}/>
@@ -183,20 +190,10 @@ const Page = () => {
                         dimensions.x <= PHONE_WIDTH && <ToolBar title='Sorting Input Controller' toggle={() => setShowSideTab(prev=>!prev)} />
                     }
                 </SideTab>
-                <DisplayControls
-                zoomStage={(zoomBy) => zoomStage(zoomBy,stageRef?.current,dimensions.x)}
-                toggleShow={() =>setShowSideTab(prev => !prev)}
-                />
                 <Stage
-                onWheel={(e) => {
-                    const stage = stageRef.current;
-                    if (stage) handleWheelZoom(e, stage);
-                }}
                 ref={stageRef} 
                 width={dimensions.x} 
                 height={dimensions.y-HEADER_HEIGHT-5}
-                draggable
-                style={{cursor:'grab'}}
                 >
                     <Layer>
                         {
@@ -204,13 +201,12 @@ const Page = () => {
                             <React.Fragment key={idx}>
                                 <SortingRect 
                                     position={{
-                                        x: (dimensions.x < MOBILE_WIDTH/2 ? 10 : 425) + ((RECT_GAP+RECT_WIDTH) * idx),
-                                        y: dimensions.x < MOBILE_WIDTH/2 ? (2*dimensions.y/3) : dimensions.y/2-50
+                                        x: (dimensions.x < MOBILE_WIDTH/2 ? 0 : inputsWidth) + ((rectGap+rectWidth)*idx+rectGap),
+                                        y: dimensions.x < MOBILE_WIDTH/2 ? (2*dimensions.y/3) : (dimensions.y/2)
                                     }}
-                                    width={RECT_WIDTH}
-                                    height={-1*item*10}
+                                    width={rectWidth}
+                                    height={-1*item*maxHeight}
                                     fill={curSelectedIndex.includes(idx) ? COLORS.RED : COLORS.BLACK}
-                                    animate
                                 />
                             </React.Fragment>
                             )
