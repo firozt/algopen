@@ -6,7 +6,7 @@ import './index.css'
 import SideTab from '../components/SideTab/SideTab'
 import ErrorMsg from '../components/ErrorMsg/ErrorMsg'
 import NavBar from '../components/NavBar/NavBar'
-import { COLORS, HEADER_HEIGHT, MOBILE_WIDTH, PHONE_WIDTH, Theme } from '../../utils/constants'
+import { COLORS, HEADER_HEIGHT, MOBILE_WIDTH, PHONE_WIDTH, Theme } from '@/utils/constants'
 import SlideButton from '../components/SlideButton/SlideButton'
 import { Stage, Layer } from "react-konva";
 import { Vector2D } from '../GlobalTypes';
@@ -82,7 +82,7 @@ const generateRandomArray = (length = 100, min = -100, max = 100): number[] => {
 
 const Page = () => {
     const [selectedTab, setSelectedTab] = useState<number>(0)
-    const [textArea, setTextArea] = useState<string>(String(generateRandomArray(50)))
+    const [textArea, setTextArea] = useState<string>(String(generateRandomArray(500)))
     const [showSideTab, setShowSideTab] = useState<boolean>(true)
 	const [dimensions, setDimensions] = useState<Vector2D>({ x: 500, y: 500 });
     const [parsedInput, setParsedInput] = useState<number[]>([])

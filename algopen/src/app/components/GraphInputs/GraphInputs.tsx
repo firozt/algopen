@@ -2,7 +2,7 @@ import React from 'react'
 import './index.css'
 import SlideButton from '../SlideButton/SlideButton'
 import SideTab from '../SideTab/SideTab'
-import { HEADER_HEIGHT } from '../../../utils/constants'
+import { HEADER_HEIGHT } from '@utils/constants'
 
 type Props = {
 	showInputs: boolean

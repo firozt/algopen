@@ -4,12 +4,12 @@ import NavBar from '../components/NavBar/NavBar'
 import './index.css'
 import { Stage, Layer} from "react-konva";
 import { EdgeInfo, NodeInfo, Vector2D } from '../GlobalTypes';
-import { HEADER_HEIGHT, INPUTS_WIDTH, MOBILE_WIDTH, NODE_STARTUP_ANIMATION_DURATION, Theme } from '../../utils/constants';
-import { getSafeCorners, handleWheelZoom, zoomStage } from '../../utils/SceneController';
+import { HEADER_HEIGHT, INPUTS_WIDTH, MOBILE_WIDTH, NODE_STARTUP_ANIMATION_DURATION, Theme } from '@utils/constants';
+import { getSafeCorners, handleWheelZoom, zoomStage } from '@utils/SceneController';
 import Konva from 'konva';
 import GraphInputs from '../components/GraphInputs/GraphInputs';
-import { getLevel } from '../../utils/Misc';
-import { generateRandomPoints, getLinePoints, } from '../../utils/GeometryHelpers';
+import { getLevel } from '@utils/Misc';
+import { generateRandomPoints, getLinePoints, } from '@utils/GeometryHelpers';
 import GraphEdge from '../components/GraphEdge/GraphEdge';
 import GraphNode from '../components/GraphNode/GraphNode';
 import DisplayControls from '../components/DisplayControls/DisplayControls';

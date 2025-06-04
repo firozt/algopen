@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useRef } from 'react'
 import { Rect } from 'react-konva'
-import { COLORS } from '../../../utils/constants'
+import { COLORS } from '@utils/constants'
 import { Vector2D } from '../../GlobalTypes'
 import Konva from 'konva'
 

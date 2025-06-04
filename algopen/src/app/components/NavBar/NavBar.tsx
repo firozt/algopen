@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import './index.css'
-import { ROUTEMAPPINGS, Theme } from '../../../utils/constants'
+import { ROUTEMAPPINGS, Theme } from '@utils/constants'
 import { redirect } from 'next/navigation'
 
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Arrow, Group, Line, Rect, Text } from 'react-konva';
-import { COLORS, LINE_WIDTH } from '../../../utils/constants';
+import { COLORS, LINE_WIDTH } from '@utils/constants';
 
 type Props = {
     points: number[];

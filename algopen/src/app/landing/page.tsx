@@ -8,6 +8,7 @@ import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
 import TypeWriter from '../components/TypeWriter/TypeWriter'
 import Card from '../components/Card/Card'
 import { useRouter } from 'next/navigation'
+import Footer from '../components/Footer/Footer'
 
 const getStartedStyles: React.CSSProperties = {
 	height:'60px',
@@ -98,19 +99,7 @@ const Index = () => {
 				</div>
 			</div>
 			<div id='divider'><div></div></div>
-			<footer id='landing-footer'>
-				{/* <h3>AlgoPen visualising tool</h3> */}
-				<div style={{display:'flex',flexDirection:'row',gap:'15px'}}>
-					<p onClick={() => scrollToSection('top')}>About</p>
-					<p onClick={() => scrollToSection('services')}>Services</p>
-					<a href='https://ramizabdulla.me/#contact'>Contact</a>
-				</div>
-					<p style={{textAlign:'center'}}>© Copyright algopen.ramizabdulla.me All Rights Reserved 2025</p>
-				<div id='last-footer'>
-					<p>Designed and Developed by <span style={{color:'#DE5454'}}>Ramiz Abdulla</span></p>
-					<p onClick={() => router.push(ROUTEMAPPINGS.Terms)} style={{textDecoration:'underline',cursor:'pointer'}}> Terms and Services</p>
-				</div>
-			</footer>
+			<Footer scrollToSection={scrollToSection} />
 		</>
 	)
 }
