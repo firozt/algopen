@@ -28,13 +28,29 @@ enum AlgoName {
 // 
 // }
 
+type SortingData = {
+    desc: string
+    complexity?: string // filename under /public/
+}
 
-const sortingDesc = [
-    'Bubble sort is a simple comparison-based sorting algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. This process is repeated until the list is sorted.This algorithm has a complexity of big O of O(N*N)',
-    'Merge Sort divides the list, sorts each half, and merges them. It runs in O(n log n) time. It’s stable but uses extra memory.',
-    'under construction, please check again at a later date',
-    'under construction, please check again at a later date',
-    'under construction, please check again at a later date',
+const sortingDesc: SortingData[] = [
+    {
+        desc: 'Bubble sort is a simple comparison-based sorting algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. This process is repeated until the list is sorted.',
+        complexity: 'nsquared'
+    },
+    {
+        desc: 'Merge Sort divides the list, sorts each half, and merges them. It runs in O(n log n) time. It’s stable but uses extra memory.',
+        complexity: 'nlogn'
+    },
+    {
+        desc:'under construction, please check again at a later date',
+    },
+    {
+        desc:'under construction, please check again at a later date',
+    },
+    {
+        desc:'under construction, please check again at a later date',
+    },
 
 ]
 
@@ -46,6 +62,7 @@ const Page = () => {
     const [parsedInput, setParsedInput] = useState<number[]>([])
     const [errorMsg, setErrorMsg] = useState<string>('')
     const [curSelectedIndex, setCurSelectedIdx] = useState<number[]>([])
+    const [comparisons, setComparisons] = useState<number>(0)
     const stageRef = useRef<Konva.Stage | null>(null); 
     
     useEffect(() => {
@@ -100,9 +117,11 @@ const Page = () => {
     });
 
     const runAlgo = async () => {
+        setComparisons(0)
         if (dimensions.x < MOBILE_WIDTH/2) setShowSideTab(false)
         const onSwap = (i: number, j: number): Promise<void> => {
             return new Promise(resolve => {
+                setComparisons(prev => prev+1)
                 setTimeout(() => {
                     setParsedInput(prev => {
                         const newArr = [...prev];
@@ -116,9 +135,11 @@ const Page = () => {
         };
         const onUpdate = async (fullArray: number[], l: number, r: number): Promise<void> => {
             return new Promise(resolve => {
+                
                 setTimeout(() => {
-                    setParsedInput(fullArray);
+                    setComparisons(prev => prev+1)
                     setCurSelectedIdx([l,r])
+                    setParsedInput(fullArray);
                     resolve();
                 }, 100);
             });
@@ -143,6 +164,8 @@ const Page = () => {
         return arr.map(n => n / maxAbs);
     }
 
+    // constants for canvas rect styling
+
     const rectGap = 0.02*dimensions.x / parsedInput.length // 2% padding
     const inputsWidth = 400 + rectGap
     const workAreaWidth = 0.99*dimensions.x - (dimensions.x < MOBILE_WIDTH/2 ? 0 : inputsWidth) 
@@ -165,7 +188,7 @@ const Page = () => {
                                         <p
                                         key={index}
                                         className={selectedTab === index ? 'selected' : ''}
-                                        onClick={() => setSelectedTab(index)}
+                                        onClick={() => {setSelectedTab(index);setComparisons(0)}}
                                         >
                                         {label}
                                         </p>
@@ -173,7 +196,20 @@ const Page = () => {
                                 </div>
                             </header>
                             <hr style={{border:'1px solid #9999', margin:'1rem',marginTop:'0',marginBottom:'0'}}/>
-                            <p id='algo-desc'>{sortingDesc[selectedTab]}</p>
+                            <p id='algo-desc'>{sortingDesc[selectedTab].desc}</p>
+                            <div style={{paddingTop:'15px',paddingBottom:'15px'}}>
+                                { 
+                                sortingDesc[selectedTab].complexity && 
+                                <div className='stats'>
+                                    <p> Complexity:</p>
+                                    <img id='complexity' src={`/${sortingDesc[selectedTab].complexity}.svg`}/>
+                                </div>
+                                }
+                                <div className='stats'>
+                                    <p>Number of comparisons: </p>
+                                    <p>{comparisons == 0 ? 'Run to find out' : comparisons}</p>
+                                </div>
+                            </div>
                             <div style={{paddingLeft:'20px',paddingRight:'20px'}}>
                                 {errorMsg.length > 0 && <ErrorMsg message={errorMsg} severity={0}/>}
                             </div>

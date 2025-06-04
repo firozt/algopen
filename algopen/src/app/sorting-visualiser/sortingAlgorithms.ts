@@ -39,7 +39,6 @@ async function merge(arr: number[], start: number, mid: number, end: number, onU
             // Shift all the elements between element 1
             // element 2, right by 1.
             while (index != start) {
-                // if (onUpdate) await onUpdate(arr.slice(),start,start2)
                 arr[index] = arr[index - 1];
                 index--;
             }
