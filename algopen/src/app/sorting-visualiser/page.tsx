@@ -152,19 +152,18 @@ const Page = () => {
         setComparisons(0)
         if (dimensions.x < MOBILE_WIDTH/2) setShowSideTab(false)
         const onSwap = (i: number, j: number, change=true): Promise<void> => {
-
             return new Promise(resolve => {
                 setTimeout(() => {
                     setCurSelectedIdx([i,j])
                     if (!change) {
-                    setComparisons(prev => prev+1) 
-                        resolve()
+                        setComparisons(prev => prev+1) 
+                    } else {
+                        setParsedInput(prev => {
+                            const newArr = [...prev];
+                            [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+                            return newArr;
+                        });
                     }
-                    setParsedInput(prev => {
-                        const newArr = [...prev];
-                        [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
-                        return newArr;
-                    });
                     resolve();
                 }, sliderSpeedRef.current);
             });
