@@ -248,7 +248,7 @@ const Page = () => {
                             <div style={{paddingTop:'15px',paddingBottom:'15px'}}>
                                 <div className='stats'>
                                     <p>Worst Case</p>
-                                    <img className='complexity' src={'/o.svg'}/>
+                                    <img className='complexity' src={'/O.svg'}/>
                                     <img className='complexity' src={`/${sortingDesc[selectedTab].worstCaseTime}.svg`}/>
                                 </div>
                                 <div className='stats'>
@@ -263,7 +263,7 @@ const Page = () => {
                                 </div>
                                 <div className='stats'>
                                     <p>Space complexity: </p>
-                                    <img className='complexity' src={'/o.svg'}/>
+                                    <img className='complexity' src={'/O.svg'}/>
                                     <img className='complexity' src={`/${sortingDesc[selectedTab].spaceComplexity}.svg`}/>
                                 </div>
                                 <div className='stats'>
