@@ -96,23 +96,60 @@ textarea:focus {
 
 .sorting-vis .stats {
     display: flex;
+    align-items: center;
     gap: 5px;
     width: 100%;
     padding-left: 15px;
     padding-right: 15px;
+    margin-bottom: 5px;
 }
 
-.sorting-vis #complexity {
-    height: 24px;
-    width: fit-content;
+.sorting-vis .complexity {
+    max-height: 24px;
+    height: 100%;
 }
 
+.sorting-vis button {
+    text-decoration: underline;
+    cursor: pointer;
+    margin: 0;
+    text-align: center;
+    width: 100%;
+    user-select: none; /* Prevents text selection */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE/Edge */
+}
 
 .sorting-vis .side-tab #algo-desc {
     transition: all .5s;
     padding: 15px;
     color: rgba(255, 255, 255, 0.526);
     line-height: 18px;
+}
+input[type="range"] {
+    -webkit-appearance: none;  /* Remove default styling */
+    height: 4px;
+    width: 100%;
+    border-radius: 0px;
+    background: #ffffffc3;
+    outline: none;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+
+.sorting-vis .setting {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 15px;
 }
 
 .sorting-vis .side-tab .text-area-wrapper {

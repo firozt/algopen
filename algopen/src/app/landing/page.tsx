@@ -4,7 +4,7 @@ import './index.css'
 import NavBar from '../components/NavBar/NavBar'
 import { ROUTEMAPPINGS, Theme } from '../../utils/constants'
 import SlideButton from '../components/SlideButton/SlideButton'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
 import TypeWriter from '../components/TypeWriter/TypeWriter'
 import Card from '../components/Card/Card'
 import { useRouter } from 'next/navigation'
@@ -25,6 +25,14 @@ const Index = () => {
 		el.scrollIntoView({ behavior: 'smooth' });
 		}
 	};
+
+	const { scrollY } = useScroll();
+	const serviceOffsetY = useTransform(scrollY, [0, 400], [0, -50]);
+	const smoothServiceY = useSpring(serviceOffsetY, {
+		stiffness: 50,
+		damping: 20,
+		mass: 1
+	});
 
 	return (
 		<>
@@ -77,16 +85,16 @@ const Index = () => {
 				<div id='services'>
 					<header style={{textAlign:'center',position:'relative',top:'-100px'}}>
 						<h1>Services⚙️</h1>
-						<p>(its all free forever)</p>
+						<p style={{position:'relative',bottom:'20px'}}>(its all free forever)</p>
 					</header>
-					<section id='card-container'>
+					<motion.section id='card-container'  style={{ y: smoothServiceY, position:'relative',top:'50px' }}>
 						<Card onClick={() => router.push(ROUTEMAPPINGS.GraphVisualiser)} heading='Graph Data Structure' iconSrc='/graphIcon.svg' />
 						<Card onClick={() => router.push(ROUTEMAPPINGS.HeapVisualiser)} heading='Heap Algorithm' iconSrc='/heapIcon.svg' />
 						<Card onClick={() => router.push(ROUTEMAPPINGS.SortingVisualiser)} heading='Sorting Visualiser' iconSrc='/sortingIcon.svg' />
 						<Card onClick={() => router.push(ROUTEMAPPINGS.PathfindingVisualiser)} heading='Path finding Algorithm' iconSrc='/pathfindingIcon.svg' />
-						<Card onClick={() => 1} heading='Coming Soon...'  />
-						<Card onClick={() => 1} heading='Coming Soon...'  />
-					</section>
+						<Card onClick={() => 1} heading='Coming Soon...' />
+						<Card onClick={() => 1} heading='Coming Soon...' />
+					</motion.section>
 				</div>
 			</div>
 			<div id='divider'><div></div></div>

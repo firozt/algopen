@@ -30,17 +30,20 @@ enum AlgoName {
 
 type SortingData = {
     desc: string
-    complexity?: string // filename under /public/
+    timeComplexity?: string // filename under /public/
+    spaceComplexity?: string // 
 }
 
 const sortingDesc: SortingData[] = [
     {
         desc: 'Bubble sort is a simple comparison-based sorting algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. This process is repeated until the list is sorted.',
-        complexity: 'nsquared'
+        timeComplexity: 'nsquared',
+        spaceComplexity: 'constant'
     },
     {
         desc: 'Merge Sort divides the list, sorts each half, and merges them. It runs in O(n log n) time. It’s stable but uses extra memory.',
-        complexity: 'nlogn'
+        timeComplexity: 'nlogn',
+        spaceComplexity: 'n'
     },
     {
         desc:'under construction, please check again at a later date',
@@ -54,17 +57,27 @@ const sortingDesc: SortingData[] = [
 
 ]
 
+const generateRandomArray = (length = 100, min = -100, max = 100): number[] => {
+  return Array.from({ length }, () => Math.floor(Math.random() * (max - min + 1)) + min);
+}
+
 const Page = () => {
     const [selectedTab, setSelectedTab] = useState<number>(0)
-    const [textArea, setTextArea] = useState<string>('12,3,41,9,5,1,32,-12,-3,-4,-15,9,1,15')
+    const [textArea, setTextArea] = useState<string>(String(generateRandomArray(50)))
     const [showSideTab, setShowSideTab] = useState<boolean>(true)
 	const [dimensions, setDimensions] = useState<Vector2D>({ x: 500, y: 500 });
     const [parsedInput, setParsedInput] = useState<number[]>([])
     const [errorMsg, setErrorMsg] = useState<string>('')
     const [curSelectedIndex, setCurSelectedIdx] = useState<number[]>([])
     const [comparisons, setComparisons] = useState<number>(0)
+    const [sliderSpeed, setSliderSpeed] = useState<number>(50)
     const stageRef = useRef<Konva.Stage | null>(null); 
+    const sliderSpeedRef = useRef(sliderSpeed);
     
+    useEffect(() => {
+        sliderSpeedRef.current = sliderSpeed;
+    }, [sliderSpeed]);
+
     useEffect(() => {
         const updateSize = () => {
             setDimensions({ x: window.innerWidth, y: window.innerHeight });
@@ -130,7 +143,7 @@ const Page = () => {
                     });
                     setCurSelectedIdx([j])
                     resolve();
-                }, 50);
+                }, sliderSpeedRef.current);
             });
         };
         const onUpdate = async (fullArray: number[], l: number, r: number): Promise<void> => {
@@ -141,7 +154,7 @@ const Page = () => {
                     setCurSelectedIdx([l,r])
                     setParsedInput(fullArray);
                     resolve();
-                }, 100);
+                }, sliderSpeedRef.current);
             });
         };
 
@@ -199,16 +212,25 @@ const Page = () => {
                             <p id='algo-desc'>{sortingDesc[selectedTab].desc}</p>
                             <div style={{paddingTop:'15px',paddingBottom:'15px'}}>
                                 { 
-                                sortingDesc[selectedTab].complexity && 
+                                sortingDesc[selectedTab].timeComplexity && 
                                 <div className='stats'>
-                                    <p> Complexity:</p>
-                                    <img id='complexity' src={`/${sortingDesc[selectedTab].complexity}.svg`}/>
+                                    <p> Time complexity:</p>
+                                    <img className='complexity' src={`/${sortingDesc[selectedTab].timeComplexity}.svg`}/>
                                 </div>
                                 }
                                 <div className='stats'>
-                                    <p>Number of comparisons: </p>
-                                    <p>{comparisons == 0 ? 'Run to find out' : comparisons}</p>
+                                    <p>Space complexity: </p>
+                                    <img className='complexity' src={`/${sortingDesc[selectedTab].spaceComplexity}.svg`}/>
                                 </div>
+                                <div className='stats'>
+                                    <p>Number of comparisons: </p>
+                                    <p style={{fontSize:'16px'}}>{comparisons == 0 ? 'Run Algorithm' : comparisons}</p>
+                                </div>
+                                <div className='setting'>
+                                    <p>Speed</p>
+                                    <input type='range' max={200} min={0} value={sliderSpeed} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSliderSpeed(Number(e.target.value))}/>
+                                </div>
+                                <button onClick={() => setTextArea(String(generateRandomArray(Math.floor(Math.random()*100))))}>Generate Random Array</button>
                             </div>
                             <div style={{paddingLeft:'20px',paddingRight:'20px'}}>
                                 {errorMsg.length > 0 && <ErrorMsg message={errorMsg} severity={0}/>}
@@ -241,7 +263,7 @@ const Page = () => {
                                         y: dimensions.x < MOBILE_WIDTH/2 ? (2*dimensions.y/3) : (dimensions.y/2)
                                     }}
                                     width={rectWidth}
-                                    height={-1*item*maxHeight}
+                                    height={item == 0 ? 1 :  -1*item*maxHeight}
                                     fill={curSelectedIndex.includes(idx) ? COLORS.RED : COLORS.BLACK}
                                 />
                             </React.Fragment>
