@@ -34,7 +34,7 @@ Below depicts the binary tree visualiser, by entering the array notation of a bi
 
 ## Tech Stack
 
-**Frontend:** Vite / Typescript / Konva.js 
+**Frontend:** NextJs / Typescript / Konva.js 
 **Backend:** None (as of now)
 
 ## Getting Started
