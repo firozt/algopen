@@ -11,6 +11,7 @@
 
 
 
+
 .sorting-vis .side-input+header {
     height: 100px;
     background-color: black;
@@ -94,15 +95,29 @@ textarea:focus {
 }
 
 
+.sorting-vis .stats p:first-child {
+    width: 60%;
+}
+
+.sorting-vis .stats p, .sorting-vis .stats img {
+    padding: 2px;
+}
+
 .sorting-vis .stats {
     display: flex;
     align-items: center;
-    gap: 5px;
     width: 100%;
     padding-left: 15px;
     padding-right: 15px;
     margin-bottom: 5px;
 }
+
+.sorting-vis .stats div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 
 .sorting-vis .complexity {
     max-height: 24px;
