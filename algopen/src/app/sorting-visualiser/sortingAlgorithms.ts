@@ -97,7 +97,7 @@ const swap = async (arr: number[],
 
 ) => {
     const temp = arr[i];
-    await onUpdate(arr, i, j)
+    if (onUpdate) await onUpdate(arr, i, j)
     arr[i] = arr[j];
     arr[j] = temp;
 }

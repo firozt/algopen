@@ -14,7 +14,6 @@ import Konva from 'konva';
 import ToolBar from '../components/ToolBar/ToolBar';
 import { BubbleSort, InsertionSort, MergeSort, QuickSort, SelectionSort } from './sortingAlgorithms';
 import SortingRect from '../components/SortingRect/SortingRect';
-import { resolve } from 'path'
 
 
 enum AlgoName {
