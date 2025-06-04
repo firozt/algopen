@@ -12,8 +12,9 @@ import { Stage, Layer } from "react-konva";
 import { Vector2D } from '../GlobalTypes';
 import Konva from 'konva';
 import ToolBar from '../components/ToolBar/ToolBar';
-import { BubbleSort, MergeSort } from './sortingAlgorithms';
+import { BubbleSort, InsertionSort, MergeSort, QuickSort, SelectionSort } from './sortingAlgorithms';
 import SortingRect from '../components/SortingRect/SortingRect';
+import { resolve } from 'path'
 
 
 enum AlgoName {
@@ -30,29 +31,48 @@ enum AlgoName {
 
 type SortingData = {
     desc: string
-    timeComplexity?: string // filename under /public/
-    spaceComplexity?: string // 
+    worstCaseTime?: string // filename under /public/
+    bestCaseTime: string
+    spaceComplexity: string
+    averageComplexity: string
 }
 
 const sortingDesc: SortingData[] = [
     {
         desc: 'Bubble sort is a simple comparison-based sorting algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. This process is repeated until the list is sorted.',
-        timeComplexity: 'nsquared',
+        worstCaseTime: 'nsquared',
+        averageComplexity: 'nsquared',
+        bestCaseTime: 'n',
         spaceComplexity: 'constant'
     },
     {
-        desc: 'Merge Sort divides the list, sorts each half, and merges them. It runs in O(n log n) time. It’s stable but uses extra memory.',
-        timeComplexity: 'nlogn',
-        spaceComplexity: 'n'
+        desc: 'Merge sort is a divide-and-conquer algorithm that splits the array into halves until each subarray contains a single element. It then merges the subarrays back together in sorted order to produce the final sorted array.',
+        worstCaseTime: 'nlogn',
+        bestCaseTime: 'nlogn',
+        averageComplexity:'nlogn',
+        spaceComplexity: 'n',
     },
     {
-        desc:'under construction, please check again at a later date',
+        desc:'Quicksort is a fast, recursive sorting algorithm that efficiently organizes data. It selects a pivot element, partitions the array into smaller and larger values, and then recursively sorts each partition.',
+        worstCaseTime: 'nsquared',
+        averageComplexity:'nlogn',
+        bestCaseTime: 'nlogn',
+        spaceComplexity: 'logn',
+
     },
     {
-        desc:'under construction, please check again at a later date',
+        desc:'Selection sort is a straightforward sorting algorithm that works by repeatedly finding the smallest element from the unsorted portion of the array and swapping it with the first unsorted element. This process continues, moving the boundary of the sorted portion one step forward each time until the entire array is sorted.',
+        worstCaseTime: 'nsquared',
+        averageComplexity: 'nsquared',
+        bestCaseTime: 'nsquared',
+        spaceComplexity: 'constant',
     },
     {
-        desc:'under construction, please check again at a later date',
+        desc:'Insertion sort builds a sorted portion of the array by taking one element at a time and inserting it into its correct position. It works by comparing the current element with those before it and shifting elements to make space as needed.',
+        worstCaseTime: 'nsquared',
+        averageComplexity: 'nsquared',
+        bestCaseTime: 'n',
+        spaceComplexity: 'constant'
     },
 
 ]
@@ -132,16 +152,20 @@ const Page = () => {
     const runAlgo = async () => {
         setComparisons(0)
         if (dimensions.x < MOBILE_WIDTH/2) setShowSideTab(false)
-        const onSwap = (i: number, j: number): Promise<void> => {
+        const onSwap = (i: number, j: number, change=true): Promise<void> => {
+
             return new Promise(resolve => {
-                setComparisons(prev => prev+1)
                 setTimeout(() => {
+                    setCurSelectedIdx([i,j])
+                    if (!change) {
+                    setComparisons(prev => prev+1) 
+                        resolve()
+                    }
                     setParsedInput(prev => {
                         const newArr = [...prev];
                         [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
                         return newArr;
                     });
-                    setCurSelectedIdx([j])
                     resolve();
                 }, sliderSpeedRef.current);
             });
@@ -166,6 +190,18 @@ const Page = () => {
 
         if (selectedAlgo.label == AlgoName.MERGE_SORT) {
             await MergeSort(parsedInput,0,parsedInput.length-1,onUpdate)
+        }
+
+        if (selectedAlgo.label == AlgoName.QUICK_SORT) {
+            await QuickSort(parsedInput,0,parsedInput.length-1,onUpdate)
+        }
+
+        if (selectedAlgo.label == AlgoName.SELECTION_SORT) {
+            await SelectionSort(parsedInput,onUpdate)
+        }
+
+        if (selectedAlgo.label == AlgoName.INSERTION_SORT) {
+            await InsertionSort(parsedInput,onUpdate)
         }
 
         setCurSelectedIdx([-1])
@@ -211,19 +247,28 @@ const Page = () => {
                             <hr style={{border:'1px solid #9999', margin:'1rem',marginTop:'0',marginBottom:'0'}}/>
                             <p id='algo-desc'>{sortingDesc[selectedTab].desc}</p>
                             <div style={{paddingTop:'15px',paddingBottom:'15px'}}>
-                                { 
-                                sortingDesc[selectedTab].timeComplexity && 
                                 <div className='stats'>
-                                    <p> Time complexity:</p>
-                                    <img className='complexity' src={`/${sortingDesc[selectedTab].timeComplexity}.svg`}/>
+                                    <p>Worst Case</p>
+                                    <img className='complexity' src={'/o.svg'}/>
+                                    <img className='complexity' src={`/${sortingDesc[selectedTab].worstCaseTime}.svg`}/>
                                 </div>
-                                }
+                                <div className='stats'>
+                                    <p>Average Case</p>
+                                    <img className='complexity' src={'/theta.svg'}/>
+                                    <img className='complexity' src={`/${sortingDesc[selectedTab].averageComplexity}.svg`}/>
+                                </div>
+                                <div className='stats'>
+                                    <p>Best Case</p>
+                                    <img className='complexity' src={'/omega.svg'}/>
+                                    <img className='complexity' src={`/${sortingDesc[selectedTab].bestCaseTime}.svg`}/>
+                                </div>
                                 <div className='stats'>
                                     <p>Space complexity: </p>
+                                    <img className='complexity' src={'/o.svg'}/>
                                     <img className='complexity' src={`/${sortingDesc[selectedTab].spaceComplexity}.svg`}/>
                                 </div>
                                 <div className='stats'>
-                                    <p>Number of comparisons: </p>
+                                    <p>Number of comparisons</p>
                                     <p style={{fontSize:'16px'}}>{comparisons == 0 ? 'Run Algorithm' : comparisons}</p>
                                 </div>
                                 <div className='setting'>
