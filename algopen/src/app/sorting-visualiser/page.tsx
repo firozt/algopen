@@ -14,21 +14,15 @@ import Konva from 'konva';
 import ToolBar from '../components/ToolBar/ToolBar';
 import { BubbleSort, InsertionSort, MergeSort, QuickSort, SelectionSort } from './sortingAlgorithms';
 import SortingRect from '../components/SortingRect/SortingRect';
+import TabManager from '../components/TabManager/TabManager'
 
-
-enum AlgoName {
-    BUBBLE_SORT = 'Bubble Sort',
-    MERGE_SORT = 'Merge Sort',
-    SELECTION_SORT = 'Selection Sort',
-    QUICK_SORT = 'Quick Sort',
-    INSERTION_SORT = 'Insertion Sort'
-}
 
 // type Props = {
 // 
 // }
 
 type SortingData = {
+    title: string
     desc: string
     worstCaseTime?: string // filename under /public/
     bestCaseTime: string
@@ -38,6 +32,7 @@ type SortingData = {
 
 const sortingDesc: SortingData[] = [
     {
+        title: 'Bubble Sort',
         desc: 'Bubble sort is a simple comparison-based sorting algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. This process is repeated until the list is sorted.',
         worstCaseTime: 'nsquared',
         averageComplexity: 'nsquared',
@@ -45,6 +40,7 @@ const sortingDesc: SortingData[] = [
         spaceComplexity: 'constant'
     },
     {
+        title: 'Merge Sort',
         desc: 'Merge sort is a divide-and-conquer algorithm that splits the array into halves until each subarray contains a single element. It then merges the subarrays back together in sorted order to produce the final sorted array.',
         worstCaseTime: 'nlogn',
         bestCaseTime: 'nlogn',
@@ -52,6 +48,7 @@ const sortingDesc: SortingData[] = [
         spaceComplexity: 'n',
     },
     {
+        title: 'Quick Sort',
         desc:'Quicksort is a fast, recursive sorting algorithm that efficiently organizes data. It selects a pivot element, partitions the array into smaller and larger values, and then recursively sorts each partition.',
         worstCaseTime: 'nsquared',
         averageComplexity:'nlogn',
@@ -60,6 +57,7 @@ const sortingDesc: SortingData[] = [
 
     },
     {
+        title: 'Selection Sort',
         desc:'Selection sort is a straightforward sorting algorithm that works by repeatedly finding the smallest element from the unsorted portion of the array and swapping it with the first unsorted element. This process continues, moving the boundary of the sorted portion one step forward each time until the entire array is sorted.',
         worstCaseTime: 'nsquared',
         averageComplexity: 'nsquared',
@@ -67,6 +65,7 @@ const sortingDesc: SortingData[] = [
         spaceComplexity: 'constant',
     },
     {
+        title: 'Insertion Sort',
         desc:'Insertion sort builds a sorted portion of the array by taking one element at a time and inserting it into its correct position. It works by comparing the current element with those before it and shifting elements to make space as needed.',
         worstCaseTime: 'nsquared',
         averageComplexity: 'nsquared',
@@ -134,20 +133,6 @@ const Page = () => {
         }
         }
 
-    const sortingAlgorithms: { label: AlgoName; index: number }[] = [
-    { label: AlgoName.BUBBLE_SORT, index: 0 },
-    { label: AlgoName.MERGE_SORT, index: 1 },
-    { label: AlgoName.QUICK_SORT, index: 2 },
-    { label: AlgoName.SELECTION_SORT, index: 3 },
-    { label: AlgoName.INSERTION_SORT, index: 4 },
-    ];
-
-    const sortedAlgorithms = [...sortingAlgorithms].sort((a, b) => {
-        if (a.index === selectedTab) return -1;
-        if (b.index === selectedTab) return 1;
-        return a.index - b.index;
-    });
-
     const runAlgo = async () => {
         setComparisons(0)
         if (dimensions.x < MOBILE_WIDTH/2) setShowSideTab(false)
@@ -180,25 +165,24 @@ const Page = () => {
             });
         };
 
-        const selectedAlgo = sortedAlgorithms[0]
 
-        if (selectedAlgo.label == AlgoName.BUBBLE_SORT) {
+        if (selectedTab == 0) {
             await BubbleSort(parsedInput,onSwap)
         }
 
-        if (selectedAlgo.label == AlgoName.MERGE_SORT) {
+        if (selectedTab == 1) {
             await MergeSort(parsedInput,0,parsedInput.length-1,onUpdate)
         }
 
-        if (selectedAlgo.label == AlgoName.QUICK_SORT) {
+        if (selectedTab == 2) {
             await QuickSort(parsedInput,0,parsedInput.length-1,onUpdate)
         }
 
-        if (selectedAlgo.label == AlgoName.SELECTION_SORT) {
+        if (selectedTab == 3) {
             await SelectionSort(parsedInput,onUpdate)
         }
 
-        if (selectedAlgo.label == AlgoName.INSERTION_SORT) {
+        if (selectedTab == 4) {
             await InsertionSort(parsedInput,onUpdate)
         }
 
@@ -230,17 +214,11 @@ const Page = () => {
                     <div className='side-input'>
                         <div id='top-inputs'>
                             <header>
-                                <div className='selection-input'>
-                                    {sortedAlgorithms.map(({ label, index }) => (
-                                        <p
-                                        key={index}
-                                        className={selectedTab === index ? 'selected' : ''}
-                                        onClick={() => {setSelectedTab(index);setComparisons(0)}}
-                                        >
-                                        {label}
-                                        </p>
-                                    ))}
-                                </div>
+                                <TabManager 
+                                data={sortingDesc.map(item => item.title)} 
+                                onClick={(index) => {setSelectedTab(index);setComparisons(0)}}
+                                selected={selectedTab} 
+                                />
                             </header>
                             <hr style={{border:'1px solid #9999', margin:'1rem',marginTop:'0',marginBottom:'0'}}/>
                             <p id='algo-desc'>{sortingDesc[selectedTab].desc}</p>

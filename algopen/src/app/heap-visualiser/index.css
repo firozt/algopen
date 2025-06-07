@@ -20,9 +20,6 @@
     transition: all .2s;
 }
 
-.selected {
-    background-color: #21282c;
-}
 
 
 .heap-vis section p:hover {
