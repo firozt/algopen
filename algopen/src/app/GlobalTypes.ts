@@ -26,3 +26,10 @@ export type TreeNode = {
 	right: TreeNode
 }
 
+export type Complexity = {
+	best?: string
+	worst: string
+	average?: string
+	space: string
+}
+

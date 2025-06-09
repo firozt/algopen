@@ -15,65 +15,8 @@ import ToolBar from '../components/ToolBar/ToolBar';
 import { BubbleSort, InsertionSort, MergeSort, QuickSort, SelectionSort } from './sortingAlgorithms';
 import SortingRect from '../components/SortingRect/SortingRect';
 import TabManager from '../components/TabManager/TabManager'
+import { sortingDesc } from './data'
 
-
-// type Props = {
-// 
-// }
-
-type SortingData = {
-    title: string
-    desc: string
-    worstCaseTime?: string // filename under /public/
-    bestCaseTime: string
-    spaceComplexity: string
-    averageComplexity: string
-}
-
-const sortingDesc: SortingData[] = [
-    {
-        title: 'Bubble Sort',
-        desc: 'Bubble sort is a simple comparison-based sorting algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. This process is repeated until the list is sorted.',
-        worstCaseTime: 'nsquared',
-        averageComplexity: 'nsquared',
-        bestCaseTime: 'n',
-        spaceComplexity: 'constant'
-    },
-    {
-        title: 'Merge Sort',
-        desc: 'Merge sort is a divide-and-conquer algorithm that splits the array into halves until each subarray contains a single element. It then merges the subarrays back together in sorted order to produce the final sorted array.',
-        worstCaseTime: 'nlogn',
-        bestCaseTime: 'nlogn',
-        averageComplexity:'nlogn',
-        spaceComplexity: 'n',
-    },
-    {
-        title: 'Quick Sort',
-        desc:'Quicksort is a fast, recursive sorting algorithm that efficiently organizes data. It selects a pivot element, partitions the array into smaller and larger values, and then recursively sorts each partition.',
-        worstCaseTime: 'nsquared',
-        averageComplexity:'nlogn',
-        bestCaseTime: 'nlogn',
-        spaceComplexity: 'logn',
-
-    },
-    {
-        title: 'Selection Sort',
-        desc:'Selection sort is a straightforward sorting algorithm that works by repeatedly finding the smallest element from the unsorted portion of the array and swapping it with the first unsorted element. This process continues, moving the boundary of the sorted portion one step forward each time until the entire array is sorted.',
-        worstCaseTime: 'nsquared',
-        averageComplexity: 'nsquared',
-        bestCaseTime: 'nsquared',
-        spaceComplexity: 'constant',
-    },
-    {
-        title: 'Insertion Sort',
-        desc:'Insertion sort builds a sorted portion of the array by taking one element at a time and inserting it into its correct position. It works by comparing the current element with those before it and shifting elements to make space as needed.',
-        worstCaseTime: 'nsquared',
-        averageComplexity: 'nsquared',
-        bestCaseTime: 'n',
-        spaceComplexity: 'constant'
-    },
-
-]
 
 const generateRandomArray = (length = 100, min = -100, max = 100): number[] => {
   return Array.from({ length }, () => Math.floor(Math.random() * (max - min + 1)) + min);
@@ -226,22 +169,22 @@ const Page = () => {
                                 <div className='stats'>
                                     <p>Worst Case</p>
                                     <img className='complexity' src={'/O.svg'}/>
-                                    <img className='complexity' src={`/${sortingDesc[selectedTab].worstCaseTime}.svg`}/>
+                                    <img className='complexity' src={`/${sortingDesc[selectedTab].complexity.worst}.svg`}/>
                                 </div>
                                 <div className='stats'>
                                     <p>Average Case</p>
                                     <img className='complexity' src={'/theta.svg'}/>
-                                    <img className='complexity' src={`/${sortingDesc[selectedTab].averageComplexity}.svg`}/>
+                                    <img className='complexity' src={`/${sortingDesc[selectedTab].complexity.average}.svg`}/>
                                 </div>
                                 <div className='stats'>
                                     <p>Best Case</p>
                                     <img className='complexity' src={'/omega.svg'}/>
-                                    <img className='complexity' src={`/${sortingDesc[selectedTab].bestCaseTime}.svg`}/>
+                                    <img className='complexity' src={`/${sortingDesc[selectedTab].complexity.best}.svg`}/>
                                 </div>
                                 <div className='stats'>
                                     <p>Space complexity: </p>
                                     <img className='complexity' src={'/O.svg'}/>
-                                    <img className='complexity' src={`/${sortingDesc[selectedTab].spaceComplexity}.svg`}/>
+                                    <img className='complexity' src={`/${sortingDesc[selectedTab].complexity.space}.svg`}/>
                                 </div>
                                 <div className='stats'>
                                     <p>Number of comparisons</p>
