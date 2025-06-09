@@ -9,17 +9,14 @@ import { HEADER_HEIGHT, PHONE_WIDTH, Theme, COLORS } from '@utils/constants'
 import NavBar from '../components/NavBar/NavBar'
 import TabManager from '../components/TabManager/TabManager'
 import SlideButton from '../components/SlideButton/SlideButton'
-import { algorithms } from './data'
+import { algorithms, colors } from './data'
 
 
-const colors = ['white','black','green','red']
 
 const Page = () => {
   const [matrix, setMatrix] = useState<number[][]>([])
   const [dimensions, setDimensions] = useState<Vector2D>({ x: 500, y: 500 });
   const [selected, setSelected] = useState<number>(0)
-
-
   const stageRef = useRef<Konva.Stage | null>(null); 
 
     // canvas numbers

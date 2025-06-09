@@ -1,7 +1,8 @@
 export enum COLORS {
     BLACK = 'black',
     WHITE = 'white',
-    RED = 'red'
+    RED = 'red',
+    GREEN = 'green'
 }
 
 export enum Theme {

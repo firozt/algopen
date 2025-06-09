@@ -1,3 +1,4 @@
+import { COLORS } from "@utils/constants"
 import { Complexity } from "../GlobalTypes"
 
 export type AlgoData = {
@@ -6,6 +7,12 @@ export type AlgoData = {
   complexitiy: Complexity
 }
 
+
+// colors for cells
+export const colors = [COLORS.WHITE,COLORS.BLACK,COLORS.GREEN,COLORS.RED] 
+
+
+// algorithm data for display
 export const algorithms: AlgoData[] = [
   {
     name:'Depth First Search',
